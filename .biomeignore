@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.next/
+.turbo/
+coverage/
+storybook-static/
+*.min.js
+*.d.ts
+pnpm-lock.yaml
+

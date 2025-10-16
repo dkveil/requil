@@ -1,0 +1,53 @@
+{
+  "name": "relettr",
+  "description": "ReLettr is an API-first engine for generating (AI), validating, rendering, and sending transactional and campaign emails. The MVP consolidates today's fragmented flow: from creating MJML+Liquid templates and hard quality validation, through per-recipient render, to reliable delivery via Resend or SMTP adapters. A simple editor with guardrails and a thin newsletter demo layer sit on top for the MVP.",
+  "version": "0.0.1",
+  "author": "ReLettr",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/relettr/relettr.git"
+  },
+  "homepage": "https://relettr.com",
+  "keywords": [
+    "email",
+    "marketing",
+    "api",
+    "ai",
+    "mjml",
+    "liquid",
+    "resend",
+    "smtp",
+    "qstash",
+    "upstash",
+    "drizzle",
+    "supabase",
+    "postgres",
+    "redis",
+    "nodejs",
+    "typescript",
+    "javascript",
+    "react",
+    "nextjs",
+    "astro",
+    "tailwind",
+    "shadcn",
+    "lucide",
+    "tanstack",
+    "react-hook-form",
+    "zod",
+    "supabase-js",
+    "grapesjs",
+    "grapesjs-mjml",
+    "grapesjs-preset-webpage",
+    "grapesjs-preset-newsletter",
+    "grapesjs-preset-email",
+    "grapesjs-preset-email-editor",
+    "grapesjs-preset-email-editor-advanced",
+    "grapesjs-preset-email-editor-advanced-advanced",
+    "grapesjs-preset-email-editor-advanced-advanced-advanced"
+  ],
+  "engines": {
+    "node": ">=22"
+  }
+}

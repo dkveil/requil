@@ -1,20 +1,27 @@
 {
-  "name": "relettr",
-  "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
-  },
-  "devDependencies": {
-    "prettier": "^3.6.2",
-    "turbo": "^2.5.8",
-    "typescript": "5.9.2"
-  },
-  "packageManager": "pnpm@9.0.0",
-  "engines": {
-    "node": ">=18"
-  }
+	"name": "relettr",
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --write .",
+		"format": "biome format --write .",
+		"check": "biome check --write .",
+		"ci:check": "biome ci .",
+		"type-check": "turbo run type-check",
+		"clean": "turbo run clean",
+		"clean:all": "turbo run clean --all",
+		"clean:install": "pnpm run clean:modules && pnpm install",
+		"clean:modules": "rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules && rm -rf .turbo"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.2.5",
+		"turbo": "^2.5.8",
+		"typescript": "5.9.2"
+	},
+	"packageManager": "pnpm@10.6.5",
+	"engines": {
+		"node": ">=22"
+	}
 }

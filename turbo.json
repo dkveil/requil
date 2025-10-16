@@ -1,6 +1,7 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
+  "globalDependencies": ["biome.json"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -8,10 +9,14 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint"],
+      "cache": true,
+      "inputs": ["**/*.{js,jsx,ts,tsx,json}", "biome.json"]
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
+    "type-check": {
+      "dependsOn": ["^type-check"],
+      "cache": true,
+      "inputs": ["**/*.{ts,tsx}", "tsconfig.json"]
     },
     "dev": {
       "cache": false,
