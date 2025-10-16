@@ -1,0 +1,31 @@
+api:
+  - changed-files:
+    - any-glob-to-any-file: 'apps/api/**/*'
+
+dashboard:
+  - changed-files:
+    - any-glob-to-any-file: 'apps/dashboard/**/*'
+
+website:
+  - changed-files:
+    - any-glob-to-any-file: 'apps/website/**/*'
+
+packages:
+  - changed-files:
+    - any-glob-to-any-file: 'packages/**/*'
+
+ci:
+  - changed-files:
+    - any-glob-to-any-file: '.github/**/*'
+
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '**/package.json'
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file: '**/*.md'
+
