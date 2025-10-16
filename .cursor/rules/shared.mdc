@@ -1,0 +1,75 @@
+---
+alwaysApply: true
+---
+
+# AI Rules for ReLettr
+
+ReLettr is an API-first engine for generating (AI), validating, rendering, and sending transactional and campaign emails. The MVP consolidates today’s fragmented flow: from creating MJML+Liquid templates and hard quality validation, through per-recipient render, to reliable delivery via Resend or SMTP adapters. A simple editor with guardrails and a thin newsletter demo layer sit on top for the MVP.
+
+## Tech Stack
+
+### Architecture
+
+Single-service **Fastify** monolith (Node 22+, TypeScript) exposing the API, email rendering (MJML + Liquid), sending (Resend/SMTP), and QStash-triggered worker endpoints. **Supabase** (Postgres/Auth/Storage) with **RLS** handles data; **Drizzle ORM** manages schema/migrations. **Upstash Redis** provides rate-limiting, idempotency locks/results, caching (MJML/HTML/brandKit/schema), and counters. **Upstash QStash** handles retries, backoff, fan-out, and cron/at scheduling by calling the monolith over HTTP (a separate `worker` service arrives post-MVP). Incoming webhooks use **HMAC** (timestamp + nonce) with replay protection. Guardrails include **AJV** validation, HTML analysis (Cheerio), WCAG contrast checks, enforced HTTPS + `rel="noopener"`, and a hard HTML size cap. Two separate frontends: a **Dashboard** (Next.js App Router, Tailwind, shadcn/ui) and a **Website** (Astro for content/SEO or Next.js SSG), kept split by design.
+
+### Project structure (Turborepo)
+
+- apps/
+  - dashboard/  # Next.js (App Router) – admin dashboard
+  - website/    # Astro (SEO/content) or Next.js SSG – marketing site
+  - api/        # Fastify monolith (HTTP API + QStash worker endpoints)
+- services/
+  - worker/     # Extracted post-MVP (QStash → HTTP to monolith for now)
+- packages/
+  - email-engine/  # MJML + Liquid, plaintext generation, guardrails
+  - transports/    # Resend SDK, Nodemailer/SMTP
+  - validation/    # AJV + quality rules (contrast/alt/HTTPS/size)
+  - webhooks/      # HMAC sign/verify, event types
+  - ratelimit/     # Upstash: token bucket + idempotency helpers
+  - db/            # Drizzle ORM + migrations
+  - types/         # @relettr/types (OpenAPI → TS)
+  - ui/            # shadcn/ui shared components
+  - utils/         # pino logger, traceId, helpers
+  - config/        # tsconfig, turbo, biome configuration
+
+> When modifying the directory structure, always update this section.
+
+## Coding practices
+
+### Guidelines for VERSION_CONTROL
+
+#### GIT
+
+- Use Conventional Commits to create meaningful commit messages.
+- Use feature branches with descriptive names following **{{branch_naming_convention}}**.
+- Explain **why** changes were made, not only **what** changed.
+- Keep commits focused on single logical changes to aid review and git bisect.
+- Use interactive rebase to clean up history before merging.
+- Leverage git hooks to run quality checks before commits and pushes.
+
+#### CONVENTIONAL_COMMITS
+
+- Follow `type(scope): description` for all commit messages.
+- Use consistent types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`.
+- Define clear scopes based on **{{project_modules}}** to indicate affected areas.
+- Include issue references to link changes to requirements.
+- Use the **BREAKING CHANGE** footer (or `type!:`) for incompatibilities.
+- Enforce via commitlint configuration.
+
+### Guidelines for ARCHITECTURE
+
+#### MONOREPO
+
+- Use workspace-aware tooling to optimize build and test pipelines.
+- Define clear package boundaries with explicit dependencies.
+- Choose and document a consistent versioning strategy (independent or lockstep).
+- Configure CI/CD to build and test only affected packages.
+- Share configs for linting, testing, and Biome.
+- Use code generators to maintain consistency across similar modules.
+
+### Code Readability (No Comments Policy)
+
+- **Do not add inline comments**; the code must be self-explanatory through clear naming, small focused functions, and explicit types.
+- Prefer well-named variables/functions, cohesive modules, and predictable control flow over commentary.
+- Use **README/docs** and **module-level ADRs** for non-obvious design intent and decisions.
+- Public APIs may include concise docstrings for contract and examples; implementation details should remain comment-free.

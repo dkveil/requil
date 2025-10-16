@@ -1,0 +1,109 @@
+---
+alwaysApply: false
+---
+
+# DevOps Guidelines
+
+## Containerization with Docker
+
+### Best Practices
+
+- Use multi-stage builds to create smaller production images
+- Implement layer caching strategies to speed up builds for {{dependency_types}}
+- Use non-root users in containers for better security
+
+### ReLettr Dockerfiles
+
+- Create separate Dockerfiles for dashboard, website, and api apps
+- Use Node 22 Alpine as base image for minimal size
+- Copy only necessary files using .dockerignore
+- Install production dependencies only in final stage
+- Set proper NODE_ENV and other environment variables
+- Expose appropriate ports (3000 for Next.js, 3001 for Fastify)
+
+## CI/CD with GitHub Actions
+
+### Workflow Best Practices
+
+- Check if `package.json` exists in project root and summarize key scripts
+- Check if `.nvmrc` exists in project root
+- Check if `.env.example` exists in project root to identify key `env:` variables
+- Always use terminal command: `git branch -a | cat` to verify whether we use `main` or `master` branch
+- Always use `env:` variables and secrets attached to jobs instead of global workflows
+- Always use `npm ci` for Node-based dependency setup (or `pnpm install --frozen-lockfile`)
+- Extract common steps into composite actions in separate files
+- Once you're done, as a final step conduct the following: for each public action always use <tool>"Run Terminal"</tool> to see what is the most up-to-date version (use only major version) - extract tag_name from the response:
+- ```bash curl -s https://api.github.com/repos/{owner}/{repo}/releases/latest ```
+
+### ReLettr Workflows
+
+#### Build & Test
+
+- Run Turborepo build with proper caching
+- Execute Vitest tests for all packages
+- Run Playwright E2E tests for dashboard
+- Check TypeScript types with `turbo run type-check`
+- Run linting with Biome
+- Upload test coverage reports
+
+#### Deploy Preview
+
+- Build Docker images for changed apps
+- Deploy to preview environment (Vercel/Railway/Fly.io)
+- Run E2E tests against preview deployment
+- Comment preview URLs on pull requests
+
+#### Production Deploy
+
+- Build optimized Docker images with proper tags
+- Push images to container registry
+- Deploy to production (GCP Cloud Run or similar)
+- Run smoke tests against production
+- Notify team in Slack/Discord on success/failure
+
+## Cloud Infrastructure (GCP)
+
+### Deployment Targets
+
+- Use Cloud Run for the Fastify API (serverless containers)
+- Use Vercel or Cloud Run for Next.js dashboard
+- Use Vercel or Cloud Run for Astro website
+- Use Cloud Storage for static assets and user uploads
+- Use Cloud CDN for global content delivery
+
+### Infrastructure as Code
+
+- Use Terraform or Deployment Manager for infrastructure as code
+- Implement VPC Service Controls for network security around {{sensitive_services}}
+- Use workload identity for service-to-service authentication
+
+### Secrets Management
+
+- Store secrets in GCP Secret Manager
+- Use workload identity to access secrets from Cloud Run
+- Rotate secrets regularly and audit access
+- Never commit secrets to git repository
+
+## Monitoring & Observability
+
+### Logging
+
+- Use Pino logger with structured JSON output
+- Include traceId in all log entries for request correlation
+- Log at appropriate levels (debug, info, warn, error)
+- Send logs to GCP Cloud Logging or similar
+
+### Metrics
+
+- Track API response times and error rates
+- Monitor email rendering performance and cache hit rates
+- Track campaign sending progress and delivery rates
+- Monitor Redis and Postgres connection pool metrics
+
+### Alerting
+
+- Alert on API error rates above threshold
+- Alert on email sending failures
+- Alert on database connection pool exhaustion
+- Alert on Redis connection failures
+- Set up uptime monitoring for critical endpoints

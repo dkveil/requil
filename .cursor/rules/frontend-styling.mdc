@@ -1,0 +1,38 @@
+---
+alwaysApply: false
+---
+
+# Frontend Styling Guidelines
+
+## Tailwind CSS
+
+### Best Practices
+
+- Use the @layer directive to organize styles into components, utilities, and base layers
+- Implement Just-in-Time (JIT) mode for development efficiency and smaller CSS bundles
+- Use arbitrary values with square brackets (e.g., w-[123px]) for precise one-off designs
+- Leverage the @apply directive in component classes to reuse utility combinations
+- Implement the Tailwind configuration file for customizing theme, plugins, and variants
+- Use component extraction for repeated UI patterns instead of copying utility classes
+- Leverage the theme() function in CSS for accessing Tailwind theme values
+- Implement dark mode with the dark: variant
+- Use responsive variants (sm:, md:, lg:, etc.) for adaptive designs
+- Leverage state variants (hover:, focus:, active:, etc.) for interactive elements
+
+## shadcn/ui Integration
+
+### Component Library
+
+- Use shadcn/ui components from the shared `packages/ui` workspace
+- Customize components through Tailwind classes rather than modifying source
+- Extend the theme in `tailwind.config.js` for brand colors and design tokens
+- Use CSS variables for theme colors to support light/dark mode switching
+- Leverage composition to create domain-specific components from shadcn/ui primitives
+
+### Design System
+
+- Define consistent spacing scale in Tailwind config (4px base unit)
+- Use semantic color names (primary, secondary, destructive, etc.)
+- Implement consistent border radius and shadow scales
+- Use consistent typography scale with proper line heights
+- Define animation timing functions and durations in config

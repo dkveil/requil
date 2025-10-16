@@ -1,0 +1,39 @@
+---
+alwaysApply: false
+---
+
+# Backend Guidelines
+
+## Node.js with Fastify
+
+### Core Principles
+
+- Use the schema validation feature with JSON Schema to validate request and response payloads for {{api_endpoints}}
+- Implement the plugin system for modularizing application components and enabling code reuse across projects
+- Use fastify-swagger for automatic API documentation generation based on your schema definitions
+- Leverage the hooks system (onRequest, preHandler, onSend) for precise control over the request lifecycle
+- Use the reply.send() method consistently and avoid mixing with return statements to prevent hard-to-debug issues
+- Implement proper error handling with custom error classes and the setErrorHandler hook for {{error_types}}
+
+### Email Engine Specifics
+
+- Use MJML for responsive email template generation with proper validation
+- Implement Liquid templating for dynamic content insertion with proper escaping
+- Enforce HTML size limits and WCAG contrast checks in the validation pipeline
+- Use Cheerio for HTML analysis and link validation (HTTPS enforcement, rel="noopener")
+- Cache compiled MJML templates in Redis for performance optimization
+
+### Queue & Workers
+
+- Use Upstash QStash for reliable job scheduling with automatic retries and backoff
+- Implement idempotency locks using Redis to prevent duplicate processing
+- Design worker endpoints to be called via HTTP (QStash → Fastify monolith)
+- Store job results in Redis with appropriate TTL for client polling
+- Use HMAC-based webhook verification with timestamp and nonce for replay protection
+
+### Rate Limiting & Caching
+
+- Implement token bucket rate limiting using Upstash Redis
+- Cache brand kits, validation schemas, and compiled templates in Redis
+- Use Redis counters for usage tracking and quota enforcement
+- Set appropriate TTLs based on data volatility (templates: 1h, brand kits: 24h)

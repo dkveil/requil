@@ -1,0 +1,48 @@
+---
+alwaysApply: false
+---
+
+# Next.js Guidelines (Dashboard App)
+
+## App Router Principles
+
+- Use App Router and Server Components for improved performance and SEO
+- Implement route handlers for API endpoints instead of the pages/api directory
+- Use server actions for form handling and data mutations from Server Components
+- Leverage Next.js Image component with proper sizing for core web vitals optimization
+- Implement the Metadata API for dynamic SEO optimization
+- Use React Server Components for {{data_fetching_operations}} to reduce client-side JavaScript
+- Implement Streaming and Suspense for improved loading states
+- Use the new Link component without requiring a child <a> tag
+- Leverage parallel routes for complex layouts and parallel data fetching
+- Implement intercepting routes for modal patterns and nested UIs
+
+## Dashboard-Specific Patterns
+
+### Authentication & Authorization
+
+- Integrate Supabase Auth with Next.js middleware for protected routes
+- Use Server Components to validate sessions before rendering sensitive data
+- Implement Row Level Security (RLS) policies in Supabase for data access control
+- Cache user session data appropriately to minimize database calls
+
+### Template Editor
+
+- Use Client Components for the MJML editor with real-time preview
+- Implement debounced auto-save with optimistic UI updates
+- Stream template validation results from server actions
+- Cache validated templates in Redis for quick retrieval
+
+### Campaign Management
+
+- Use Server Components for campaign lists with streaming data
+- Implement infinite scroll with useInfiniteQuery for large datasets
+- Show real-time sending progress using Server-Sent Events or polling
+- Use parallel routes for campaign detail modals
+
+### Performance Optimization
+
+- Use Next.js Image component for brand assets and user uploads
+- Implement ISR (Incremental Static Regeneration) for rarely changing pages
+- Leverage route segment config for fine-grained caching control
+- Use generateStaticParams for known routes (e.g., template categories)

@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+# AI Rules for ReLettr
+
+ReLettr is an API-first engine for generating (AI), validating, rendering, and sending transactional and campaign emails. The MVP consolidates today's fragmented flow: from creating MJML+Liquid templates and hard quality validation, through per-recipient render, to reliable delivery via Resend or SMTP adapters. A simple editor with guardrails and a thin newsletter demo layer sit on top for the MVP.

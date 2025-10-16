@@ -1,0 +1,58 @@
+---
+alwaysApply: false
+---
+
+# Accessibility Guidelines
+
+## ARIA (Accessible Rich Internet Applications)
+
+### Semantic HTML First
+
+- Use ARIA landmarks to identify regions of the page (main, navigation, search, etc.)
+- Apply appropriate ARIA roles to custom interface elements that lack semantic HTML equivalents
+- Set aria-expanded and aria-controls for expandable content like accordions and dropdowns
+- Use aria-live regions with appropriate politeness settings for dynamic content updates
+- Implement aria-hidden to hide decorative or duplicative content from screen readers
+- Apply aria-label or aria-labelledby for elements without visible text labels
+- Use aria-describedby to associate descriptive text with form inputs or complex elements
+- Implement aria-current for indicating the current item in a set, navigation, or process
+- Avoid redundant ARIA that duplicates the semantics of native HTML elements
+- Apply aria-invalid and appropriate error messaging for form validation in {{form_validation}}
+
+## WCAG Perceivable
+
+### Visual Design
+
+- Provide text alternatives for non-text content including images, icons, and graphics with appropriate alt attributes
+- Ensure pre-recorded audio-visual content has captions, audio descriptions, and transcripts for {{media_content}}
+- Maintain minimum contrast ratios of 4.5:1 for normal text and 3:1 for large text and UI components
+- Enable content to be presented in different ways without losing information or structure when zoomed or resized
+- Avoid using color alone to convey information; pair with text, patterns, or icons for {{status_indicators}}
+- Provide controls to pause, stop, or hide any moving, blinking, or auto-updating content
+- Ensure text can be resized up to 200% without loss of content or functionality in {{responsive_layouts}}
+- Use responsive design that adapts to different viewport sizes and zoom levels without horizontal scrolling
+- Enable users to customize text spacing (line height, paragraph spacing, letter/word spacing) without breaking layouts
+
+## Mobile Accessibility
+
+### Touch & Interaction
+
+- Ensure touch targets are at least 44 by 44 pixels for comfortable interaction on mobile devices
+- Implement proper viewport configuration to support pinch-to-zoom and prevent scaling issues
+- Design layouts that adapt to both portrait and landscape orientations without loss of content
+- Support both touch and keyboard navigation for hybrid devices with {{input_methods}}
+- Ensure interactive elements have sufficient spacing to prevent accidental activation
+- Test with mobile screen readers like VoiceOver (iOS) and TalkBack (Android)
+- Design forms that work efficiently with on-screen keyboards and autocomplete functionality
+- Implement alternatives to complex gestures that require fine motor control
+- Ensure content is accessible when device orientation is locked for users with fixed devices
+- Provide alternatives to motion-based interactions for users with vestibular disorders
+
+## Dashboard-Specific Considerations
+
+- Implement keyboard shortcuts for common actions (save template, preview, send test)
+- Use proper focus management in modal dialogs and multi-step forms
+- Provide skip links to main content areas
+- Announce dynamic status updates (email sent, validation errors) to screen readers
+- Ensure the template editor is keyboard navigable with proper focus indicators
+- Provide text alternatives for visual email preview renders

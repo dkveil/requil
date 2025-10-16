@@ -1,0 +1,58 @@
+---
+alwaysApply: false
+---
+
+# Database Guidelines
+
+## PostgreSQL with Supabase
+
+### Core Principles
+
+- Use connection pooling to manage database connections efficiently
+- Implement JSONB columns for semi-structured data instead of creating many tables for {{flexible_data}}
+- Use materialized views for complex, frequently accessed read-only data
+
+### Drizzle ORM
+
+- Define schema in TypeScript using Drizzle schema builder
+- Use Drizzle migrations for version-controlled schema changes
+- Leverage type-safe queries with full TypeScript inference
+- Implement proper relations for foreign keys and joins
+- Use prepared statements for frequently executed queries
+
+### Row Level Security (RLS)
+
+- Enable RLS on all tables that contain user-specific data
+- Create policies that enforce organization/user boundaries
+- Use Supabase Auth JWT claims in RLS policies for user identification
+- Test RLS policies with different user roles and organizations
+- Implement helper functions in Postgres for complex RLS conditions
+
+### Schema Design for ReLettr
+
+#### Core Tables
+
+- `organizations` - Multi-tenant organization boundaries
+- `users` - User accounts linked to Supabase Auth
+- `templates` - MJML email templates with version history
+- `campaigns` - Email campaign configurations
+- `recipients` - Campaign recipient lists with merge variables
+- `sends` - Individual email send records with status tracking
+- `brand_kits` - Organization branding assets and styles
+- `webhooks` - Webhook configurations and delivery logs
+
+#### Performance Optimization
+
+- Add indexes on frequently queried columns (organization_id, user_id, status)
+- Use partial indexes for status-based queries (WHERE status = 'sent')
+- Implement JSONB GIN indexes for flexible data queries
+- Use composite indexes for multi-column WHERE clauses
+- Consider table partitioning for large send logs (by date)
+
+### Caching Strategy
+
+- Cache compiled templates in Redis (TTL: 1 hour)
+- Cache brand kits in Redis (TTL: 24 hours)
+- Cache user permissions in Redis (TTL: 15 minutes)
+- Invalidate cache on updates via database triggers or application logic
+- Use Redis for idempotency keys (TTL: 24 hours)

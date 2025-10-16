@@ -1,0 +1,121 @@
+---
+alwaysApply: false
+---
+# Turborepo Configuration & Best Practices
+
+## Project Structure
+
+- Maintain a clear separation between apps and packages
+- Keep shared configurations in the root configs/ directory
+- Use consistent naming conventions for workspaces
+- Follow the standard Turborepo workspaces directory structure:
+  `apps/              # Application workspaces`
+  `packages/      # Shared package workspaces`
+
+## Turborepo Configuration
+
+### Root turbo.json
+
+- Define clear pipeline tasks with proper dependencies
+- Use proper caching strategies for each task
+- Keep globalEnv empty to prevent environment variable leaks
+- Use proper task dependencies to optimize build times
+- Define proper outputs for caching
+
+### App turbo.json
+
+- Extend root configuration for apps when needed
+- Keep workspace-specific configurations minimal
+- Use proper task overrides
+- Follow consistent naming conventions
+
+## Package Management
+
+- Use pnpm as the package manager
+- Maintain consistent versions across workspaces
+- Use `workspace:* | repo:*` protocol for internal dependencies
+- Keep package.json files minimal
+- Use proper peer dependencies
+
+## Workspace Generation
+
+- Use `@turbo/gen` for creating new apps and packages
+- Follow consistent template structure
+- Use proper naming conventions
+- Include necessary configuration files
+- Set up proper dependencies
+
+## Development Workflow
+
+- Use turbo run for executing commands
+- Implement proper task dependencies
+- Use proper caching for faster builds
+- Follow consistent naming conventions for scripts
+- Use proper workspace filtering
+
+## Build & Deployment
+
+- Use proper caching for CI/CD
+- Implement proper artifact handling
+- Use proper environment variable management
+- Follow consistent deployment patterns
+- Use proper workspace filtering
+
+## Performance Optimization
+
+- Implement proper task dependencies
+- Use proper caching strategies
+- Optimize build times
+- Use proper parallel execution
+- Use proper workspace filtering
+
+## Environment Variables
+
+- Keep globalEnv empty in turbo.json
+- Use proper workspace-specific environment variables
+- Follow proper naming conventions
+- Implement proper validation
+- Use proper documentation
+
+## Caching Best Practices
+
+- Define proper outputs for each task
+- Use proper cache keys
+- Implement proper cache invalidation
+- Use proper cache dependencies
+- Follow proper cache naming conventions
+
+## Task Dependencies
+
+- Define clear task dependencies
+- Use proper task ordering
+- Implement proper task filtering
+- Use proper task caching
+- Follow proper task naming conventions
+
+## Workspace Dependencies
+
+- Use proper workspace references
+- Implement proper versioning
+- Use proper peer dependencies
+- Follow proper dependency naming conventions
+- Use proper dependency filtering
+
+## CI/CD Integration
+
+- Use proper caching in CI/CD
+- Implement proper artifact handling
+- Use proper environment variable management
+- Follow proper deployment patterns
+- Use proper workspace filtering
+
+## Best Practices
+
+- Keep workspace dependencies up to date
+- Use proper versioning strategy
+- Implement proper error handling
+- Follow consistent naming conventions
+- Use proper documentation
+- Implement proper testing strategy
+- Use proper logging
+- Follow proper security practices
