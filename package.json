@@ -10,13 +10,25 @@
 		"check": "biome check --write .",
 		"ci:check": "biome ci .",
 		"type-check": "turbo run type-check",
+		"test": "turbo run test",
+		"pre-commit:check": "pnpm run check && pnpm run type-check && pnpm run test",
+		"pre-push:check": "pnpm run ci:check && pnpm run type-check && pnpm run test && pnpm run build",
+		"validate": "pnpm run pre-push:check",
 		"clean": "turbo run clean",
 		"clean:all": "turbo run clean --all",
 		"clean:install": "pnpm run clean:modules && pnpm install",
-		"clean:modules": "rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules && rm -rf .turbo"
+		"clean:modules": "rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules && rm -rf .turbo",
+		"prepare": "lefthook install",
+		"test:projects": "vitest run",
+		"test:projects:watch": "vitest --watch",
+		"e2e": "turbo run e2e",
+		"e2e:smoke": "turbo run e2e:smoke"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.5",
+		"@commitlint/cli": "^20.1.0",
+		"@commitlint/config-conventional": "^20.0.0",
+		"lefthook": "^1.13.6",
 		"turbo": "^2.5.8",
 		"typescript": "5.9.2"
 	},

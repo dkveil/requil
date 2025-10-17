@@ -1,9 +1,14 @@
 {
-  "name": "@repo/typescript-config",
-  "version": "0.0.0",
-  "private": true,
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@repo/typescript-config",
+	"version": "0.0.0",
+	"private": true,
+	"license": "MIT",
+	"scripts": {
+		"build": "echo 'Config package - no build needed' && exit 0",
+		"type-check": "echo 'Config package - no type check needed' && exit 0",
+		"test": "echo 'Config package - no tests' && exit 0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }

@@ -1,0 +1,12 @@
+# Global owners
+* @dkveil
+
+# Dependencies
+package.json @dkveil
+pnpm-lock.yaml @dkveil
+renovate.json @dkveil
+
+# Configs
+*.config.* @dkveil
+tsconfig.json @dkveil
+

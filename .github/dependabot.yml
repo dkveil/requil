@@ -1,0 +1,36 @@
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - github-actions
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+    groups:
+      biome:
+        patterns:
+          - "@biomejs/*"
+      typescript:
+        patterns:
+          - "typescript"
+          - "@types/*"
+      turbo:
+        patterns:
+          - "turbo"
+      commitlint:
+        patterns:
+          - "@commitlint/*"
+

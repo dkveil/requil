@@ -1,26 +1,32 @@
 {
-  "$schema": "https://turborepo.com/schema.json",
-  "ui": "tui",
-  "globalDependencies": ["biome.json"],
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
-    "lint": {
-      "dependsOn": ["^lint"],
-      "cache": true,
-      "inputs": ["**/*.{js,jsx,ts,tsx,json}", "biome.json"]
-    },
-    "type-check": {
-      "dependsOn": ["^type-check"],
-      "cache": true,
-      "inputs": ["**/*.{ts,tsx}", "tsconfig.json"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    }
-  }
+	"$schema": "https://turborepo.com/schema.json",
+	"ui": "tui",
+	"globalDependencies": ["biome.json"],
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": [".next/**", "!.next/cache/**"]
+		},
+		"lint": {
+			"dependsOn": ["^lint"],
+			"cache": true,
+			"inputs": ["**/*.{js,jsx,ts,tsx,json}", "biome.json"]
+		},
+		"type-check": {
+			"dependsOn": ["^type-check"],
+			"cache": true,
+			"inputs": ["**/*.{ts,tsx}", "tsconfig.json"]
+		},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"test": {
+			"dependsOn": ["^build"],
+			"cache": true,
+			"inputs": ["src/**/*.{ts,tsx}", "**/*.test.{ts,tsx}"],
+			"outputs": ["coverage/**"]
+		}
+	}
 }

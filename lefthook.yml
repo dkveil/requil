@@ -1,0 +1,46 @@
+skip_output:
+  - meta
+  - summary
+
+pre-commit:
+  commands:
+    format:
+      glob: "*.{js,jsx,ts,tsx,json,jsonc}"
+      run: npx biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
+
+    typecheck:
+      glob: "*.{ts,tsx}"
+      run: npx turbo type-check --filter=...[HEAD] --continue
+
+    check-package-json:
+      glob: "**/package.json"
+      run: |
+        echo "🔍 Checking package.json files..."
+        find . -name "package.json" -not -path "./node_modules/*" -not -path "./.turbo/*" | while read -r file; do
+          if ! node -e "try { JSON.parse(require('fs').readFileSync('$file', 'utf8')); } catch(e) { process.exit(1); }" 2>/dev/null; then
+            echo "❌ Invalid JSON in $file"
+            exit 1
+          fi
+        done
+        echo "✅ All package.json files are valid"
+
+    check-dependencies:
+      glob: "**/package.json"
+      run: |
+        echo "🔍 Checking for unused dependencies..."
+        if command -v depcheck >/dev/null 2>&1; then
+          depcheck --ignores="@types/*,@repo/*,lefthook,turbo,typescript" --skip-missing
+        else
+          echo "⚠️  depcheck not installed, skipping dependency check"
+        fi
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit {1}
+
+pre-push:
+  commands:
+    lint:
+      run: npx biome ci .
