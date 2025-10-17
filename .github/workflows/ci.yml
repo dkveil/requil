@@ -52,67 +52,67 @@ jobs:
       - name: Build all packages
         run: pnpm run build
 
-  build-apps:
-    name: Build App (${{ matrix.app }})
-    runs-on: ubuntu-latest
-    needs: quality-and-test
-    timeout-minutes: 10
-    if: false # TODO: Remove this line when build is added to matrix below
+  # TODO: Uncomment when apps are added to the monorepo
+  # build-apps:
+  #   name: Build App (${{ matrix.app }})
+  #   runs-on: ubuntu-latest
+  #   needs: quality-and-test
+  #   timeout-minutes: 10
+  #
+  #   strategy:
+  #     matrix:
+  #       app: [dashboard, website, api]
+  #
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #
+  #     - name: Setup Node.js with pnpm
+  #       uses: ./.github/actions/setup-node
+  #
+  #     - name: Build ${{ matrix.app }}
+  #       run: pnpm turbo build --filter=${{ matrix.app }}
 
-    strategy:
-      matrix:
-        app: [] # TODO: Add apps here: [dashboard, website, api]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js with pnpm
-        uses: ./.github/actions/setup-node
-
-      - name: Build ${{ matrix.app }}
-        run: pnpm turbo build --filter=${{ matrix.app }}
-
-  e2e:
-    name: E2E Tests (${{ matrix.app }})
-    runs-on: ubuntu-latest
-    needs: build-apps
-    timeout-minutes: 15
-    if: false # TODO: Remove this line when e2e tests are added to matrix below
-
-    strategy:
-      matrix:
-        app: []
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js with pnpm
-        uses: ./.github/actions/setup-node
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
-      - name: Install Playwright browsers
-        run: pnpm --filter=${{ matrix.app }} exec playwright install --with-deps
-
-      - name: Run E2E smoke tests
-        run: pnpm turbo e2e:smoke --filter=${{ matrix.app }}
-
-      - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: playwright-report-${{ matrix.app }}
-          path: apps/${{ matrix.app }}/playwright-report/
-          retention-days: 7
+  # TODO: Uncomment when E2E tests are added
+  # e2e:
+  #   name: E2E Tests (${{ matrix.app }})
+  #   runs-on: ubuntu-latest
+  #   needs: build-apps
+  #   timeout-minutes: 15
+  #
+  #   strategy:
+  #     matrix:
+  #       app: [dashboard, website, api]
+  #
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #
+  #     - name: Setup Node.js with pnpm
+  #       uses: ./.github/actions/setup-node
+  #
+  #     - name: Cache Playwright browsers
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ~/.cache/ms-playwright
+  #         key: ${{ runner.os }}-playwright-${{ hashFiles('**/pnpm-lock.yaml') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-playwright-
+  #
+  #     - name: Install Playwright browsers
+  #       run: pnpm --filter=${{ matrix.app }} exec playwright install --with-deps
+  #
+  #     - name: Run E2E smoke tests
+  #       run: pnpm turbo e2e:smoke --filter=${{ matrix.app }}
+  #
+  #     - name: Upload Playwright report
+  #       uses: actions/upload-artifact@v4
+  #       if: failure()
+  #       with:
+  #         name: playwright-report-${{ matrix.app }}
+  #         path: apps/${{ matrix.app }}/playwright-report/
+  #         retention-days: 7
