@@ -1,5 +1,5 @@
 {
-	"name": "@repo/ui",
+	"name": "@requil/ui",
 	"version": "0.0.0",
 	"private": true,
 	"exports": {
@@ -15,7 +15,7 @@
 		"test": "echo 'No tests yet' && exit 0"
 	},
 	"devDependencies": {
-		"@repo/typescript-config": "workspace:*",
+		"@requil/typescript-config": "workspace:*",
 		"@types/node": "^22.15.3",
 		"@types/react": "19.1.0",
 		"@types/react-dom": "19.1.1",

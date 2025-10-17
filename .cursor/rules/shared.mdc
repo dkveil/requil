@@ -2,9 +2,9 @@
 alwaysApply: true
 ---
 
-# AI Rules for ReLettr
+# AI Rules for Requil
 
-ReLettr is an API-first engine for generating (AI), validating, rendering, and sending transactional and campaign emails. The MVP consolidates today’s fragmented flow: from creating MJML+Liquid templates and hard quality validation, through per-recipient render, to reliable delivery via Resend or SMTP adapters. A simple editor with guardrails and a thin newsletter demo layer sit on top for the MVP.
+Requil is an API-first engine for generating (AI), validating, rendering, and sending transactional and campaign emails. The MVP consolidates today's fragmented flow: from creating MJML+Liquid templates and hard quality validation, through per-recipient render, to reliable delivery via Resend or SMTP adapters. A simple editor with guardrails and a thin newsletter demo layer sit on top for the MVP.
 
 ## Tech Stack
 
@@ -27,7 +27,7 @@ Single-service **Fastify** monolith (Node 22+, TypeScript) exposing the API, ema
   - webhooks/      # HMAC sign/verify, event types
   - ratelimit/     # Upstash: token bucket + idempotency helpers
   - db/            # Drizzle ORM + migrations
-  - types/         # @relettr/types (OpenAPI → TS)
+  - types/         # @requil/types (OpenAPI → TS)
   - ui/            # shadcn/ui shared components
   - utils/         # pino logger, traceId, helpers
   - config/        # tsconfig, turbo, biome configuration

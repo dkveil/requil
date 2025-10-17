@@ -38,7 +38,7 @@ importers:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
     devDependencies:
-      '@repo/typescript-config':
+      '@requil/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/node':

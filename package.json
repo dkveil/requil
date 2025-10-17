@@ -1,5 +1,5 @@
 {
-	"name": "relettr",
+	"name": "requil",
 	"private": true,
 	"scripts": {
 		"build": "turbo run build",

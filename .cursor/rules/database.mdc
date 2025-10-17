@@ -28,7 +28,7 @@ alwaysApply: false
 - Test RLS policies with different user roles and organizations
 - Implement helper functions in Postgres for complex RLS conditions
 
-### Schema Design for ReLettr
+### Schema Design for Requil
 
 #### Core Tables
 

@@ -1,14 +1,14 @@
 {
-	"name": "relettr",
-	"description": "ReLettr is an API-first engine for generating (AI), validating, rendering, and sending transactional and campaign emails. The MVP consolidates today's fragmented flow: from creating MJML+Liquid templates and hard quality validation, through per-recipient render, to reliable delivery via Resend or SMTP adapters. A simple editor with guardrails and a thin newsletter demo layer sit on top for the MVP.",
+	"name": "requil",
+	"description": "Requil is an API-first engine for generating (AI), validating, rendering, and sending transactional and campaign emails. The MVP consolidates today's fragmented flow: from creating MJML+Liquid templates and hard quality validation, through per-recipient render, to reliable delivery via Resend or SMTP adapters. A simple editor with guardrails and a thin newsletter demo layer sit on top for the MVP.",
 	"version": "0.0.1",
-	"author": "ReLettr",
+	"author": "Requil",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/relettr/relettr.git"
+		"url": "https://github.com/requil/requil.git"
 	},
-	"homepage": "https://relettr.com",
+	"homepage": "https://requil.com",
 	"keywords": [
 		"email",
 		"marketing",

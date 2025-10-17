@@ -28,7 +28,7 @@ alwaysApply: false
 - Implement a test database for integration tests
 - Use beforeEach/afterEach hooks for database setup and teardown when testing {{api_endpoints}}
 
-### ReLettr API Testing
+### Requil API Testing
 
 - Test template validation endpoints with valid and invalid MJML
 - Verify email rendering produces correct HTML and plaintext

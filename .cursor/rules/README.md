@@ -1,4 +1,4 @@
-# Cursor Rules for ReLettr
+# Cursor Rules for Requil
 
 This directory contains AI coding assistant rules organized by technology and domain.
 
@@ -8,7 +8,7 @@ This directory contains AI coding assistant rules organized by technology and do
 
 These rules are automatically applied in every conversation:
 
-- **`project.mdc`** - Project overview and core description of ReLettr
+- **`project.mdc`** - Project overview and core description of Requil
 - **`shared.mdc`** - Version control (Git, Conventional Commits), monorepo practices, code readability
 
 ### Context-Specific Rules

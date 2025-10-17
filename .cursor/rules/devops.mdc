@@ -12,7 +12,7 @@ alwaysApply: false
 - Implement layer caching strategies to speed up builds for {{dependency_types}}
 - Use non-root users in containers for better security
 
-### ReLettr Dockerfiles
+### Requil Dockerfiles
 
 - Create separate Dockerfiles for dashboard, website, and api apps
 - Use Node 22 Alpine as base image for minimal size
@@ -35,7 +35,7 @@ alwaysApply: false
 - Once you're done, as a final step conduct the following: for each public action always use <tool>"Run Terminal"</tool> to see what is the most up-to-date version (use only major version) - extract tag_name from the response:
 - ```bash curl -s https://api.github.com/repos/{owner}/{repo}/releases/latest ```
 
-### ReLettr Workflows
+### Requil Workflows
 
 #### Build & Test
 

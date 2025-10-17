@@ -30,7 +30,7 @@ pre-commit:
       run: |
         echo "🔍 Checking for unused dependencies..."
         if command -v depcheck >/dev/null 2>&1; then
-          depcheck --ignores="@types/*,@repo/*,lefthook,turbo,typescript" --skip-missing
+          depcheck --ignores="@types/*,@requil/*,lefthook,turbo,typescript" --skip-missing
         else
           echo "⚠️  depcheck not installed, skipping dependency check"
         fi

@@ -20,8 +20,7 @@
 			"!**/node_modules",
 			"!**/dist",
 			"!**/.next",
-			"!**/storybook-static",
-			"!packages/ui/web/src/styles.css"
+			"!**/.turbo"
 		]
 	},
 	"formatter": {
