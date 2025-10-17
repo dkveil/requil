@@ -44,3 +44,5 @@ pre-push:
   commands:
     lint:
       run: npx biome ci .
+
+colors: true
