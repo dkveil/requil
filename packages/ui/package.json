@@ -16,10 +16,10 @@
 	},
 	"devDependencies": {
 		"@requil/typescript-config": "workspace:*",
-		"@types/node": "^22.15.3",
+		"@types/node": "^24.8.1",
 		"@types/react": "19.1.0",
 		"@types/react-dom": "19.1.1",
-		"typescript": "5.9.2"
+		"typescript": "5.9.3"
 	},
 	"dependencies": {
 		"react": "^19.1.0",
