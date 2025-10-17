@@ -30,7 +30,7 @@
 		"@commitlint/config-conventional": "^20.0.0",
 		"lefthook": "^1.13.6",
 		"turbo": "^2.5.8",
-		"typescript": "5.9.2"
+		"typescript": "5.9.3"
 	},
 	"packageManager": "pnpm@10.6.5",
 	"engines": {
