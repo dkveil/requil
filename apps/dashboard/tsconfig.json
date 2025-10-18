@@ -1,0 +1,17 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "@requil/config/typescript/nextjs.json",
+	"compilerOptions": {
+		"paths": {
+			"@/*": ["./*"]
+		}
+	},
+	"include": [
+		"../../packages/config/typescript/**/*.ts",
+		"../../packages/config/typescript/**/*.tsx",
+		"../../packages/config/typescript/next-env.d.ts",
+		"../../packages/config/typescript/next.config.js",
+		"../../packages/config/typescript/.next/types/**/*.ts",
+		".next/types/**/*.ts"
+	]
+}

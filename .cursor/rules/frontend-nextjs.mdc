@@ -11,38 +11,217 @@ alwaysApply: false
 - Use server actions for form handling and data mutations from Server Components
 - Leverage Next.js Image component with proper sizing for core web vitals optimization
 - Implement the Metadata API for dynamic SEO optimization
-- Use React Server Components for {{data_fetching_operations}} to reduce client-side JavaScript
+- Use React Server Components for data fetching operations to reduce client-side JavaScript
 - Implement Streaming and Suspense for improved loading states
-- Use the new Link component without requiring a child <a> tag
+- Use the new Link component without requiring a child anchor tag
 - Leverage parallel routes for complex layouts and parallel data fetching
 - Implement intercepting routes for modal patterns and nested UIs
+
+## Folder Structure Convention
+
+```plaintext
+apps/dashboard/app/
+├── (auth)/              # Route group: login, signup (minimal layout)
+│   ├── login/
+│   ├── signup/
+│   └── layout.tsx       # Auth-specific layout (centered, no sidebar)
+├── (dashboard)/         # Route group: authenticated pages (full dashboard layout)
+│   ├── layout.tsx       # Dashboard shell (sidebar, header, breadcrumbs)
+│   ├── page.tsx         # Dashboard home
+│   ├── templates/       # /templates
+│   │   ├── page.tsx     # List view
+│   │   ├── [id]/        # /templates/:id
+│   │   │   ├── page.tsx # Template detail/editor
+│   │   │   └── loading.tsx
+│   │   └── new/         # /templates/new
+│   ├── campaigns/       # /campaigns
+│   │   ├── page.tsx
+│   │   ├── [id]/
+│   │   └── @modal/      # Parallel route for modals
+│   ├── subscribers/     # /subscribers
+│   └── settings/        # /settings
+│       ├── profile/
+│       ├── workspace/
+│       └── api-keys/
+├── api/                 # API routes (route handlers)
+│   └── v1/
+│       ├── send/
+│       ├── templates/
+│       └── usage/
+├── layout.tsx           # Root layout (providers, fonts, metadata)
+└── globals.css          # Global styles
+```
+
+### Component Organization
+
+```plaintext
+apps/dashboard/
+├── components/          # Shared dashboard components
+│   ├── ui/             # shadcn/ui components (button, card, dialog, etc.)
+│   ├── forms/          # Reusable form components
+│   ├── layouts/        # Layout components (sidebar, header, etc.)
+│   └── features/       # Feature-specific components
+│       ├── templates/
+│       ├── campaigns/
+│       └── subscribers/
+├── lib/                 # Utilities and helpers
+│   ├── api/            # API client functions
+│   ├── auth/           # Auth utilities
+│   ├── utils.ts        # General utilities
+│   └── validations/    # Zod schemas
+└── hooks/              # Custom React hooks
+    ├── use-auth.ts
+    ├── use-templates.ts
+    └── use-campaigns.ts
+```
+
+## State Management
+
+### Server State (Data Fetching)
+
+- Use **React Query (TanStack Query)** for API data fetching and caching
+- Leverage **Server Components** for initial data loading (eliminate loading spinners)
+- Implement **optimistic updates** for instant feedback on mutations
+- Use **Suspense boundaries** with streaming for progressive rendering
+- Cache Server Component data with Next.js caching (`revalidate`, `cache: 'force-cache'`)
+
+### Client State (UI State)
+
+- Use **React Context** for global UI state (theme, sidebar open/closed, toast notifications)
+- Use **Zustand** for complex client state (editor state, form drafts, multi-step wizards)
+- Prefer **URL state** (searchParams) for shareable/bookmarkable state (filters, pagination, tabs)
+- Use **React.use** for unwrapping promises in Client Components when needed
+- Avoid prop drilling; colocate state close to where it's used
+
+### Form State
+
+- Use **react-hook-form** for all forms with controlled and uncontrolled inputs
+- Integrate **zod** for type-safe validation schemas
+- Use **Server Actions** for form submissions with progressive enhancement
+- Implement field-level validation with `mode: 'onBlur'` or `'onChange'` as needed
 
 ## Dashboard-Specific Patterns
 
 ### Authentication & Authorization
 
-- Integrate Supabase Auth with Next.js middleware for protected routes
-- Use Server Components to validate sessions before rendering sensitive data
-- Implement Row Level Security (RLS) policies in Supabase for data access control
+- Integrate **Supabase Auth** with Next.js middleware for protected routes
+- Use **Server Components** to validate sessions before rendering sensitive data
+- Implement **Row Level Security (RLS)** policies in Supabase for data access control
 - Cache user session data appropriately to minimize database calls
+- Use middleware to redirect unauthenticated users to login page
+- Implement role-based access control (owner/member) at both UI and API levels
 
 ### Template Editor
 
-- Use Client Components for the MJML editor with real-time preview
-- Implement debounced auto-save with optimistic UI updates
-- Stream template validation results from server actions
-- Cache validated templates in Redis for quick retrieval
+- Use **Client Components** for the MJML editor with real-time preview
+- Implement **debounced auto-save** (500ms-1s) with optimistic UI updates
+- Stream **template validation results** from server actions as they complete
+- Cache **validated templates** in Redis for quick retrieval
+- Use **Web Workers** for heavy MJML compilation if needed
+- Show **live variable preview** with sample data
 
 ### Campaign Management
 
-- Use Server Components for campaign lists with streaming data
-- Implement infinite scroll with useInfiniteQuery for large datasets
-- Show real-time sending progress using Server-Sent Events or polling
-- Use parallel routes for campaign detail modals
+- Use **Server Components** for campaign lists with streaming data
+- Implement **infinite scroll** with `useInfiniteQuery` for large datasets
+- Show **real-time sending progress** using Server-Sent Events or polling
+- Use **parallel routes** (`@modal`) for campaign detail modals
+- Display **per-recipient status** (sent/failed/bounced) with filtering
+- Implement **batch actions** (pause, cancel, retry failed)
 
 ### Performance Optimization
 
-- Use Next.js Image component for brand assets and user uploads
-- Implement ISR (Incremental Static Regeneration) for rarely changing pages
-- Leverage route segment config for fine-grained caching control
-- Use generateStaticParams for known routes (e.g., template categories)
+- Use **Next.js Image component** for brand assets and user uploads with proper sizing
+- Implement **ISR (Incremental Static Regeneration)** for rarely changing pages
+- Leverage **route segment config** for fine-grained caching control:
+  - `export const dynamic = 'force-dynamic'` for real-time data
+  - `export const revalidate = 60` for periodic revalidation
+- Use **generateStaticParams** for known routes (e.g., template categories)
+- Implement **code splitting** with dynamic imports for heavy components (editor, charts)
+- Use **Suspense** boundaries to prevent blocking the entire page on slow data
+
+## Form Handling
+
+### Form Setup
+
+- Use **react-hook-form** with TypeScript for type-safe forms
+- Define **zod schemas** in `lib/validations/` and infer types
+- Implement **server-side validation** in Server Actions (never trust client)
+- Use **FormData** with Server Actions for progressive enhancement
+
+### Example Pattern
+
+```typescript
+// lib/validations/template.ts
+import { z } from 'zod';
+
+export const templateSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100),
+  subject: z.string().min(1, 'Subject is required'),
+  // ...
+});
+
+export type TemplateInput = z.infer<typeof templateSchema>;
+```
+
+```typescript
+// app/(dashboard)/templates/new/page.tsx (Client Component)
+'use client';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+export default function NewTemplate() {
+  const form = useForm<TemplateInput>({
+    resolver: zodResolver(templateSchema),
+    mode: 'onBlur',
+  });
+
+  async function onSubmit(data: TemplateInput) {
+    const result = await createTemplate(data); // Server Action
+    if (result.success) {
+      toast.success('Template created!');
+      router.push(`/templates/${result.id}`);
+    } else {
+      toast.error(result.error);
+    }
+  }
+  // ...
+}
+```
+
+### Form Validation
+
+- Show **inline errors** with proper a11y attributes (`aria-describedby`, `aria-invalid`)
+- Use **field-level validation** for instant feedback
+- Implement **async validation** for unique checks (email, slug, etc.)
+- Display **loading states** during submission with disabled inputs
+- Use **optimistic updates** to show changes immediately
+- Handle **network errors** gracefully with retry options
+
+## Error Handling
+
+### Client-Side Errors
+
+- Use **Error Boundaries** for component tree errors
+- Implement `error.tsx` files at route segments for graceful degradation
+- Use **toast notifications** for user-facing errors (form submission, API calls)
+- Log errors to console in development, to Sentry in production
+- Include **traceId** in error logs for correlation with backend
+
+### API Error Handling
+
+- Parse API error responses consistently (`{ ok: false, error: { code, message, traceId } }`)
+- Map error codes to user-friendly messages
+- Show **retry buttons** for transient errors (network, 5xx)
+- Display **actionable error messages** (e.g., "Upgrade plan" for 402)
+- Use **React Query's error boundaries** for query errors
+
+## Accessibility
+
+- Use **semantic HTML** (nav, main, aside, article, section)
+- Implement **keyboard navigation** for all interactive elements
+- Add **ARIA labels** where text content is insufficient
+- Ensure **focus management** in modals and dialogs
+- Test with **screen readers** (NVDA, JAWS, VoiceOver)
+- Maintain **WCAG AA contrast ratios** (4.5:1 for text, 3:1 for UI components)
+- Use **shadcn/ui** components which are built with a11y in mind

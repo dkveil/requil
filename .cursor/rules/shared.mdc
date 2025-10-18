@@ -1,6 +1,3 @@
----
-alwaysApply: true
----
 
 # AI Rules for Requil
 
@@ -71,5 +68,44 @@ Single-service **Fastify** monolith (Node 22+, TypeScript) exposing the API, ema
 
 - **Do not add inline comments**; the code must be self-explanatory through clear naming, small focused functions, and explicit types.
 - Prefer well-named variables/functions, cohesive modules, and predictable control flow over commentary.
+- Use **README/docs** and **module-level ADRs** for non-obvious design intent and decisions.
+- Public APIs may include concise docstrings for contract and examples; implementation details should remain comment-free.
+
+## Error Handling
+
+### API Errors
+
+- Use custom error classes extending Error (ValidationError, TransportError, etc.)
+- Include error codes, traceId, and context in error responses
+- Never expose internal errors to clients; log internally, return sanitized messages
+
+### Frontend Errors
+
+- Use ErrorBoundary for React component trees
+- Implement toast/notification system for user-facing errors
+- Log errors to Sentry with traceId correlation
+
+## Naming Conventions
+
+### Files & Folders
+
+- **kebab-case**: files, folders, routes (`user-profile.tsx`, `api/send-email/`)
+- **PascalCase**: React components (`UserProfile.tsx`, `EmailEditor.tsx`)
+- **camelCase**: utilities, hooks (`useAuth.ts`, `formatDate.ts`)
+
+### Code
+
+- **PascalCase**: Components, Types, Interfaces (`Button`, `UserProfile`, `ApiResponse`)
+- **camelCase**: variables, functions, hooks (`userId`, `sendEmail`, `useAuth`)
+- **SCREAMING_SNAKE_CASE**: constants, env vars (`MAX_HTML_SIZE`, `DATABASE_URL`)
+- **Prefix**: booleans with `is/has/should` (`isValid`, `hasAccess`, `shouldRetry`)
+
+## Testing Strategy
+
+- **Unit tests**: Pure functions, utilities, validators (Vitest)
+- **Integration tests**: API routes, database operations (Vitest + Testcontainers)
+- **E2E tests**: Critical user flows (Playwright) - post-MVP for dashboard
+- Aim for >80% coverage on business logic; skip trivial getters/setters
+
 - Use **README/docs** and **module-level ADRs** for non-obvious design intent and decisions.
 - Public APIs may include concise docstrings for contract and examples; implementation details should remain comment-free.

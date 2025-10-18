@@ -1,5 +1,6 @@
 packages:
   - apps/*
+  - packages/config/*
   - packages/*
 ignoredBuiltDependencies:
   - lefthook

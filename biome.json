@@ -11,6 +11,9 @@
 	"css": {
 		"formatter": {
 			"enabled": true
+		},
+		"linter": {
+			"enabled": true
 		}
 	},
 	"files": {
@@ -20,7 +23,9 @@
 			"!**/node_modules",
 			"!**/dist",
 			"!**/.next",
-			"!**/.turbo"
+			"!**/.turbo",
+			"!**/.build",
+			"turbo.json"
 		]
 	},
 	"formatter": {
@@ -66,6 +71,10 @@
 	},
 	"linter": {
 		"enabled": true,
+		"domains": {
+			"next": "recommended",
+			"react": "recommended"
+		},
 		"rules": {
 			"a11y": {
 				"noAccessKey": "error",
@@ -197,7 +206,8 @@
 				"noShadowRestrictedNames": "error",
 				"noSparseArray": "error",
 				"noUnsafeNegation": "error",
-				"recommended": true
+				"recommended": true,
+				"noUnknownAtRules": "off"
 			}
 		}
 	},

@@ -1,4 +1,4 @@
-# Dokument wymagań produktu (PRD) - ReLetrr
+# Dokument wymagań produktu (PRD) - Requil
 
 ## 1. Przegląd produktu
 

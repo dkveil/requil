@@ -1,8 +1,17 @@
 {
-	"name": "@requil/typescript-config",
+	"name": "@requil/config",
 	"version": "0.0.0",
 	"private": true,
 	"license": "MIT",
+	"exports": {
+		"./typescript/base.json": "./typescript/base.json",
+		"./typescript/nextjs.json": "./typescript/nextjs.json",
+		"./typescript/react-library.json": "./typescript/react-library.json",
+		"./typescript/node.json": "./typescript/node.json"
+	},
+	"files": [
+		"typescript"
+	],
 	"scripts": {
 		"build": "echo 'Config package - no build needed' && exit 0",
 		"type-check": "echo 'Config package - no type check needed' && exit 0",
