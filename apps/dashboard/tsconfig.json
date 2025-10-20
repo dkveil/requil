@@ -1,17 +1,18 @@
 {
-	"$schema": "https://json.schemastore.org/tsconfig",
 	"extends": "@requil/config/typescript/nextjs.json",
 	"compilerOptions": {
-		"paths": {
-			"@/*": ["./*"]
-		}
+		"plugins": [
+			{
+				"name": "next"
+			}
+		]
 	},
 	"include": [
-		"../../packages/config/typescript/**/*.ts",
-		"../../packages/config/typescript/**/*.tsx",
-		"../../packages/config/typescript/next-env.d.ts",
-		"../../packages/config/typescript/next.config.js",
-		"../../packages/config/typescript/.next/types/**/*.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"next-env.d.ts",
+		"next.config.ts",
 		".next/types/**/*.ts"
-	]
+	],
+	"exclude": ["node_modules"]
 }
