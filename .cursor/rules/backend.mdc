@@ -1,5 +1,14 @@
 ---
 alwaysApply: false
+globs:
+  - "apps/api/**"
+  - "packages/email-engine/**"
+  - "packages/transports/**"
+  - "packages/validation/**"
+  - "packages/webhooks/**"
+  - "packages/ratelimit/**"
+  - "packages/utils/**"
+  - "services/**"
 ---
 
 # Backend Guidelines

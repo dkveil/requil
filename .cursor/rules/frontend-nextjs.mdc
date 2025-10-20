@@ -1,5 +1,7 @@
 ---
 alwaysApply: false
+globs:
+  - "apps/dashboard/**"
 ---
 
 # Next.js Guidelines (Dashboard App)

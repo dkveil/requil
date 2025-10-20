@@ -1,5 +1,9 @@
 ---
 alwaysApply: false
+globs:
+  - "apps/dashboard/**"
+  - "apps/website/**"
+  - "packages/ui/**"
 ---
 
 # React Guidelines

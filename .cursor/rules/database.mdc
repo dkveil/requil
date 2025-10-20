@@ -1,5 +1,10 @@
 ---
 alwaysApply: false
+globs:
+  - "packages/db/**"
+  - "supabase/**"
+  - "**/migrations/**"
+  - "**/schema/**"
 ---
 
 # Database Guidelines

@@ -1,5 +1,7 @@
 ---
 alwaysApply: false
+globs:
+  - "apps/website/**"
 ---
 
 # Astro Guidelines (Website App)

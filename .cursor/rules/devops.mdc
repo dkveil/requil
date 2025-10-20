@@ -1,5 +1,12 @@
 ---
 alwaysApply: false
+globs:
+  - ".github/**"
+  - "**/*.yml"
+  - "**/*.yaml"
+  - "**/Dockerfile"
+  - "**/docker-compose*.yml"
+  - ".env*"
 ---
 
 # DevOps Guidelines

@@ -1,5 +1,10 @@
 ---
 alwaysApply: false
+globs:
+  - "apps/dashboard/**"
+  - "apps/website/**"
+  - "packages/ui/**"
+  - "**/*.css"
 ---
 
 # Frontend Styling Guidelines

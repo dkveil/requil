@@ -1,6 +1,7 @@
 ---
-alwaysApply: false
+alwaysApply: true
 ---
+
 # Turborepo Configuration & Best Practices
 
 ## Project Structure
