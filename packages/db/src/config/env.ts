@@ -10,6 +10,8 @@ const serverSchema = z.object({
 		.string()
 		.min(1)
 		.default('postgresql://postgres:postgres@localhost:54322/postgres'),
+	SUPABASE_URL: z.string().min(1).default('http://localhost:54321'),
+	SUPABASE_ANON_KEY: z.string().min(1).default(''),
 });
 
 const _serverEnv = serverSchema.safeParse(process.env);
@@ -20,9 +22,12 @@ if (!_serverEnv.success) {
 	);
 }
 
-const { NODE_ENV, DATABASE_URL } = _serverEnv.data;
+const { NODE_ENV, DATABASE_URL, SUPABASE_URL, SUPABASE_ANON_KEY } =
+	_serverEnv.data;
 
 export const env = {
 	NODE_ENV,
 	DATABASE_URL,
+	SUPABASE_URL,
+	SUPABASE_ANON_KEY,
 };
