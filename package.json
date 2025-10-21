@@ -22,7 +22,15 @@
 		"test:projects": "vitest run",
 		"test:projects:watch": "vitest --watch",
 		"e2e": "turbo run e2e",
-		"e2e:smoke": "turbo run e2e:smoke"
+		"e2e:smoke": "turbo run e2e:smoke",
+		"db:pull": "turbo run db:pull",
+		"db:push": "turbo run db:push",
+		"db:generate": "turbo run db:generate",
+		"db:migrate": "turbo run db:migrate",
+		"db:studio": "turbo run db:studio",
+		"db:drop": "turbo run db:drop",
+		"db:check": "turbo run db:check",
+		"db:up": "turbo run db:up"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.5",
