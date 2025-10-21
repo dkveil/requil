@@ -148,7 +148,6 @@
 				"noAccumulatingSpread": "error",
 				"noBarrelFile": "off",
 				"noDelete": "error",
-				"noReExportAll": "error",
 				"useTopLevelRegex": "error"
 			},
 			"recommended": true,

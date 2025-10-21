@@ -1,0 +1,38 @@
+{
+	"name": "@requil/db",
+	"version": "1.0.0",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"db:pull": "drizzle-kit pull",
+		"db:push": "drizzle-kit push",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio --port 4983",
+		"db:drop": "drizzle-kit drop",
+		"db:check": "drizzle-kit check",
+		"db:up": "drizzle-kit up",
+		"clean": "rm -rf dist"
+	},
+	"dependencies": {
+		"@supabase/supabase-js": "^2.76.1",
+		"dotenv": "^17.2.3",
+		"drizzle-orm": "^0.44.6",
+		"postgres": "^3.4.7"
+	},
+	"devDependencies": {
+		"@types/node": "^24.9.1",
+		"drizzle-kit": "^0.31.5",
+		"tsx": "^4.20.6",
+		"typescript": "^5.9.3"
+	}
+}
