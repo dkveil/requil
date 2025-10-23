@@ -1,12 +1,12 @@
-export * from './base-transport.js';
-export { ResendTransport } from './resend/resend-transport.js';
-export { SmtpTransport } from './smtp/smtp-transport.js';
-export * from './types.js';
+export * from './base-transport';
+export { ResendTransport } from './resend/resend-transport';
+export { SmtpTransport } from './smtp/smtp-transport';
+export * from './types';
 
-import type { BaseTransport } from './base-transport.js';
-import { ResendTransport } from './resend/resend-transport.js';
-import { SmtpTransport } from './smtp/smtp-transport.js';
-import type { AnyTransportConfig } from './types.js';
+import type { BaseTransport } from './base-transport';
+import { ResendTransport } from './resend/resend-transport';
+import { SmtpTransport } from './smtp/smtp-transport';
+import type { AnyTransportConfig } from './types';
 
 export const createTransport = (config: AnyTransportConfig): BaseTransport => {
 	switch (config.type) {

@@ -1,7 +1,7 @@
 import { TransportError } from '@requil/utils/errors';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ResendTransport } from '../resend/resend-transport.js';
-import type { ResendConfig, SendEmailRequest } from '../types.js';
+import { ResendTransport } from '../resend/resend-transport';
+import type { ResendConfig, SendEmailRequest } from '../types';
 
 vi.mock('resend', () => {
 	const mockSend = vi.fn();

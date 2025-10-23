@@ -1,1 +1,1 @@
-export * from './resend-transport.js';
+export * from './resend-transport';

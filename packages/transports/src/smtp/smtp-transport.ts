@@ -1,12 +1,8 @@
 import { TransportError } from '@requil/utils/errors';
 import type { Transporter } from 'nodemailer';
 import nodemailer from 'nodemailer';
-import { BaseTransport } from '../base-transport.js';
-import type {
-	SendEmailRequest,
-	SendEmailResponse,
-	SmtpConfig,
-} from '../types.js';
+import { BaseTransport } from '../base-transport';
+import type { SendEmailRequest, SendEmailResponse, SmtpConfig } from '../types';
 
 export class SmtpTransport extends BaseTransport {
 	private transporter: Transporter;

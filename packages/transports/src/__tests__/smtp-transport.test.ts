@@ -1,7 +1,7 @@
 import { TransportError } from '@requil/utils/errors';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { SmtpTransport } from '../smtp/smtp-transport.js';
-import type { SendEmailRequest, SmtpConfig } from '../types.js';
+import { SmtpTransport } from '../smtp/smtp-transport';
+import type { SendEmailRequest, SmtpConfig } from '../types';
 
 const mockSendMail = vi.fn();
 const mockVerify = vi.fn();

@@ -2,7 +2,7 @@ import type {
 	SendEmailRequest,
 	SendEmailResponse,
 	TransportConfig,
-} from './types.js';
+} from './types';
 
 export abstract class BaseTransport {
 	protected config: TransportConfig;

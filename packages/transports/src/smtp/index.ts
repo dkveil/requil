@@ -1,1 +1,1 @@
-export * from './smtp-transport.js';
+export * from './smtp-transport';

@@ -1,13 +1,13 @@
 import { TransportError } from '@requil/utils/errors';
 import { Resend } from 'resend';
-import { BaseTransport } from '../base-transport.js';
+import { BaseTransport } from '../base-transport';
 import type {
 	EmailAddress,
 	EmailAttachment,
 	ResendConfig,
 	SendEmailRequest,
 	SendEmailResponse,
-} from '../types.js';
+} from '../types';
 
 export class ResendTransport extends BaseTransport {
 	private client: Resend;

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { createTransport } from '../index.js';
-import { ResendTransport } from '../resend/resend-transport.js';
-import { SmtpTransport } from '../smtp/smtp-transport.js';
-import type { ResendConfig, SmtpConfig } from '../types.js';
+import { createTransport } from '../index';
+import { ResendTransport } from '../resend/resend-transport';
+import { SmtpTransport } from '../smtp/smtp-transport';
+import type { ResendConfig, SmtpConfig } from '../types';
 
 describe('createTransport', () => {
 	describe('resend', () => {

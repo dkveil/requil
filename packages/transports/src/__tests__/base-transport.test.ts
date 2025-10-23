@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { BaseTransport } from '../base-transport.js';
+import { BaseTransport } from '../base-transport';
 import type {
 	SendEmailRequest,
 	SendEmailResponse,
 	TransportConfig,
-} from '../types.js';
+} from '../types';
 
 class TestTransport extends BaseTransport {
 	async send(request: SendEmailRequest): Promise<SendEmailResponse> {
