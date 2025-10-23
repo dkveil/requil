@@ -24,7 +24,7 @@
   - webhooks/ – HMAC sign/verify, typy zdarzeń
   - ratelimit/ – Upstash: token bucket + idempotencja
   - db/ – Drizzle ORM + migracje
-  - types/ – @revail/types (OpenAPI → TS)
+  - types/ – @requil/types (OpenAPI → TS)
   - ui/ – shadcn/ui, wspólne komponenty
   - utils/ – logger (pino), traceId, helpers
   - config/ – tsconfig, turbo, biome config

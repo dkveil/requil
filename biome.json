@@ -25,6 +25,7 @@
 			"!**/.next",
 			"!**/.turbo",
 			"!**/.build",
+			"!**/coverage",
 			"turbo.json"
 		]
 	},
@@ -114,7 +115,7 @@
 				"noUselessTypeConstraint": "error",
 				"noUselessUndefinedInitialization": "error",
 				"useDateNow": "warn",
-				"useLiteralKeys": "error",
+				"useLiteralKeys": "off",
 				"useOptionalChain": "error",
 				"useRegexLiterals": "error",
 				"useSimplifiedLogicExpression": "error"
