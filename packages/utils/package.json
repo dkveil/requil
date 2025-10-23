@@ -1,0 +1,51 @@
+{
+	"name": "@requil/utils",
+	"version": "1.0.0",
+	"type": "module",
+	"private": true,
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./logger": {
+			"types": "./dist/logger.d.ts",
+			"import": "./dist/logger.js"
+		},
+		"./errors": {
+			"types": "./dist/errors.d.ts",
+			"import": "./dist/errors.js"
+		},
+		"./crypto": {
+			"types": "./dist/crypto.d.ts",
+			"import": "./dist/crypto.js"
+		},
+		"./env": {
+			"types": "./dist/env.d.ts",
+			"import": "./dist/env.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"clean": "rm -rf dist",
+		"type-check": "tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest"
+	},
+	"dependencies": {
+		"nanoid": "^5.1.6",
+		"pino": "^10.1.0",
+		"pino-pretty": "^13.1.2",
+		"zod": "^4.1.12"
+	},
+	"devDependencies": {
+		"@requil/config": "workspace:*",
+		"@types/node": "^24.9.1",
+		"@vitest/coverage-v8": "^3.0.0",
+		"typescript": "^5.9.3",
+		"vitest": "^3.2.4"
+	}
+}
