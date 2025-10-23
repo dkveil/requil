@@ -7,10 +7,12 @@
 		"./typescript/base.json": "./typescript/base.json",
 		"./typescript/nextjs.json": "./typescript/nextjs.json",
 		"./typescript/react-library.json": "./typescript/react-library.json",
-		"./typescript/node.json": "./typescript/node.json"
+		"./typescript/node.json": "./typescript/node.json",
+		"./vitest": "./vitest/base.ts"
 	},
 	"files": [
-		"typescript"
+		"typescript",
+		"vitest"
 	],
 	"scripts": {
 		"build": "echo 'Config package - no build needed' && exit 0",

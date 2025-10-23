@@ -1,19 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import baseConfig from '@requil/config/vitest';
+import { defineConfig, mergeConfig } from 'vitest/config';
 
-export default defineConfig({
-	test: {
-		globals: true,
-		environment: 'node',
-		coverage: {
-			provider: 'v8',
-			reporter: ['text', 'json', 'html'],
-			exclude: [
-				'dist/**',
-				'**/*.test.ts',
-				'**/*.config.ts',
-				'**/types.ts',
-				'**/index.ts',
-			],
-		},
-	},
-});
+export default mergeConfig(baseConfig, defineConfig({}));
