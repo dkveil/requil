@@ -8,6 +8,7 @@ import {
 	primaryKey,
 	text,
 	timestamp,
+	unique,
 	uuid,
 } from 'drizzle-orm/pg-core';
 import { workspaces } from './auth.js';
