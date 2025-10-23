@@ -28,6 +28,9 @@ jobs:
       - name: Lint & Format Check
         run: pnpm run ci:check
 
+      - name: Build Packages
+        run: pnpm run build
+
       - name: Type Check
         run: pnpm run type-check
 
