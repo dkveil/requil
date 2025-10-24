@@ -1,0 +1,7 @@
+{
+	"permissions": {
+		"allow": ["Bash(pnpm test:*)", "Bash(npx turbo run test)"],
+		"deny": [],
+		"ask": []
+	}
+}
