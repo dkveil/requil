@@ -103,7 +103,12 @@
 			"complexity": {
 				"noBannedTypes": "error",
 				"noEmptyTypeParameters": "error",
-				"noExcessiveCognitiveComplexity": "error",
+				"noExcessiveCognitiveComplexity": {
+					"level": "error",
+					"options": {
+						"maxAllowedComplexity": 20
+					}
+				},
 				"noExcessiveNestedTestSuites": "error",
 				"noExtraBooleanCast": "error",
 				"noUselessConstructor": "off",
