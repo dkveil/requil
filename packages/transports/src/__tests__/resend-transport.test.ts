@@ -27,7 +27,9 @@ describe('ResendTransport', () => {
 	};
 
 	let transport: ResendTransport;
+	// biome-ignore lint/suspicious/noExplicitAny: Mock objects need flexible typing for tests
 	let mockSend: any;
+	// biome-ignore lint/suspicious/noExplicitAny: Mock objects need flexible typing for tests
 	let mockList: any;
 
 	beforeEach(async () => {

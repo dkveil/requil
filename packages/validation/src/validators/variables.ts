@@ -44,6 +44,7 @@ export type ValidationMode = 'strict' | 'permissive';
  */
 export function validateVariables(
 	variables: Record<string, unknown>,
+	// biome-ignore lint/suspicious/noExplicitAny: JSONSchemaType requires any for flexible schema validation
 	schema: JSONSchemaType<any> | Record<string, unknown>,
 	mode: ValidationMode = 'strict'
 ): VariableValidationResult {
