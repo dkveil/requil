@@ -6,7 +6,20 @@ import { signWebhook } from '../core/signer.js';
 import { webhookPlugin } from '../middleware/fastify-webhook.js';
 import type { DeliveredEventPayload } from '../types/index.js';
 
-describe('Fastify Webhook Middleware', () => {
+const hasRedis = async (): Promise<boolean> => {
+	try {
+		const redis = new Redis({
+			url: process.env.UPSTASH_REDIS_REST_URL || 'http://localhost:8079',
+			token: process.env.UPSTASH_REDIS_REST_TOKEN || 'test-token',
+		});
+		await redis.ping();
+		return true;
+	} catch {
+		return false;
+	}
+};
+
+describe.skipIf(!(await hasRedis()))('Fastify Webhook Middleware', () => {
 	let fastify: FastifyInstance;
 	let redis: Redis;
 	let replayProtection: ReplayProtection;

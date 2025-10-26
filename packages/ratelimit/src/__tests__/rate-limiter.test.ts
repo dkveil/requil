@@ -2,7 +2,20 @@ import { Redis } from '@upstash/redis';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RateLimiter } from '../core/rate-limiter.js';
 
-describe('RateLimiter', () => {
+const hasRedis = async (): Promise<boolean> => {
+	try {
+		const redis = new Redis({
+			url: process.env.UPSTASH_REDIS_REST_URL || 'http://localhost:8079',
+			token: process.env.UPSTASH_REDIS_REST_TOKEN || 'test-token',
+		});
+		await redis.ping();
+		return true;
+	} catch {
+		return false;
+	}
+};
+
+describe.skipIf(!(await hasRedis()))('RateLimiter', () => {
 	let redis: Redis;
 	let rateLimiter: RateLimiter;
 

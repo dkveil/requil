@@ -3,7 +3,20 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { IdempotencyManager } from '../idempotency/idempotency-manager.js';
 import { IdempotencyConflictError } from '../types/index.js';
 
-describe('IdempotencyManager', () => {
+const hasRedis = async (): Promise<boolean> => {
+	try {
+		const redis = new Redis({
+			url: process.env.UPSTASH_REDIS_REST_URL || 'http://localhost:8079',
+			token: process.env.UPSTASH_REDIS_REST_TOKEN || 'test-token',
+		});
+		await redis.ping();
+		return true;
+	} catch {
+		return false;
+	}
+};
+
+describe.skipIf(!(await hasRedis()))('IdempotencyManager', () => {
 	let redis: Redis;
 	let idempotencyManager: IdempotencyManager;
 
