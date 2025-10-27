@@ -1,8 +1,12 @@
 {
-	"extends": "fastify-tsconfig",
+	"extends": "@tsconfig/node22/tsconfig.json",
 	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
 		"outDir": "dist",
 		"sourceMap": true
 	},
-	"include": ["src/**/*.ts"]
+	"include": ["src", "tests"]
 }
