@@ -7,7 +7,7 @@
 - **Workspace Members** (`workspace_members`) - User membership and roles
 - **Workspace Invitations** (`workspace_invitations`) - Invitation management
 - **API Keys** (`api_keys`, `api_key_scopes`) - Authentication credentials with scopes
-- **Templates** (`templates`, `template_snapshots`) - Email template versioning with dual storage (MJML + optional builder JSON structure)
+- **Templates** (`templates`, `template_snapshots`) - Email template versioning with dual storage (MJML + builder JSON structure)
 - **Brand Kit** (`workspace_brandkit`) - Workspace branding configuration
 - **Transports** (`workspace_transports`) - Email delivery configuration (Resend/SMTP)
 - **Send Jobs** (`send_jobs`, `send_recipients`) - Email sending orchestration
@@ -251,7 +251,7 @@ DELETE /v1/workspace/invitations/{invitationId}
 >           "name": "button",
 >           "properties": {
 >             "text": "Complete your profile",
->             "url": "{{profile_url}}",
+>             "href": "{{profile_url}}",
 >             "backgroundColor": "#007AFF",
 >             "textColor": "#ffffff",
 >             "borderRadius": "8px",
@@ -1770,7 +1770,7 @@ GET /v1/usage/history
   - TTL: 1 hour
   - Invalidation: On draft builder_structure update
   - Used for: Preview generation, validation
-  
+
 > **Cache Flow**:
 > - **Editing**: builder_structure (DB) → [cache MJML] → [cache HTML preview]
 > - **Publishing**: builder_structure → generate & store MJML/HTML in snapshot (DB)

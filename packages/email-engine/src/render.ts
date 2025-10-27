@@ -1,9 +1,16 @@
 import { Liquid } from 'liquidjs';
 import mjml2html from 'mjml';
+import { convertBuilderToHtml } from './builder-to-mjml.js';
 import { analyzeAndFixHtml } from './guardrails.js';
 import { toPlaintext } from './plaintext.js';
-import type { RenderInput, RenderOutput } from './types.js';
+import type {
+	BuilderRenderInput,
+	RenderInput,
+	RenderOutput,
+	TemplateSnapshot,
+} from './types.js';
 import { validateVariables } from './validate.js';
+import { validateBuilderStructure } from './validate-builder.js';
 
 const engine = new Liquid({ cache: false, strictVariables: false });
 
@@ -53,5 +60,42 @@ export async function renderRecipient(
 		usedSubject: subjectCandidate,
 		usedPreheader: preheaderCandidate || undefined,
 		sizeBytes: analyzed.sizeBytes,
+	};
+}
+
+export async function renderFromBuilder(
+	input: BuilderRenderInput
+): Promise<RenderOutput> {
+	const { builderStructure, variablesSchema, subjectLines, preheader } = input;
+
+	const builderValidation = validateBuilderStructure(builderStructure);
+	if (!builderValidation.ok) {
+		throw new Error(
+			`Builder structure validation failed: ${builderValidation.errors.map((e) => e.message).join(', ')}`
+		);
+	}
+
+	const conversionResult = convertBuilderToHtml(builderStructure);
+	const { mjml: generatedMjml } = conversionResult;
+
+	const snapshot: TemplateSnapshot = {
+		stableId: 'builder-draft',
+		snapshotId: 'preview',
+		builderStructure,
+		mjml: generatedMjml,
+		variablesSchema,
+		subjectLines,
+		preheader,
+	};
+
+	const result = await renderRecipient({ ...input, snapshot });
+
+	return {
+		...result,
+		warnings: [
+			...conversionResult.warnings,
+			...builderValidation.warnings,
+			...result.warnings,
+		],
 	};
 }

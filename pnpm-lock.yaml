@@ -139,6 +139,9 @@ importers:
 
   packages/email-engine:
     dependencies:
+      '@requil/db':
+        specifier: workspace:*
+        version: link:../db
       '@requil/utils':
         specifier: workspace:*
         version: link:../utils

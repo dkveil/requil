@@ -47,3 +47,39 @@ export const transportState = pgEnum('transport_state', [
 	'unverified',
 ]);
 export const transportType = pgEnum('transport_type', ['resend', 'smtp']);
+
+export const builderElementType = pgEnum('builder_element_type', [
+	'layout',
+	'content',
+	'media',
+	'advanced',
+]);
+
+export const builderLayoutElement = pgEnum('builder_layout_element', [
+	'container',
+	'section',
+	'column',
+	'columns-2',
+	'columns-3',
+	'row',
+]);
+
+export const builderContentElement = pgEnum('builder_content_element', [
+	'heading',
+	'paragraph',
+	'text',
+	'button',
+	'divider',
+	'spacer',
+]);
+
+export const builderMediaElement = pgEnum('builder_media_element', [
+	'image',
+	'video',
+]);
+
+export const builderAdvancedElement = pgEnum('builder_advanced_element', [
+	'social-links',
+	'unsubscribe',
+	'custom',
+]);

@@ -750,4 +750,64 @@ create policy usage_counters_daily_delete_auth_deny on public.usage_counters_dai
 -- aplikacja musi ustawiać current_setting 'app.workspace_id' na uuid bieżącego workspace'u dla każdej sesji/żądania
 -- przykładowo: select set_config('app.workspace_id', '<uuid>', true);
 
+-- ========================================
+-- BUILDER STRUCTURE SUPPORT (2025-10-27)
+-- ========================================
+
+-- nowe typy enum dla builder element types
+do $$ begin
+  if not exists (select 1 from pg_type where typname = 'builder_element_type') then
+    create type builder_element_type as enum ('layout', 'content', 'media', 'advanced');
+  end if;
+  if not exists (select 1 from pg_type where typname = 'builder_layout_element') then
+    create type builder_layout_element as enum ('container', 'section', 'column', 'columns-2', 'columns-3', 'row');
+  end if;
+  if not exists (select 1 from pg_type where typname = 'builder_content_element') then
+    create type builder_content_element as enum ('heading', 'paragraph', 'text', 'button', 'divider', 'spacer');
+  end if;
+  if not exists (select 1 from pg_type where typname = 'builder_media_element') then
+    create type builder_media_element as enum ('image', 'video');
+  end if;
+  if not exists (select 1 from pg_type where typname = 'builder_advanced_element') then
+    create type builder_advanced_element as enum ('social-links', 'unsubscribe', 'custom');
+  end if;
+end $$;
+
+-- dodanie pól draft do templates
+alter table public.templates
+  add column if not exists builder_structure jsonb,
+  add column if not exists mjml text,
+  add column if not exists variables_schema jsonb,
+  add column if not exists subject_lines text[],
+  add column if not exists preheader text,
+  add column if not exists updated_at timestamptz not null default now();
+
+-- dodanie builder_structure do template_snapshots (dla archiwizacji)
+alter table public.template_snapshots
+  add column if not exists builder_structure jsonb;
+
+-- trigger dla auto-update updated_at w templates
+drop trigger if exists trg_touch_templates on public.templates;
+create trigger trg_touch_templates
+  before update on public.templates
+  for each row
+  execute function app.touch_updated_at();
+
+-- komentarze dokumentujące nowe kolumny
+comment on column public.templates.builder_structure is 'Builder structure (JSON) - primary storage format, source of truth for visual editor';
+comment on column public.templates.mjml is 'MJML template - generated from builder_structure or provided directly via API';
+comment on column public.templates.variables_schema is 'JSON Schema for template variables (draft)';
+comment on column public.templates.subject_lines is 'Array of subject line suggestions (draft)';
+comment on column public.templates.preheader is 'Email preheader text (draft)';
+comment on column public.templates.updated_at is 'Timestamp of last draft modification';
+
+comment on column public.template_snapshots.builder_structure is 'Archived builder structure from publish time - allows rollback and re-editing';
+
+-- indeks GIN na builder_structure dla szybkiego wyszukiwania
+create index if not exists templates_builder_structure_gin
+  on public.templates using gin (builder_structure);
+
+create index if not exists template_snapshots_builder_structure_gin
+  on public.template_snapshots using gin (builder_structure);
+
 

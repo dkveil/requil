@@ -22,8 +22,16 @@ export const templates = pgTable(
 		stableId: citext('stable_id').notNull(),
 		name: text(),
 		currentSnapshotId: uuid('current_snapshot_id'),
+		builderStructure: jsonb('builder_structure'),
+		mjml: text(),
+		variablesSchema: jsonb('variables_schema'),
+		subjectLines: text('subject_lines').array(),
+		preheader: text(),
 		createdBy: uuid('created_by'),
 		createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+			.defaultNow()
+			.notNull(),
+		updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
 			.defaultNow()
 			.notNull(),
 	},
@@ -91,6 +99,7 @@ export const templateSnapshots = pgTable(
 			withTimezone: true,
 			mode: 'string',
 		}),
+		builderStructure: jsonb('builder_structure'),
 		mjml: text().notNull(),
 		html: text().notNull(),
 		plaintext: text(),

@@ -1,5 +1,6 @@
 export * from './api-keys.js';
 export * from './auth.js';
+export * from './builder-types.js';
 export * from './enums.js';
 export * from './events.js';
 export * from './relations.js';

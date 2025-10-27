@@ -20,6 +20,7 @@
 		"test:watch": "vitest"
 	},
 	"dependencies": {
+		"@requil/db": "workspace:*",
 		"@requil/utils": "workspace:*",
 		"@requil/validation": "workspace:*",
 		"cheerio": "^1.0.0",
