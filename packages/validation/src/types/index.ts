@@ -1,11 +1,11 @@
-export type { FormattedValidationError } from '../middleware/error-formatter.js';
-export type { ValidatorSchema } from '../middleware/fastify-validator.js';
+export type { FormattedValidationError } from '../middleware/error-formatter';
+export type { ValidatorSchema } from '../middleware/fastify-validator';
 export type {
 	ApiKeyQuery,
 	ApiKeyScope,
 	CreateApiKey,
 	UpdateApiKey,
-} from '../schemas/api-key.js';
+} from '../schemas/api-key';
 export type {
 	Attachment,
 	FromAddress,
@@ -15,7 +15,7 @@ export type {
 	SendRequest,
 	SendResponse,
 	TemplateRef,
-} from '../schemas/send.js';
+} from '../schemas/send';
 export type {
 	BulkImportSubscribers,
 	ConfirmSubscription,
@@ -23,7 +23,7 @@ export type {
 	SubscriberQuery,
 	Unsubscribe,
 	UpdateSubscriber,
-} from '../schemas/subscriber.js';
+} from '../schemas/subscriber';
 export type {
 	CreateTemplate,
 	PublishTemplate,
@@ -31,22 +31,22 @@ export type {
 	UpdateTemplate,
 	ValidateTemplate,
 	ValidateTemplateResponse,
-} from '../schemas/template.js';
+} from '../schemas/template';
 export type {
 	CreateTransport,
 	TransportType,
 	UpdateTransport,
 	VerifyTransport,
-} from '../schemas/transport.js';
+} from '../schemas/transport';
 
-export type { UsageQuery, UsageResponse } from '../schemas/usage.js';
+export type { UsageQuery, UsageResponse } from '../schemas/usage';
 export type {
 	CreateWebhook,
 	TestWebhook,
 	UpdateWebhook,
 	WebhookEvent,
 	WebhookQuery,
-} from '../schemas/webhook.js';
+} from '../schemas/webhook';
 export type {
 	AcceptInvitation,
 	CreateWorkspace,
@@ -54,15 +54,15 @@ export type {
 	UpdateBrandkit,
 	UpdateMemberRole,
 	UpdateWorkspace,
-} from '../schemas/workspace.js';
+} from '../schemas/workspace';
 export type {
 	EmailValidationOptions,
 	EmailValidationResult,
-} from '../validators/email.js';
+} from '../validators/email';
 
-export type { GuardrailResult } from '../validators/guardrails.js';
-export type { MjmlValidationResult } from '../validators/mjml.js';
+export type { GuardrailResult } from '../validators/guardrails';
+export type { MjmlValidationResult } from '../validators/mjml';
 export type {
 	ValidationMode,
 	VariableValidationResult,
-} from '../validators/variables.js';
+} from '../validators/variables';

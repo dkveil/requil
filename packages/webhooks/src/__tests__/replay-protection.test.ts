@@ -1,6 +1,6 @@
 import { Redis } from '@upstash/redis';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { ReplayProtection } from '../core/replay-protection.js';
+import { ReplayProtection } from '../core/replay-protection';
 
 const hasRedis = async (): Promise<boolean> => {
 	try {

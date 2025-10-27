@@ -5,7 +5,7 @@ import type {
 	WebhookEventPayload,
 	WebhookSignature,
 	WebhookVerificationResult,
-} from '../types/index.js';
+} from '../types/index';
 
 const DEFAULT_MAX_AGE_MS = 5 * 60 * 1000;
 

@@ -9,8 +9,8 @@ import {
 	unique,
 	uuid,
 } from 'drizzle-orm/pg-core';
-import { workspaces } from './auth.js';
-import { apiScope } from './enums.js';
+import { workspaces } from './auth';
+import { apiScope } from './enums';
 
 export const apiKeys = pgTable(
 	'api_keys',

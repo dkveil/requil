@@ -1,8 +1,8 @@
 import type { FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
-import type { ReplayProtection } from '../core/replay-protection.js';
-import { verifyWebhookSignature } from '../core/signer.js';
-import type { WebhookEventPayload } from '../types/index.js';
+import type { ReplayProtection } from '../core/replay-protection';
+import { verifyWebhookSignature } from '../core/signer';
+import type { WebhookEventPayload } from '../types/index';
 
 export interface WebhookPluginOptions {
 	secret: string;

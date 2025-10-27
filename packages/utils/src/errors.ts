@@ -1,4 +1,4 @@
-import type { TraceId } from './logger.js';
+import type { TraceId } from './logger';
 
 export interface ErrorContext {
 	traceId?: TraceId;

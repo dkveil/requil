@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hashObject, hashString } from '../utils/hash.js';
+import { hashObject, hashString } from '../utils/hash';
 
 const HEX_HASH_REGEX = /^[a-f0-9]{64}$/;
 

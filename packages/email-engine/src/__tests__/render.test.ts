@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compileMjml, renderRecipient } from '../../src/render.js';
+import { compileMjml, renderRecipient } from '../../src/render';
 
 const snapshot = {
 	stableId: 'welcome',

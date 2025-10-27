@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { toPlaintext } from '../../src/plaintext.js';
+import { toPlaintext } from '../../src/plaintext';
 
 const IMAGE_SRC_REGEX = /x\.jpg/;
 const EXAMPLE_REGEX = /example/;

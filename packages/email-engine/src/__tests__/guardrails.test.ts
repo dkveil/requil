@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { analyzeAndFixHtml } from '../../src/guardrails.js';
+import { analyzeAndFixHtml } from '../../src/guardrails';
 
 const ALT_REGEX = /alt/i;
 const HTTP_REGEX = /HTTP/i;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CONSTANTS } from '../constants.js';
+import { CONSTANTS } from '../constants';
 
 describe('constants', () => {
 	it('should have HTML_MAX_SIZE_BYTES defined', () => {

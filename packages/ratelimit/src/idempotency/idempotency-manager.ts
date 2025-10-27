@@ -4,9 +4,9 @@ import type {
 	IdempotencyConfig,
 	IdempotencyLockResult,
 	IdempotencyResult,
-} from '../types/index.js';
-import { IdempotencyConflictError } from '../types/index.js';
-import { hashObject } from '../utils/index.js';
+} from '../types/index';
+import { IdempotencyConflictError } from '../types/index';
+import { hashObject } from '../utils/index';
 
 export class IdempotencyManager {
 	private readonly redis: Redis;

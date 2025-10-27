@@ -1,7 +1,7 @@
 import type { FastifyPluginAsync, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 import { ZodError, type ZodSchema } from 'zod';
-import { zodErrorToValidationError } from './error-formatter.js';
+import { zodErrorToValidationError } from './error-formatter';
 
 export interface ValidatorSchema {
 	body?: ZodSchema;

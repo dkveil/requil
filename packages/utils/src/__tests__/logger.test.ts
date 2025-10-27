@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createChildLogger, createTraceId, logger } from '../logger.js';
+import { createChildLogger, createTraceId, logger } from '../logger';
 
 const TRACE_ID_REGEX = /^[A-Za-z0-9_-]+$/;
 

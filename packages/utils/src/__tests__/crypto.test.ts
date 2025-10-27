@@ -6,7 +6,7 @@ import {
 	hashToken,
 	verifyApiKeyFormat,
 	verifyHmacSignature,
-} from '../crypto.js';
+} from '../crypto';
 
 const API_KEY_REGEX = /^rql_[A-Za-z0-9_-]{43}$/;
 

@@ -5,11 +5,11 @@ import {
 	signWebhook,
 	timingSafeCompare,
 	verifyWebhookSignature,
-} from '../core/signer.js';
+} from '../core/signer';
 import type {
 	DeliveredEventPayload,
 	WebhookEventPayload,
-} from '../types/index.js';
+} from '../types/index';
 
 const HEX_PATTERN = /^[0-9a-f]{32}$/;
 

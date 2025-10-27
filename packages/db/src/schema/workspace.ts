@@ -13,9 +13,9 @@ import {
 	unique,
 	uuid,
 } from 'drizzle-orm/pg-core';
-import { workspaces } from './auth.js';
-import { plan, transportState, transportType } from './enums.js';
-import { bytea, citext } from './types.js';
+import { workspaces } from './auth';
+import { plan, transportState, transportType } from './enums';
+import { bytea, citext } from './types';
 
 export const workspaceBrandkit = pgTable(
 	'workspace_brandkit',

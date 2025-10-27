@@ -10,15 +10,15 @@ import {
 	timestamp,
 	uuid,
 } from 'drizzle-orm/pg-core';
-import { workspaces } from './auth.js';
+import { workspaces } from './auth';
 import {
 	recipientStatus,
 	sendJobStatus,
 	suppressionReason,
 	transportType,
-} from './enums.js';
-import { templateSnapshots } from './templates.js';
-import { bytea, citext } from './types.js';
+} from './enums';
+import { templateSnapshots } from './templates';
+import { bytea, citext } from './types';
 
 export const sendJobs = pgTable(
 	'send_jobs',

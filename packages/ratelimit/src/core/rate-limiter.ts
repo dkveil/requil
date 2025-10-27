@@ -3,7 +3,7 @@ import type {
 	RateLimiterConfig,
 	RateLimitInfo,
 	RateLimitResult,
-} from '../types/index.js';
+} from '../types/index';
 
 export class RateLimiter {
 	private readonly redis: Redis;

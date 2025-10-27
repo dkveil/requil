@@ -1,10 +1,10 @@
 import { Redis } from '@upstash/redis';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { ReplayProtection } from '../core/replay-protection.js';
-import { signWebhook } from '../core/signer.js';
-import { webhookPlugin } from '../middleware/fastify-webhook.js';
-import type { DeliveredEventPayload } from '../types/index.js';
+import { ReplayProtection } from '../core/replay-protection';
+import { signWebhook } from '../core/signer';
+import { webhookPlugin } from '../middleware/fastify-webhook';
+import type { DeliveredEventPayload } from '../types/index';
 
 const hasRedis = async (): Promise<boolean> => {
 	try {

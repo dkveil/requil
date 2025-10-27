@@ -5,7 +5,7 @@ import {
 	sanitizeError,
 	TransportError,
 	ValidationError,
-} from '../errors.js';
+} from '../errors';
 
 describe('errors', () => {
 	describe('ValidationError', () => {

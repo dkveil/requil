@@ -11,8 +11,8 @@ import {
 	unique,
 	uuid,
 } from 'drizzle-orm/pg-core';
-import { workspaces } from './auth.js';
-import { citext } from './types.js';
+import { workspaces } from './auth';
+import { citext } from './types';
 
 export const templates = pgTable(
 	'templates',

@@ -1,5 +1,5 @@
 import { validateVariables as validateVars } from '@requil/validation';
-import type { VariablesValidationMode } from './types.js';
+import type { VariablesValidationMode } from './types';
 
 export function validateVariables(
 	schema: unknown,

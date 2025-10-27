@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import type { BuilderStructure } from '@requil/db';
-import { convertBuilderToHtml } from './builder-to-mjml.js';
-import type { TemplateSnapshot } from './types.js';
+import { convertBuilderToHtml } from './builder-to-mjml';
+import type { TemplateSnapshot } from './types';
 
 export const computeSnapshotId = (
 	snapshot: Omit<TemplateSnapshot, 'snapshotId'>

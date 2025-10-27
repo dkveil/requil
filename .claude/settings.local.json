@@ -1,6 +1,6 @@
 {
 	"permissions": {
-		"allow": ["Bash(pnpm test:*)", "Bash(npx turbo run test)"],
+		"allow": ["Bash(pnpm test:*)", "Bash(npx turbo run test)", "Bash(find:*)"],
 		"deny": [],
 		"ask": []
 	}

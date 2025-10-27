@@ -1,1 +1,1 @@
-export * from './fastify-webhook.js';
+export * from './fastify-webhook';

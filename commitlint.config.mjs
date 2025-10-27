@@ -22,7 +22,6 @@ export default {
 			2,
 			'always',
 			[
-				// all scope
 				'app',
 				// Apps
 				'api',
@@ -39,6 +38,7 @@ export default {
 				'ui',
 				'utils',
 				'config',
+				'typescript',
 				// Infrastructure
 				'docker',
 				'ci',

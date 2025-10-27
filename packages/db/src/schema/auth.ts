@@ -10,7 +10,7 @@ import {
 	uniqueIndex,
 	uuid,
 } from 'drizzle-orm/pg-core';
-import { bytea, citext } from './types.js';
+import { bytea, citext } from './types';
 
 export const workspaceRole = pgEnum('workspace_role', ['owner', 'member']);
 

@@ -1,2 +1,2 @@
-export * from './replay-protection.js';
-export * from './signer.js';
+export * from './replay-protection';
+export * from './signer';

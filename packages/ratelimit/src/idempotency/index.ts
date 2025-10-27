@@ -1,1 +1,1 @@
-export * from './idempotency-manager.js';
+export * from './idempotency-manager';

@@ -1,7 +1,7 @@
 import { Redis } from '@upstash/redis';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { IdempotencyManager } from '../idempotency/idempotency-manager.js';
-import { IdempotencyConflictError } from '../types/index.js';
+import { IdempotencyManager } from '../idempotency/idempotency-manager';
+import { IdempotencyConflictError } from '../types/index';
 
 const hasRedis = async (): Promise<boolean> => {
 	try {

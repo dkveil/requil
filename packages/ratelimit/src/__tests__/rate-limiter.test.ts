@@ -1,6 +1,6 @@
 import { Redis } from '@upstash/redis';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { RateLimiter } from '../core/rate-limiter.js';
+import { RateLimiter } from '../core/rate-limiter';
 
 const hasRedis = async (): Promise<boolean> => {
 	try {

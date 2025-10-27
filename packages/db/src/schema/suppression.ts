@@ -7,9 +7,9 @@ import {
 	timestamp,
 	uuid,
 } from 'drizzle-orm/pg-core';
-import { workspaces } from './auth.js';
-import { suppressionReason } from './enums.js';
-import { citext } from './types.js';
+import { workspaces } from './auth';
+import { suppressionReason } from './enums';
+import { citext } from './types';
 
 export const suppression = pgTable(
 	'suppression',

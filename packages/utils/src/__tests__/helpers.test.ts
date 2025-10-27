@@ -8,7 +8,7 @@ import {
 	pick,
 	safeJsonParse,
 	truncate,
-} from '../helpers.js';
+} from '../helpers';
 
 describe('helpers', () => {
 	describe('isEmail', () => {

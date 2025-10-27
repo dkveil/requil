@@ -6,7 +6,7 @@ import {
 	requiredString,
 	requiredUrl,
 	validateEnv,
-} from '../env.js';
+} from '../env';
 
 describe('env utils', () => {
 	describe('validateEnv', () => {

@@ -1,16 +1,16 @@
 import { Liquid } from 'liquidjs';
 import mjml2html from 'mjml';
-import { convertBuilderToHtml } from './builder-to-mjml.js';
-import { analyzeAndFixHtml } from './guardrails.js';
-import { toPlaintext } from './plaintext.js';
+import { convertBuilderToHtml } from './builder-to-mjml';
+import { analyzeAndFixHtml } from './guardrails';
+import { toPlaintext } from './plaintext';
 import type {
 	BuilderRenderInput,
 	RenderInput,
 	RenderOutput,
 	TemplateSnapshot,
-} from './types.js';
-import { validateVariables } from './validate.js';
-import { validateBuilderStructure } from './validate-builder.js';
+} from './types';
+import { validateVariables } from './validate';
+import { validateBuilderStructure } from './validate-builder';
 
 const engine = new Liquid({ cache: false, strictVariables: false });
 
