@@ -5,7 +5,6 @@
 	"main": "app.ts",
 	"scripts": {
 		"test": "npm run build && tsc -p test/tsconfig.json && c8 node --test -r ts-node/register \"test/**/*.ts\"",
-		"predev": "node -e \"try { require('child_process').execSync('for /f \\\"tokens=5\\\" %a in (\\'netstat -ano ^| findstr :8121\\') do taskkill //F //PID %a', {shell: true, stdio: 'inherit'}); } catch(e) {}\"",
 		"dev": "tsx watch src --env-file=.env | pino-pretty",
 		"start:prod": "node ./dist/index.js --env-file=.env",
 		"build": "rm -rf ./dist && tsc --project tsconfig.build.json && resolve-tspaths -p tsconfig.build.json -s ./src -o ./dist",
@@ -19,6 +18,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@fastify/autoload": "^6.0.0",
+		"@fastify/awilix": "^8.0.0",
 		"@fastify/cors": "^11.1.0",
 		"@fastify/helmet": "^13.0.2",
 		"@fastify/request-context": "^6.2.1",
@@ -27,15 +27,18 @@
 		"@fastify/swagger-ui": "^5.2.3",
 		"@fastify/under-pressure": "^9.0.3",
 		"@gquittet/graceful-server": "^5.2.16",
+		"@requil/api": "link:",
 		"@requil/db": "workspace:*",
 		"@requil/utils": "workspace:*",
+		"awilix": "^12.0.5",
 		"dotenv": "^17.2.3",
 		"fastify": "^5.0.0",
 		"fastify-cli": "^7.4.0",
 		"fastify-plugin": "^5.0.0",
 		"fastify-type-provider-zod": "^6.1.0",
 		"pino": "^10.1.0",
-		"ramda": "^0.32.0"
+		"ramda": "^0.32.0",
+		"resolve-tspaths": "^0.8.23"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.1",

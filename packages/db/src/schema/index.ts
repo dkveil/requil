@@ -3,6 +3,8 @@ export * from './auth';
 export * from './builder-types';
 export * from './enums';
 export * from './events';
+// TODO: Remove this after testing
+export * from './example';
 export * from './relations';
 export * from './sending';
 export * from './subscribers';

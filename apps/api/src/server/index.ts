@@ -7,6 +7,7 @@ import {
 	validatorCompiler,
 } from 'fastify-type-provider-zod';
 import { env } from '@/config';
+import { di } from '@/server/di';
 
 const PRODUCTION_REGEX = /.(route|resolver).js$/;
 const DEVELOPMENT_REGEX = /.(route|resolver).(ts|js)$/;
@@ -20,11 +21,13 @@ export default async function createServer(fastify: FastifyInstance) {
 		dirNameRoutePrefix: false,
 	});
 
+	await di(fastify);
+
 	await fastify.register(AutoLoad, {
 		dir: path.join(__dirname, '../modules'),
 		dirNameRoutePrefix: false,
 		options: {
-			autoPrefix: 'api',
+			prefix: 'api',
 		},
 		matchFilter: (path) => {
 			const regex = env.isProduction ? PRODUCTION_REGEX : DEVELOPMENT_REGEX;
