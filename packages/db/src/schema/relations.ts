@@ -1,23 +1,17 @@
 import { relations } from 'drizzle-orm/relations';
+import { apiKeyScopes, apiKeys } from './api-keys';
+import { workspaceInvitations, workspaceMembers, workspaces } from './auth';
+import { events } from './events';
+import { sendJobs, sendRecipients } from './sending';
+import { subscribers, subscriberTags } from './subscribers';
+import { suppression } from './suppression';
+import { templateSnapshots, templates } from './templates';
+import { usageCountersDaily } from './usage';
 import {
-	apiKeyScopes,
-	apiKeys,
-	events,
-	sendJobs,
-	sendRecipients,
-	subscribers,
-	subscriberTags,
-	suppression,
-	templateSnapshots,
-	templates,
-	usageCountersDaily,
 	workspaceBrandkit,
-	workspaceInvitations,
-	workspaceMembers,
 	workspacePlans,
-	workspaces,
 	workspaceTransports,
-} from './index';
+} from './workspace';
 
 export const subscribersRelations = relations(subscribers, ({ one, many }) => ({
 	workspace: one(workspaces, {

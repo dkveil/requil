@@ -1,14 +1,12 @@
 {
-	"extends": "@tsconfig/node22/tsconfig.json",
+	"extends": "@requil/config/typescript/base.json",
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
 		},
 		"outDir": "dist",
-		"sourceMap": true,
-		"moduleResolution": "bundler",
-		"module": "ESNext"
+		"sourceMap": true
 	},
 	"include": ["src", "tests"]
 }

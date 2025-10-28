@@ -1,17 +1,16 @@
 {
 	"name": "@requil/db",
 	"version": "1.0.0",
-	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js"
+			"default": "./dist/index.js"
 		},
 		"./client": {
 			"types": "./dist/client.d.ts",
-			"import": "./dist/client.js"
+			"default": "./dist/client.js"
 		}
 	},
 	"scripts": {

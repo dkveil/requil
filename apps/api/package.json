@@ -5,6 +5,7 @@
 	"main": "app.ts",
 	"scripts": {
 		"test": "npm run build && tsc -p test/tsconfig.json && c8 node --test -r ts-node/register \"test/**/*.ts\"",
+		"predev": "node -e \"try { require('child_process').execSync('for /f \\\"tokens=5\\\" %a in (\\'netstat -ano ^| findstr :8121\\') do taskkill //F //PID %a', {shell: true, stdio: 'inherit'}); } catch(e) {}\"",
 		"dev": "tsx watch src --env-file=.env | pino-pretty",
 		"start:prod": "node ./dist/index.js --env-file=.env",
 		"build": "rm -rf ./dist && tsc --project tsconfig.build.json && resolve-tspaths -p tsconfig.build.json -s ./src -o ./dist",
@@ -33,16 +34,19 @@
 		"fastify-cli": "^7.4.0",
 		"fastify-plugin": "^5.0.0",
 		"fastify-type-provider-zod": "^6.1.0",
-		"pino": "^10.1.0"
+		"pino": "^10.1.0",
+		"ramda": "^0.32.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.1",
 		"@requil/config": "workspace:*",
 		"@tsconfig/node22": "^22.0.2",
 		"@types/node": "^22.1.0",
+		"@types/ramda": "^0.31.1",
 		"c8": "^10.1.2",
 		"concurrently": "^9.0.0",
 		"fastify-tsconfig": "^3.0.0",
+		"kill-port": "^2.0.1",
 		"pino-pretty": "^13.1.2",
 		"rimraf": "^6.0.1",
 		"ts-node": "^10.4.0",
