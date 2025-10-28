@@ -6,7 +6,9 @@
 			"@/*": ["./src/*"]
 		},
 		"outDir": "dist",
-		"sourceMap": true
+		"sourceMap": true,
+		"moduleResolution": "bundler",
+		"module": "ESNext"
 	},
 	"include": ["src", "tests"]
 }

@@ -1,5 +1,9 @@
+import path from 'node:path';
 import { baseEnvSchema, redisEnvSchema } from '@requil/config/env';
+import { config as dotenv } from 'dotenv';
 import { z } from 'zod';
+
+dotenv({ path: path.resolve(process.cwd(), '.env') });
 
 const apiEnvSchema = z.object({
 	...baseEnvSchema.shape,
@@ -13,7 +17,11 @@ type ApiEnv = z.infer<typeof apiEnvSchema>;
 const parsedData = apiEnvSchema.safeParse(process.env);
 
 if (!parsedData.success) {
-	throw new Error('Invalid environment variables');
+	const errors = parsedData.error.flatten().fieldErrors;
+
+	throw new Error(
+		`Invalid environment variables: \n${Object.values(errors).join('\n')}`
+	);
 }
 
 const env = parsedData.data;
@@ -32,6 +40,6 @@ const config = {
 	},
 };
 
-export type Env = typeof config;
+export type Env = typeof config & ApiEnv;
 
 export { config as env };

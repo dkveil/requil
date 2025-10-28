@@ -30,7 +30,8 @@
 		"db:studio": "turbo run db:studio",
 		"db:drop": "turbo run db:drop",
 		"db:check": "turbo run db:check",
-		"db:up": "turbo run db:up"
+		"db:up": "turbo run db:up",
+		"postinstall": "turbo build --filter='./packages/*'"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.5",
