@@ -5,7 +5,9 @@ import { z } from 'zod';
 config({ path: path.resolve(process.cwd(), '.env') });
 
 const serverSchema = z.object({
-	NODE_ENV: z.enum(['development', 'production']).default('development'),
+	NODE_ENV: z
+		.enum(['development', 'production', 'test'])
+		.default('development'),
 	DATABASE_URL: z
 		.string()
 		.min(1)
