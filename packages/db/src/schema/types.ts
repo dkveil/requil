@@ -17,3 +17,20 @@ export const bytea = customType<{ data: Buffer; driverData: Buffer }>({
 		return Buffer.isBuffer(value) ? value : Buffer.from(value);
 	},
 });
+
+export type UserRole = 'owner' | 'member';
+
+export type AuthUser = {
+	id: string;
+	email: string;
+	createdAt: string;
+	emailConfirmed: boolean;
+};
+
+export type WorkspaceMember = {
+	userId: string;
+	workspaceId: string;
+	role: UserRole;
+	invitedAt: string;
+	acceptedAt: string | null;
+};

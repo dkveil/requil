@@ -1,5 +1,9 @@
 import path from 'node:path';
-import { baseEnvSchema, redisEnvSchema } from '@requil/config/env';
+import {
+	baseEnvSchema,
+	redisEnvSchema,
+	supabaseEnvSchema,
+} from '@requil/config/env';
 import { config as dotenv } from 'dotenv';
 import { z } from 'zod';
 
@@ -8,6 +12,7 @@ dotenv({ path: path.resolve(process.cwd(), '.env') });
 const apiEnvSchema = z.object({
 	...baseEnvSchema.shape,
 	...redisEnvSchema.shape,
+	...supabaseEnvSchema.shape,
 	PORT: z.coerce.number().int().positive().default(3000),
 	HOST: z.string().default('0.0.0.0'),
 });
@@ -37,6 +42,12 @@ const config = {
 	server: {
 		host: env.HOST,
 		port: env.PORT,
+	},
+	supabase: {
+		url: env.SUPABASE_URL,
+		anonKey: env.SUPABASE_ANON_KEY,
+		serviceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY,
+		jwtSecret: env.SUPABASE_JWT_SECRET,
 	},
 };
 

@@ -26,7 +26,6 @@ export default function deleteExampleHandler({
 
 	const init = async () => {
 		commandBus.register(deleteExampleAction.type, handler);
-		logger.info(`✅ ${deleteExampleAction.type} registered`);
 	};
 
 	return {
