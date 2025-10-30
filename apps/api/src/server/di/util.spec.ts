@@ -1,9 +1,16 @@
-import assert from 'node:assert/strict';
-import { describe } from 'node:test';
+import { describe, expect, it } from 'vitest';
 import { formatName } from '@/server/di/util';
 
 describe('Awilix: formatName()', () => {
-	assert.equal(formatName('user-test.repository'), 'userTestRepository');
-	assert.equal(formatName('user.repository'), 'userRepository');
-	assert.equal(formatName('user.mapper'), 'userMapper');
+	it('should format user-test.repository correctly', () => {
+		expect(formatName('user-test.repository')).toBe('userTestRepository');
+	});
+
+	it('should format user.repository correctly', () => {
+		expect(formatName('user.repository')).toBe('userRepository');
+	});
+
+	it('should format user.mapper correctly', () => {
+		expect(formatName('user.mapper')).toBe('userMapper');
+	});
 });
