@@ -1,60 +1,47 @@
-import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
+async function verifySession(token: string): Promise<boolean> {
+	try {
+		const response = await fetch(`${API_URL}/api/auth/session`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+		return response.ok;
+	} catch {
+		return false;
+	}
+}
+
 export async function middleware(request: NextRequest) {
-	let response = NextResponse.next({
-		request: {
-			headers: request.headers,
-		},
-	});
-
-	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-	const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-	if (!supabaseUrl) {
-		return NextResponse.redirect(new URL('/auth/login', request.url));
-	}
-
-	if (!supabaseAnonKey) {
-		return NextResponse.redirect(new URL('/auth/login', request.url));
-	}
-
-	const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-		cookies: {
-			getAll() {
-				return request.cookies.getAll();
-			},
-			setAll(cookiesToSet) {
-				for (const { name, value } of cookiesToSet) {
-					request.cookies.set(name, value);
-				}
-				response = NextResponse.next({
-					request,
-				});
-				for (const { name, value, options } of cookiesToSet) {
-					response.cookies.set(name, value, options);
-				}
-			},
-		},
-	});
-
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-
+	const token = request.cookies.get('requil_access_token')?.value;
 	const isAuthRoute = request.nextUrl.pathname.startsWith('/auth');
 
-	if (!user) {
+	if (!token) {
 		if (!isAuthRoute) {
 			return NextResponse.redirect(new URL('/auth/login', request.url));
 		}
+		return NextResponse.next();
 	}
 
-	if (user && isAuthRoute) {
+	const isValid = await verifySession(token);
+
+	if (!isValid) {
+		const response = NextResponse.redirect(
+			new URL('/auth/login', request.url)
+		);
+		response.cookies.delete('requil_access_token');
+		response.cookies.delete('requil_refresh_token');
+		return response;
+	}
+
+	if (isAuthRoute) {
 		return NextResponse.redirect(new URL('/dashboard', request.url));
 	}
 
-	return response;
+	return NextResponse.next();
 }
 
 export const config = {

@@ -25,6 +25,7 @@ export default function LoginPage() {
 		try {
 			await signIn(email, password);
 			router.push('/dashboard');
+			router.refresh();
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Nie udało się zalogować');
 		} finally {

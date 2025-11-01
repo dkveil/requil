@@ -1,8 +1,13 @@
 'use client';
 
-import type { User } from '@supabase/supabase-js';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { apiClient } from '@/lib/api/client';
+import { tokenStorage } from '@/lib/auth/token-storage';
+
+type User = {
+	id: string;
+	email: string;
+};
 
 type AuthContextType = {
 	user: User | null;
@@ -18,16 +23,20 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(true);
-	const supabase = createClient();
 
 	useEffect(() => {
 		const initAuth = async () => {
 			try {
-				const {
-					data: { session },
-				} = await supabase.auth.getSession();
-				setUser(session?.user ?? null);
+				const token = tokenStorage.getAccessToken();
+				if (!token) {
+					setLoading(false);
+					return;
+				}
+
+				const { user: sessionUser } = await apiClient.auth.getSession(token);
+				setUser(sessionUser);
 			} catch {
+				tokenStorage.clearTokens();
 				setUser(null);
 			} finally {
 				setLoading(false);
@@ -35,44 +44,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		};
 
 		initAuth();
-
-		const {
-			data: { subscription },
-		} = supabase.auth.onAuthStateChange((_event, session) => {
-			setUser(session?.user ?? null);
-			setLoading(false);
-		});
-
-		return () => subscription.unsubscribe();
-	}, [supabase]);
+	}, []);
 
 	const signIn = async (email: string, password: string) => {
-		const { error } = await supabase.auth.signInWithPassword({
-			email,
-			password,
-		});
-		if (error) throw error;
+		const response = await apiClient.auth.login(email, password);
+		tokenStorage.setTokens(response.accessToken, response.refreshToken);
+		setUser(response.user);
 	};
 
 	const signUp = async (email: string, password: string) => {
-		const { error } = await supabase.auth.signUp({
-			email,
-			password,
-			options: {
-				emailRedirectTo: `${window.location.origin}/auth/callback`,
-			},
-		});
-		if (error) throw error;
+		await apiClient.auth.register(email, password);
 	};
 
 	const signOut = async () => {
-		const { error } = await supabase.auth.signOut();
-		if (error) throw error;
+		const token = tokenStorage.getAccessToken();
+		if (token) {
+			try {
+				await apiClient.auth.logout(token);
+			} catch {
+				// Ignore logout errors
+			}
+		}
+		tokenStorage.clearTokens();
+		setUser(null);
 	};
 
 	const refreshSession = async () => {
-		const { error } = await supabase.auth.refreshSession();
-		if (error) throw error;
+		const refreshToken = tokenStorage.getRefreshToken();
+		if (!refreshToken) {
+			throw new Error('No refresh token available');
+		}
+
+		const response = await apiClient.auth.refresh(refreshToken);
+		tokenStorage.setTokens(response.accessToken, response.refreshToken);
+
+		const { user: sessionUser } = await apiClient.auth.getSession(
+			response.accessToken
+		);
+		setUser(sessionUser);
 	};
 
 	return (

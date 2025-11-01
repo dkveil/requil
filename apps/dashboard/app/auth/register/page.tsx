@@ -36,7 +36,7 @@ export default function RegisterPage() {
 
 		try {
 			await signUp(email, password);
-			router.push('/auth/check-email');
+			router.push('/auth/login');
 		} catch (err) {
 			setError(
 				err instanceof Error ? err.message : 'Nie udało się zarejestrować'
