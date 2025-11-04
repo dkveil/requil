@@ -20,7 +20,7 @@ declare module 'fastify' {
 }
 
 async function supabasePlugin(fastify: FastifyInstance) {
-	const supabase = createClient(env.supabase.url, env.supabase.anonKey, {
+	const supabase = createClient(env.supabase.url, env.supabase.serviceRoleKey, {
 		auth: {
 			autoRefreshToken: false,
 			persistSession: false,

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const jsonSchemaSchema = z.object({
 	type: z.enum(['object', 'string', 'number', 'boolean', 'array']),
-	properties: z.record(z.any()).optional(),
+	properties: z.record(z.string(), z.any()).optional(),
 	required: z.array(z.string()).optional(),
 	additionalProperties: z.boolean().optional(),
 	default: z.any().optional(),
@@ -74,7 +74,7 @@ export const updateTemplateSchema = createTemplateSchema
  */
 export const validateTemplateSchema = z.object({
 	mjml: z.string().min(1, 'MJML content is required'),
-	variables: z.record(z.unknown()).optional(),
+	variables: z.record(z.string(), z.unknown()).optional(),
 	variablesSchema: jsonSchemaSchema.optional(),
 	mode: z.enum(['strict', 'permissive']).optional().default('strict'),
 	checkGuardrails: z.boolean().optional().default(true),
@@ -131,7 +131,7 @@ export const validateTemplateResponseSchema = z.object({
  * }
  */
 export const publishTemplateSchema = z.object({
-	publishedBy: z.string().uuid(),
+	publishedBy: z.uuid(),
 	notes: z.string().max(1000).optional(),
 });
 

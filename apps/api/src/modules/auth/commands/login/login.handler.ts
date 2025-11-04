@@ -1,5 +1,6 @@
+import type { LoginInput, LoginResponse } from '@requil/types/auth';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { LoginInput, LoginResponse } from './login.schema';
+import { mapSupabaseAuthError } from '@/modules/auth/domain/auth.error';
 
 export async function loginHandler(
 	input: LoginInput,
@@ -13,20 +14,22 @@ export async function loginHandler(
 	});
 
 	if (error) {
-		throw new Error(`Login failed: ${error.message}`);
+		throw mapSupabaseAuthError(error, { email });
 	}
 
 	if (!data.session) {
 		throw new Error('No session created');
 	}
 
+	const { session, user } = data;
+
 	return {
-		accessToken: data.session.access_token,
-		refreshToken: data.session.refresh_token,
-		expiresIn: data.session.expires_in,
+		accessToken: session.access_token,
+		refreshToken: session.refresh_token,
+		expiresIn: session.expires_in,
 		user: {
-			id: data.user.id,
-			email: data.user.email!,
+			id: user.id,
+			email: user.email || '',
 		},
 	};
 }

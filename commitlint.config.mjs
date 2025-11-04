@@ -25,6 +25,7 @@ export default {
 				'app',
 				// Apps
 				'api',
+				'auth',
 				'dashboard',
 				'website',
 				// Packages

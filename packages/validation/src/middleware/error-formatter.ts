@@ -18,7 +18,12 @@ export interface FormattedValidationError {
  */
 export function formatZodError(error: ZodError): FormattedValidationError[] {
 	return error.issues.map((issue: ZodIssue) => ({
-		field: formatPath(issue.path),
+		field: formatPath(
+			issue.path.filter(
+				(p): p is string | number =>
+					typeof p === 'string' || typeof p === 'number'
+			)
+		),
 		message: issue.message,
 		code: issue.code,
 	}));

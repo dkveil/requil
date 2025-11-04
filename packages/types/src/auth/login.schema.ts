@@ -10,8 +10,8 @@ export const loginResponseSchema = z.object({
 	refreshToken: z.string(),
 	expiresIn: z.number(),
 	user: z.object({
-		id: z.string().uuid(),
-		email: z.string().email(),
+		id: z.uuid(),
+		email: z.email(),
 	}),
 });
 

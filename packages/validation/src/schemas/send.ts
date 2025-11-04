@@ -19,7 +19,7 @@ export const recipientSchema = z.union([
 	z.object({
 		email: emailSchema,
 		name: z.string().optional(),
-		variables: z.record(z.unknown()).optional(),
+		variables: z.record(z.string(), z.unknown()).optional(),
 	}),
 ]);
 
@@ -33,13 +33,13 @@ export const fromSchema = z.union([
 
 export const replyToSchema = fromSchema;
 
-export const headersSchema = z.record(z.string());
+export const headersSchema = z.record(z.string(), z.string());
 
 export const templateRefSchema = z
 	.object({
 		stableId: z.string().optional(),
-		snapshotId: z.string().uuid().optional(),
-		variables: z.record(z.unknown()).optional(),
+		snapshotId: z.uuid().optional(),
+		variables: z.record(z.string(), z.unknown()).optional(),
 	})
 	.refine((data) => data.stableId || data.snapshotId, {
 		message: 'Either stableId or snapshotId must be provided',
@@ -88,16 +88,16 @@ export const sendRequestSchema = z
 			.optional(),
 		html: z.string().min(1, 'HTML content is required').optional(),
 		plaintext: z.string().optional(),
-		variables: z.record(z.unknown()).optional(),
+		variables: z.record(z.string(), z.unknown()).optional(),
 
 		attachments: z
 			.array(attachmentSchema)
 			.max(10, 'Maximum 10 attachments')
 			.optional(),
 		headers: headersSchema.optional(),
-		transportId: z.string().uuid().optional(),
+		transportId: z.uuid().optional(),
 		tags: z.array(z.string()).max(10, 'Maximum 10 tags').optional(),
-		metadata: z.record(z.string()).optional(),
+		metadata: z.record(z.string(), z.string()).optional(),
 
 		idempotencyKey: z
 			.string()
@@ -158,7 +158,7 @@ export const sendBatchRequestSchema = z.object({
 			z.object({
 				email: emailSchema,
 				name: z.string().optional(),
-				variables: z.record(z.unknown()).optional(),
+				variables: z.record(z.string(), z.unknown()).optional(),
 			})
 		)
 		.min(1, 'At least one recipient is required')
@@ -166,11 +166,11 @@ export const sendBatchRequestSchema = z.object({
 
 	attachments: z.array(attachmentSchema).max(10).optional(),
 	headers: headersSchema.optional(),
-	transportId: z.string().uuid().optional(),
+	transportId: z.uuid().optional(),
 	tags: z.array(z.string()).max(10).optional(),
-	metadata: z.record(z.string()).optional(),
+	metadata: z.record(z.string(), z.string()).optional(),
 	idempotencyKey: z.string().min(1).max(255).optional(),
-	scheduledAt: z.string().datetime().optional(),
+	scheduledAt: z.iso.datetime().optional(),
 });
 
 /**

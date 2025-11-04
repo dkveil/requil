@@ -24,7 +24,7 @@ export const createApiKeySchema = z.object({
 	name: z.string().min(1, 'Name is required').max(255),
 	description: z.string().max(1000).optional(),
 	scopes: z.array(apiKeyScopeEnum).min(1, 'At least one scope is required'),
-	expiresAt: z.string().datetime().optional(),
+	expiresAt: z.iso.datetime().optional(),
 	rateLimit: z.number().min(1).max(10000).optional(),
 });
 
@@ -40,7 +40,7 @@ export const updateApiKeySchema = z
 		name: z.string().min(1).max(255).optional(),
 		description: z.string().max(1000).optional(),
 		scopes: z.array(apiKeyScopeEnum).min(1).optional(),
-		expiresAt: z.string().datetime().optional(),
+		expiresAt: z.iso.datetime().optional(),
 		rateLimit: z.number().min(1).max(10000).optional(),
 	})
 	.refine((data) => Object.keys(data).length > 0, {

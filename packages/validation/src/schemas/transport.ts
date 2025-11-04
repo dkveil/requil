@@ -81,7 +81,7 @@ export const updateTransportSchema = z
 	});
 
 export const verifyTransportSchema = z.object({
-	transportId: z.string().uuid(),
+	transportId: z.uuid(),
 });
 
 export type CreateTransport = z.infer<typeof createTransportSchema>;

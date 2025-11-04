@@ -1,3 +1,4 @@
+import { ERROR_CODES, ERROR_MESSAGES } from '@requil/types';
 import type { TraceId } from './logger';
 
 export interface ErrorContext {
@@ -42,37 +43,37 @@ export class RequilError extends Error {
 
 export class ValidationError extends RequilError {
 	constructor(message: string, context: ErrorContext = {}) {
-		super(message, 'VALIDATION_ERROR', 400, context);
+		super(message, ERROR_CODES.VALIDATION_ERROR, 400, context);
 	}
 }
 
 export class AuthenticationError extends RequilError {
 	constructor(message: string, context: ErrorContext = {}) {
-		super(message, 'AUTHENTICATION_ERROR', 401, context);
+		super(message, ERROR_CODES.AUTHENTICATION_ERROR, 401, context);
 	}
 }
 
 export class AuthorizationError extends RequilError {
 	constructor(message: string, context: ErrorContext = {}) {
-		super(message, 'AUTHORIZATION_ERROR', 403, context);
+		super(message, ERROR_CODES.AUTHORIZATION_ERROR, 403, context);
 	}
 }
 
 export class NotFoundError extends RequilError {
 	constructor(message: string, context: ErrorContext = {}) {
-		super(message, 'NOT_FOUND', 404, context);
+		super(message, ERROR_CODES.NOT_FOUND, 404, context);
 	}
 }
 
 export class ConflictError extends RequilError {
 	constructor(message: string, context: ErrorContext = {}) {
-		super(message, 'CONFLICT', 409, context);
+		super(message, ERROR_CODES.CONFLICT, 409, context);
 	}
 }
 
 export class RateLimitError extends RequilError {
 	constructor(message: string, retryAfter: number, context: ErrorContext = {}) {
-		super(message, 'RATE_LIMIT_EXCEEDED', 429, {
+		super(message, ERROR_CODES.RATE_LIMIT_EXCEEDED, 429, {
 			...context,
 			retryAfter,
 		});
@@ -90,7 +91,9 @@ export class TransportError extends RequilError {
 		const statusCode = isTransient ? 503 : 422;
 		super(
 			message,
-			isTransient ? 'TRANSPORT_ERROR_TRANSIENT' : 'TRANSPORT_ERROR_PERMANENT',
+			isTransient
+				? ERROR_CODES.TRANSPORT_ERROR_TRANSIENT
+				: ERROR_CODES.TRANSPORT_ERROR_PERMANENT,
 			statusCode,
 			context
 		);
@@ -100,7 +103,7 @@ export class TransportError extends RequilError {
 
 export class TemplateError extends RequilError {
 	constructor(message: string, context: ErrorContext = {}) {
-		super(message, 'TEMPLATE_ERROR', 400, context);
+		super(message, ERROR_CODES.TEMPLATE_ERROR, 400, context);
 	}
 }
 
@@ -122,7 +125,7 @@ export class GuardrailError extends RequilError {
 		}>,
 		context: ErrorContext = {}
 	) {
-		super(message, 'GUARDRAIL_VIOLATION', 400, {
+		super(message, ERROR_CODES.GUARDRAIL_VIOLATION, 400, {
 			...context,
 			violations,
 		});
@@ -132,7 +135,7 @@ export class GuardrailError extends RequilError {
 
 export class IdempotencyError extends RequilError {
 	constructor(message: string, context: ErrorContext = {}) {
-		super(message, 'IDEMPOTENCY_CONFLICT', 409, context);
+		super(message, ERROR_CODES.CONFLICT, 409, context);
 	}
 }
 
@@ -142,7 +145,7 @@ export class UsageLimitError extends RequilError {
 		limitType: 'renders' | 'sends' | 'ai',
 		context: ErrorContext = {}
 	) {
-		super(message, 'USAGE_LIMIT_EXCEEDED', 402, {
+		super(message, ERROR_CODES.USAGE_LIMIT_EXCEEDED, 402, {
 			...context,
 			limitType,
 		});
@@ -168,8 +171,8 @@ export const sanitizeError = (error: unknown, traceId?: TraceId) => {
 
 	return {
 		error: {
-			message: 'Internal server error',
-			code: 'INTERNAL_ERROR',
+			message: ERROR_MESSAGES.INTERNAL_ERROR,
+			code: ERROR_CODES.INTERNAL_ERROR,
 			traceId,
 		},
 		statusCode: 500,

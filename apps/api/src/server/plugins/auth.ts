@@ -19,8 +19,10 @@ async function authPlugin(fastify: FastifyInstance) {
 
 				if (!authHeader?.startsWith('Bearer ')) {
 					return reply.code(401).send({
-						error: 'Unauthorized',
-						message: 'Missing or invalid authorization header',
+						error: {
+							code: 'AUTHENTICATION_ERROR',
+							message: 'Missing or invalid authorization header',
+						},
 					});
 				}
 
@@ -40,8 +42,10 @@ async function authPlugin(fastify: FastifyInstance) {
 			} catch (error) {
 				fastify.log.error(error, 'Authentication failed');
 				return reply.code(401).send({
-					error: 'Unauthorized',
-					message: 'Invalid or expired token',
+					error: {
+						code: 'AUTHENTICATION_ERROR',
+						message: 'Invalid or expired token',
+					},
 				});
 			}
 		}
@@ -52,8 +56,10 @@ async function authPlugin(fastify: FastifyInstance) {
 		async (request: FastifyRequest, reply: FastifyReply) => {
 			if (!request.supabaseUser) {
 				return reply.code(401).send({
-					error: 'Unauthorized',
-					message: 'Authentication required',
+					error: {
+						code: 'AUTHENTICATION_ERROR',
+						message: 'Authentication required',
+					},
 				});
 			}
 
@@ -61,8 +67,10 @@ async function authPlugin(fastify: FastifyInstance) {
 
 			if (!workspaceId) {
 				return reply.code(400).send({
-					error: 'BadRequest',
-					message: 'x-workspace-id header is required',
+					error: {
+						code: 'VALIDATION_ERROR',
+						message: 'x-workspace-id header is required',
+					},
 				});
 			}
 
@@ -79,8 +87,10 @@ async function authPlugin(fastify: FastifyInstance) {
 
 			if (!(membership.length && membership[0]?.acceptedAt)) {
 				return reply.code(403).send({
-					error: 'Forbidden',
-					message: 'Access denied to this workspace',
+					error: {
+						code: 'AUTHORIZATION_ERROR',
+						message: 'Access denied to this workspace',
+					},
 				});
 			}
 
@@ -94,15 +104,19 @@ async function authPlugin(fastify: FastifyInstance) {
 		async (request: FastifyRequest, reply: FastifyReply) => {
 			if (!request.workspaceRole) {
 				return reply.code(403).send({
-					error: 'Forbidden',
-					message: 'Workspace context required',
+					error: {
+						code: 'AUTHORIZATION_ERROR',
+						message: 'Workspace context required',
+					},
 				});
 			}
 
 			if (request.workspaceRole !== 'owner') {
 				return reply.code(403).send({
-					error: 'Forbidden',
-					message: 'Owner role required',
+					error: {
+						code: 'AUTHORIZATION_ERROR',
+						message: 'Owner role required',
+					},
 				});
 			}
 		}

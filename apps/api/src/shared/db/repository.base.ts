@@ -86,7 +86,7 @@ export function RepositoryBase<
 	};
 
 	const findAll = async (params: PaginatedQueryParams): Promise<Entity[]> => {
-		const { limit, offset, orderBy: orderByParam } = params;
+		const { limit, offset = 0, orderBy: orderByParam } = params;
 
 		let orderByClause: SQL | undefined;
 		if (orderByParam) {
@@ -125,7 +125,7 @@ export function RepositoryBase<
 	const findAllPaginated = async (
 		params: PaginatedQueryParams
 	): Promise<Paginated<Entity>> => {
-		const { limit, offset } = params;
+		const { limit, offset = 0 } = params;
 		const page = Math.floor(offset / limit);
 
 		const [entities, totalCount] = await Promise.all([

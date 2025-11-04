@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { getErrorMessage } from '@/lib/api/error-handler';
 import { useAuth } from '@/lib/auth/auth-context';
 
 export default function LoginPage() {
@@ -25,8 +26,9 @@ export default function LoginPage() {
 		try {
 			await signIn(email, password);
 			router.push('/dashboard');
+			router.refresh();
 		} catch (err) {
-			setError(err instanceof Error ? err.message : 'Nie udało się zalogować');
+			setError(getErrorMessage(err));
 		} finally {
 			setLoading(false);
 		}

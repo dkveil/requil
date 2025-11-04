@@ -20,9 +20,9 @@ export const createSubscriberSchema = z.object({
 	email: emailSchema,
 	name: z.string().max(255).optional(),
 	tags: z.array(z.string()).max(20).optional(),
-	attributes: z.record(z.unknown()).optional(),
+	attributes: z.record(z.string(), z.unknown()).optional(),
 	doubleOptIn: z.boolean().optional().default(true),
-	metadata: z.record(z.string()).optional(),
+	metadata: z.record(z.string(), z.string()).optional(),
 });
 
 /**
@@ -38,8 +38,8 @@ export const updateSubscriberSchema = z
 	.object({
 		name: z.string().max(255).optional(),
 		tags: z.array(z.string()).max(20).optional(),
-		attributes: z.record(z.unknown()).optional(),
-		metadata: z.record(z.string()).optional(),
+		attributes: z.record(z.string(), z.unknown()).optional(),
+		metadata: z.record(z.string(), z.string()).optional(),
 	})
 	.refine((data) => Object.keys(data).length > 0, {
 		message: 'At least one field must be provided',

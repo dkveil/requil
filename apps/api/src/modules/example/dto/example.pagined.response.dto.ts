@@ -1,4 +1,4 @@
-import type { Pagination } from '@/shared/db/repository.port';
+import type { Pagination } from '@requil/types/api';
 import type { ExampleResponseDto } from './example.response.dto';
 
 export interface PaginatedExampleResponseDto {

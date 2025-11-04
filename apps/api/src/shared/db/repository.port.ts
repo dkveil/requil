@@ -1,24 +1,14 @@
+import type {
+	Paginated,
+	PaginatedQueryParams,
+	Pagination,
+} from '@requil/types/api';
+
+export type { PaginatedQueryParams, Pagination, Paginated };
+
 export type OrderBy = {
 	field: string;
 	direction: 'asc' | 'desc';
-};
-
-export type PaginatedQueryParams = {
-	limit: number;
-	offset: number;
-	orderBy?: OrderBy;
-};
-
-export type Pagination = {
-	total: number;
-	page: number;
-	limit: number;
-	totalPages: number;
-};
-
-export type Paginated<T> = {
-	data: T[];
-	pagination: Pagination;
 };
 
 export type RepositoryPort<Entity, TId = string> = {

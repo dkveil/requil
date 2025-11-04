@@ -17,13 +17,14 @@ export default function findExamplesHandler({
 	const handler = async (
 		action: Action<FindExamplesQuery>
 	): Promise<FindExamplesResponse> => {
-		const { page, limit, orderBy, orderDirection } = action.payload;
+		const { page = 0, limit = 20, orderBy, orderDirection } = action.payload;
 
 		logger.info({ page, limit, orderBy }, 'Finding examples');
 
 		const offset = page * limit;
 
 		const result = await exampleRepository.findAllPaginated({
+			page,
 			limit,
 			offset,
 			orderBy: {

@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ApiClientError, getErrorMessage } from '@/lib/api/error-handler';
 import { useAuth } from '@/lib/auth/auth-context';
 
 export default function RegisterPage() {
@@ -14,6 +15,7 @@ export default function RegisterPage() {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [error, setError] = useState('');
+	const [success, setSuccess] = useState('');
 	const [loading, setLoading] = useState(false);
 	const { signUp } = useAuth();
 	const router = useRouter();
@@ -21,6 +23,7 @@ export default function RegisterPage() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setError('');
+		setSuccess('');
 
 		if (password !== confirmPassword) {
 			setError('Hasła nie są identyczne');
@@ -36,11 +39,20 @@ export default function RegisterPage() {
 
 		try {
 			await signUp(email, password);
-			router.push('/auth/check-email');
-		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : 'Nie udało się zarejestrować'
+			setSuccess(
+				'Rejestracja zakończona pomyślnie! Sprawdź swoją skrzynkę email.'
 			);
+			setTimeout(() => {
+				router.push('/auth/login');
+			}, 2000);
+		} catch (err) {
+			setError(getErrorMessage(err));
+
+			if (err instanceof ApiClientError && err.code === 'USER_ALREADY_EXISTS') {
+				setTimeout(() => {
+					router.push('/auth/login');
+				}, 3000);
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -71,6 +83,12 @@ export default function RegisterPage() {
 					{error && (
 						<Alert variant='destructive'>
 							<AlertDescription>{error}</AlertDescription>
+						</Alert>
+					)}
+
+					{success && (
+						<Alert variant='success'>
+							<AlertDescription>{success}</AlertDescription>
 						</Alert>
 					)}
 
