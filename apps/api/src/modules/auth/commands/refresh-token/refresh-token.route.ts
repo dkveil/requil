@@ -1,8 +1,9 @@
-import { ERROR_CODES } from '@requil/types';
+import { ERROR_CODES, successResponseSchema } from '@requil/types';
 import { errorResponseSchema } from '@requil/types/api';
 import { refreshTokenResponseSchema } from '@requil/types/auth';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { sendSuccess } from '@/shared/app/response-wrapper';
 import { refreshTokenHandler } from './refresh-token.handler';
 
 const refreshTokenRoute: FastifyPluginAsync = async (fastify) => {
@@ -11,7 +12,7 @@ const refreshTokenRoute: FastifyPluginAsync = async (fastify) => {
 		url: '/auth/refresh',
 		schema: {
 			response: {
-				200: refreshTokenResponseSchema,
+				200: successResponseSchema(refreshTokenResponseSchema),
 				401: errorResponseSchema,
 			},
 			tags: ['auth'],
@@ -21,6 +22,8 @@ const refreshTokenRoute: FastifyPluginAsync = async (fastify) => {
 
 			if (!refreshToken) {
 				return reply.code(401).send({
+					success: false,
+					status: 401,
 					error: {
 						message: 'No refresh token',
 						code: ERROR_CODES.REFRESH_TOKEN_NOT_FOUND,
@@ -49,7 +52,7 @@ const refreshTokenRoute: FastifyPluginAsync = async (fastify) => {
 					maxAge: 60 * 60 * 24 * 7,
 				});
 
-			return reply.send(result);
+			return sendSuccess(reply, result);
 		},
 	});
 };

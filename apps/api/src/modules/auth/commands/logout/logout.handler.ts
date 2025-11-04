@@ -13,7 +13,6 @@ export async function logoutHandler(
 	}
 
 	return {
-		success: true,
 		message: 'Successfully logged out',
 	};
 }

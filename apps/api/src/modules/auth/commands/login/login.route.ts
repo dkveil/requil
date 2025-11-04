@@ -1,7 +1,9 @@
+import { successResponseSchema } from '@requil/types';
 import { errorResponseSchema } from '@requil/types/api';
 import { loginResponseSchema, loginSchema } from '@requil/types/auth';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { sendSuccess } from '@/shared/app/response-wrapper';
 import { loginHandler } from './login.handler';
 
 const loginRoute: FastifyPluginAsync = async (fastify) => {
@@ -11,7 +13,7 @@ const loginRoute: FastifyPluginAsync = async (fastify) => {
 		schema: {
 			body: loginSchema,
 			response: {
-				200: loginResponseSchema,
+				200: successResponseSchema(loginResponseSchema),
 				400: errorResponseSchema,
 				401: errorResponseSchema,
 				429: errorResponseSchema,
@@ -37,7 +39,7 @@ const loginRoute: FastifyPluginAsync = async (fastify) => {
 					maxAge: 60 * 60 * 24 * 7,
 				});
 
-			return reply.send(result);
+			return sendSuccess(reply, result);
 		},
 	});
 };

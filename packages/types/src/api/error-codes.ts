@@ -33,6 +33,7 @@ export const ERROR_CODES = {
 	TEMPLATE_ERROR: 'TEMPLATE_ERROR',
 	GUARDRAIL_VIOLATION: 'GUARDRAIL_VIOLATION',
 	USAGE_LIMIT_EXCEEDED: 'USAGE_LIMIT_EXCEEDED',
+	UNKNOWN_ERROR: 'UNKNOWN_ERROR',
 } as const;
 
 export type ErrorCode = keyof typeof ERROR_CODES;
@@ -72,6 +73,7 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
 	TEMPLATE_ERROR: 'Template error',
 	GUARDRAIL_VIOLATION: 'Guardrail violation',
 	USAGE_LIMIT_EXCEEDED: 'Usage limit exceeded',
+	UNKNOWN_ERROR: 'Unknown error',
 };
 
 export const ERROR_MESSAGES_PL: Record<ErrorCode, string> = {
@@ -110,4 +112,5 @@ export const ERROR_MESSAGES_PL: Record<ErrorCode, string> = {
 	TEMPLATE_ERROR: 'Błąd szablonu',
 	GUARDRAIL_VIOLATION: 'Naruszenie guardrail',
 	USAGE_LIMIT_EXCEEDED: 'Przekroczono limit użycia',
+	UNKNOWN_ERROR: 'Nieznany błąd',
 };

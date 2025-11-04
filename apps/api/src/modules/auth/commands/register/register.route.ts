@@ -1,3 +1,4 @@
+import { successResponseSchema } from '@requil/types';
 import { errorResponseSchema } from '@requil/types/api';
 import {
 	registerInputSchema,
@@ -5,6 +6,7 @@ import {
 } from '@requil/types/auth';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { sendSuccess } from '@/shared/app/response-wrapper';
 import { registerHandler } from './register.handler';
 
 const registerRoute: FastifyPluginAsync = async (fastify) => {
@@ -14,7 +16,7 @@ const registerRoute: FastifyPluginAsync = async (fastify) => {
 		schema: {
 			body: registerInputSchema,
 			response: {
-				201: registerResponseSchema,
+				201: successResponseSchema(registerResponseSchema),
 				400: errorResponseSchema,
 				409: errorResponseSchema,
 				429: errorResponseSchema,
@@ -23,7 +25,7 @@ const registerRoute: FastifyPluginAsync = async (fastify) => {
 		},
 		handler: async (request, reply) => {
 			const result = await registerHandler(request.body, fastify.supabase);
-			return reply.code(201).send(result);
+			return sendSuccess(reply, result, 201);
 		},
 	});
 };

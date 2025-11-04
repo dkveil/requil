@@ -1,8 +1,9 @@
-import { errorResponseSchema } from '@requil/types/api';
+import { errorResponseSchema, successResponseSchema } from '@requil/types/api';
 import { logoutResponseSchema } from '@requil/types/auth';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+import { sendSuccess } from '@/shared/app/response-wrapper';
 import { logoutHandler } from './logout.handler';
 
 const logoutRoute: FastifyPluginAsync = async (fastify) => {
@@ -15,7 +16,7 @@ const logoutRoute: FastifyPluginAsync = async (fastify) => {
 				authorization: z.string(),
 			}),
 			response: {
-				200: logoutResponseSchema,
+				200: successResponseSchema(logoutResponseSchema),
 				401: errorResponseSchema,
 			},
 			tags: ['auth'],
@@ -28,7 +29,7 @@ const logoutRoute: FastifyPluginAsync = async (fastify) => {
 				.clearCookie('requil_access_token', { path: '/' })
 				.clearCookie('requil_refresh_token', { path: '/' });
 
-			return reply.send(result);
+			return sendSuccess(reply, result);
 		},
 	});
 };

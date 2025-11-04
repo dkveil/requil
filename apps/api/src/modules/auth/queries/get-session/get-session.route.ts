@@ -23,6 +23,8 @@ const getSessionRoute: FastifyPluginAsync = async (fastify) => {
 		handler: async (request, reply) => {
 			if (!request.supabaseUser) {
 				return reply.code(401).send({
+					success: false,
+					status: 401,
 					error: {
 						message: 'Authentication required',
 						code: ERROR_CODES.AUTHENTICATION_ERROR,
