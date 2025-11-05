@@ -1,7 +1,7 @@
 'use client';
 
 import { NextIntlClientProvider } from 'next-intl';
-import { AuthProvider } from '@/features/auth/providers/auth-provider';
+import { AuthInitializer } from '@/features/auth/providers/auth-init';
 import { ThemeProvider } from '@/lib/providers/theme-provider';
 
 type ProviderProps = {
@@ -12,7 +12,7 @@ type ProviderProps = {
 
 const providers: React.ComponentType<ProviderProps>[] = [
 	ThemeProvider,
-	AuthProvider,
+	AuthInitializer,
 ];
 
 export function Providers({ children, locale, messages }: ProviderProps) {

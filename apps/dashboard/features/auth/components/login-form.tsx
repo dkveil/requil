@@ -19,7 +19,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { getErrorMessage } from '@/lib/api';
 import { cn } from '@/lib/utils';
-import { useAuth } from '../hooks/use-auth';
+import { useAuthStore } from '../stores/auth-store';
 
 const loginSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' }),
@@ -32,7 +32,7 @@ export function LoginForm({
 	className,
 	...props
 }: React.ComponentProps<'form'>) {
-	const { signIn } = useAuth();
+	const signIn = useAuthStore((state) => state.signIn);
 	const router = useRouter();
 	const locale = useLocale();
 	const tAuth = useTranslations('auth.login');

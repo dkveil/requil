@@ -19,7 +19,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { ApiClientError, getErrorMessage } from '@/lib/api';
 import { cn } from '@/lib/utils';
-import { useAuth } from '../hooks/use-auth';
+import { useAuthStore } from '../stores/auth-store';
 
 const registerSchema = z
 	.object({
@@ -40,7 +40,8 @@ export function RegisterForm({
 	className,
 	...props
 }: React.ComponentProps<'form'>) {
-	const { signUp, signIn } = useAuth();
+	const signUp = useAuthStore((state) => state.signUp);
+	const signIn = useAuthStore((state) => state.signIn);
 	const router = useRouter();
 	const locale = useLocale();
 	const tAuth = useTranslations('auth.register');

@@ -2,10 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/features/auth';
+import { useAuthStore } from '@/features/auth/stores/auth-store';
 
 export default function DashboardPage() {
-	const { user, signOut, loading } = useAuth();
+	const user = useAuthStore((state) => state.user);
+	const signOut = useAuthStore((state) => state.signOut);
+	const loading = useAuthStore((state) => state.loading);
 	const router = useRouter();
 
 	const handleSignOut = async () => {
