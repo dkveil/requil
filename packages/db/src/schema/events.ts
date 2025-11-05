@@ -9,11 +9,11 @@ import {
 	timestamp,
 	uuid,
 } from 'drizzle-orm/pg-core';
-import { workspaces } from './auth';
 import { eventType, transportType } from './enums';
 import { sendJobs } from './sending';
 import { templateSnapshots } from './templates';
 import { citext } from './types';
+import { workspaces } from './workspace';
 
 export const events = pgTable(
 	'events',

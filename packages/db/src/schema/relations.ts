@@ -1,6 +1,5 @@
 import { relations } from 'drizzle-orm/relations';
 import { apiKeyScopes, apiKeys } from './api-keys';
-import { workspaceInvitations, workspaceMembers, workspaces } from './auth';
 import { events } from './events';
 import { sendJobs, sendRecipients } from './sending';
 import { subscribers, subscriberTags } from './subscribers';
@@ -9,7 +8,10 @@ import { templateSnapshots, templates } from './templates';
 import { usageCountersDaily } from './usage';
 import {
 	workspaceBrandkit,
+	workspaceInvitations,
+	workspaceMembers,
 	workspacePlans,
+	workspaces,
 	workspaceTransports,
 } from './workspace';
 

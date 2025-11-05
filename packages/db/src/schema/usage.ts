@@ -9,7 +9,7 @@ import {
 	primaryKey,
 	uuid,
 } from 'drizzle-orm/pg-core';
-import { workspaces } from './auth';
+import { workspaces } from './workspace';
 
 export const usageCountersDaily = pgTable(
 	'usage_counters_daily',

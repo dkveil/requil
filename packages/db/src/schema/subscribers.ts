@@ -11,9 +11,9 @@ import {
 	unique,
 	uuid,
 } from 'drizzle-orm/pg-core';
-import { workspaces } from './auth';
 import { subscriberStatus } from './enums';
 import { bytea, citext } from './types';
+import { workspaces } from './workspace';
 
 export const subscribers = pgTable(
 	'subscribers',

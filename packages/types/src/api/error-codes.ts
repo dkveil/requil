@@ -34,6 +34,7 @@ export const ERROR_CODES = {
 	GUARDRAIL_VIOLATION: 'GUARDRAIL_VIOLATION',
 	USAGE_LIMIT_EXCEEDED: 'USAGE_LIMIT_EXCEEDED',
 	UNKNOWN_ERROR: 'UNKNOWN_ERROR',
+	WORKSPACE_VALIDATION_ERROR: 'WORKSPACE_VALIDATION_ERROR',
 } as const;
 
 export type ErrorCode = keyof typeof ERROR_CODES;
@@ -74,6 +75,7 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
 	GUARDRAIL_VIOLATION: 'Guardrail violation',
 	USAGE_LIMIT_EXCEEDED: 'Usage limit exceeded',
 	UNKNOWN_ERROR: 'Unknown error',
+	WORKSPACE_VALIDATION_ERROR: 'Workspace validation error',
 };
 
 export const ERROR_MESSAGES_PL: Record<ErrorCode, string> = {
@@ -113,4 +115,5 @@ export const ERROR_MESSAGES_PL: Record<ErrorCode, string> = {
 	GUARDRAIL_VIOLATION: 'Naruszenie guardrail',
 	USAGE_LIMIT_EXCEEDED: 'Przekroczono limit użycia',
 	UNKNOWN_ERROR: 'Nieznany błąd',
+	WORKSPACE_VALIDATION_ERROR: 'Błąd walidacji przestrzeni roboczej',
 };

@@ -25,9 +25,11 @@ export default {
 				'app',
 				// Apps
 				'api',
-				'auth',
 				'dashboard',
 				'website',
+				// Modules
+				'auth',
+				'workspace',
 				// Packages
 				'email-engine',
 				'transports',
