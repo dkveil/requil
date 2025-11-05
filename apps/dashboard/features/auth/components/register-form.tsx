@@ -87,7 +87,7 @@ export function RegisterForm() {
 					)}
 
 					{success && (
-						<Alert variant='success'>
+						<Alert variant='default'>
 							<AlertDescription>{success}</AlertDescription>
 						</Alert>
 					)}
