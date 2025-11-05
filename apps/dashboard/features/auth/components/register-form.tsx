@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,7 @@ export function RegisterForm() {
 	const [loading, setLoading] = useState(false);
 	const { signUp } = useAuth();
 	const router = useRouter();
+	const tAuth = useTranslations('auth.register');
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -26,12 +28,12 @@ export function RegisterForm() {
 		setSuccess('');
 
 		if (password !== confirmPassword) {
-			setError('Hasła nie są identyczne');
+			setError(tAuth('errors.passwordMismatch'));
 			return;
 		}
 
 		if (password.length < 8) {
-			setError('Hasło musi mieć minimum 8 znaków');
+			setError(tAuth('errors.weakPassword'));
 			return;
 		}
 
@@ -39,9 +41,7 @@ export function RegisterForm() {
 
 		try {
 			await signUp(email, password);
-			setSuccess(
-				'Rejestracja zakończona pomyślnie! Sprawdź swoją skrzynkę email.'
-			);
+			setSuccess(tAuth('success'));
 			setTimeout(() => {
 				router.push('/auth/login');
 			}, 2000);
@@ -63,15 +63,15 @@ export function RegisterForm() {
 			<div className='w-full max-w-md space-y-8'>
 				<div className='text-center'>
 					<h1 className='text-3xl font-bold tracking-tight text-gray-900'>
-						Stwórz konto
+						{tAuth('title')}
 					</h1>
 					<p className='mt-2 text-sm text-gray-600'>
-						Masz już konto?{' '}
+						{tAuth('hasAccount')}{' '}
 						<Link
 							href='/auth/login'
 							className='font-medium text-gray-900 hover:text-gray-700'
 						>
-							Zaloguj się
+							{tAuth('signInLink')}
 						</Link>
 					</p>
 				</div>
@@ -94,11 +94,11 @@ export function RegisterForm() {
 
 					<div className='space-y-4'>
 						<div>
-							<Label htmlFor='email'>Email</Label>
+							<Label htmlFor='email'>{tAuth('email')}</Label>
 							<Input
 								id='email'
 								type='email'
-								placeholder='twoj@email.com'
+								placeholder={tAuth('emailPlaceholder')}
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								required
@@ -108,11 +108,11 @@ export function RegisterForm() {
 						</div>
 
 						<div>
-							<Label htmlFor='password'>Hasło</Label>
+							<Label htmlFor='password'>{tAuth('password')}</Label>
 							<Input
 								id='password'
 								type='password'
-								placeholder='••••••••'
+								placeholder={tAuth('passwordPlaceholder')}
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								required
@@ -120,15 +120,19 @@ export function RegisterForm() {
 								minLength={8}
 								className='mt-1'
 							/>
-							<p className='mt-1 text-sm text-gray-500'>Minimum 8 znaków</p>
+							<p className='mt-1 text-sm text-gray-500'>
+								{tAuth('passwordHint')}
+							</p>
 						</div>
 
 						<div>
-							<Label htmlFor='confirmPassword'>Potwierdź hasło</Label>
+							<Label htmlFor='confirmPassword'>
+								{tAuth('confirmPassword')}
+							</Label>
 							<Input
 								id='confirmPassword'
 								type='password'
-								placeholder='••••••••'
+								placeholder={tAuth('confirmPasswordPlaceholder')}
 								value={confirmPassword}
 								onChange={(e) => setConfirmPassword(e.target.value)}
 								required
@@ -144,7 +148,7 @@ export function RegisterForm() {
 						className='w-full'
 						disabled={loading}
 					>
-						{loading ? 'Rejestracja...' : 'Zarejestruj się'}
+						{loading ? tAuth('loading') : tAuth('submit')}
 					</Button>
 				</form>
 			</div>

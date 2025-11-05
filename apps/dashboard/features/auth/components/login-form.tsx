@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,7 @@ export function LoginForm() {
 	const [loading, setLoading] = useState(false);
 	const { signIn } = useAuth();
 	const router = useRouter();
+	const tAuth = useTranslations('auth.login');
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -39,15 +41,15 @@ export function LoginForm() {
 			<div className='w-full max-w-md space-y-8'>
 				<div className='text-center'>
 					<h1 className='text-3xl font-bold tracking-tight text-gray-900'>
-						Zaloguj się do Requil
+						{tAuth('title')}
 					</h1>
 					<p className='mt-2 text-sm text-gray-600'>
-						Nie masz konta?{' '}
+						{tAuth('noAccount')}{' '}
 						<Link
 							href='/auth/register'
 							className='font-medium text-gray-900 hover:text-gray-700'
 						>
-							Zarejestruj się
+							{tAuth('signUpLink')}
 						</Link>
 					</p>
 				</div>
@@ -64,11 +66,11 @@ export function LoginForm() {
 
 					<div className='space-y-4'>
 						<div>
-							<Label htmlFor='email'>Email</Label>
+							<Label htmlFor='email'>{tAuth('email')}</Label>
 							<Input
 								id='email'
 								type='email'
-								placeholder='twoj@email.com'
+								placeholder={tAuth('emailPlaceholder')}
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								required
@@ -78,11 +80,11 @@ export function LoginForm() {
 						</div>
 
 						<div>
-							<Label htmlFor='password'>Hasło</Label>
+							<Label htmlFor='password'>{tAuth('password')}</Label>
 							<Input
 								id='password'
 								type='password'
-								placeholder='••••••••'
+								placeholder={tAuth('passwordPlaceholder')}
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								required
@@ -97,7 +99,7 @@ export function LoginForm() {
 						className='w-full'
 						disabled={loading}
 					>
-						{loading ? 'Logowanie...' : 'Zaloguj się'}
+						{loading ? tAuth('loading') : tAuth('submit')}
 					</Button>
 				</form>
 			</div>

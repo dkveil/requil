@@ -1,0 +1,45 @@
+export const authPlLocales = {
+	auth: {
+		login: {
+			title: 'Zaloguj się do Requil',
+			email: 'Email',
+			emailPlaceholder: 'twoj@email.com',
+			password: 'Hasło',
+			passwordPlaceholder: '••••••••',
+			submit: 'Zaloguj się',
+			loading: 'Logowanie...',
+			noAccount: 'Nie masz konta?',
+			signUpLink: 'Zarejestruj się',
+			errors: {
+				invalidCredentials: 'Nieprawidłowy email lub hasło',
+				emailRequired: 'Email jest wymagany',
+				passwordRequired: 'Hasło jest wymagane',
+			},
+		},
+		register: {
+			title: 'Stwórz konto',
+			email: 'Email',
+			emailPlaceholder: 'twoj@email.com',
+			password: 'Hasło',
+			passwordPlaceholder: '••••••••',
+			confirmPassword: 'Potwierdź hasło',
+			confirmPasswordPlaceholder: '••••••••',
+			passwordHint: 'Minimum 8 znaków',
+			submit: 'Zarejestruj się',
+			loading: 'Rejestracja...',
+			hasAccount: 'Masz już konto?',
+			signInLink: 'Zaloguj się',
+			success:
+				'Rejestracja zakończona pomyślnie! Sprawdź swoją skrzynkę email.',
+			errors: {
+				emailExists: 'Ten email jest już zajęty',
+				passwordMismatch: 'Hasła nie są identyczne',
+				weakPassword: 'Hasło musi mieć minimum 8 znaków',
+				emailRequired: 'Email jest wymagany',
+				passwordRequired: 'Hasło jest wymagane',
+				confirmPasswordRequired: 'Potwierdzenie hasła jest wymagane',
+			},
+		},
+		logout: 'Wyloguj się',
+	},
+};

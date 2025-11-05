@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { AuthProvider } from '@/features/auth';
 import './globals.css';
+import { getLocale, getMessages } from 'next-intl/server';
+import { Providers } from './providers';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -18,17 +19,28 @@ export const metadata: Metadata = {
 	description: 'API-first engine for transactional and campaign emails',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const locale = await getLocale();
+	const messages = await getMessages();
+
 	return (
-		<html lang='pl'>
+		<html
+			lang={locale}
+			suppressHydrationWarning
+		>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				<AuthProvider>{children}</AuthProvider>
+				<Providers
+					locale={locale}
+					messages={messages}
+				>
+					{children}
+				</Providers>
 			</body>
 		</html>
 	);
