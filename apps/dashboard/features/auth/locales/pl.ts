@@ -1,15 +1,16 @@
 export const authPlLocales = {
 	auth: {
 		login: {
-			title: 'Zaloguj się do Requil',
+			title: 'Zaloguj się',
+			subtitle: 'Wprowadź swój email, aby zalogować się do konta',
 			email: 'Email',
 			emailPlaceholder: 'twoj@email.com',
 			password: 'Hasło',
 			passwordPlaceholder: '••••••••',
-			submit: 'Zaloguj się',
-			loading: 'Logowanie...',
+			forgotPassword: 'Zapomniałeś hasła?',
 			noAccount: 'Nie masz konta?',
-			signUpLink: 'Zarejestruj się',
+			success: 'Witaj ponownie!',
+			failed: 'Logowanie nie powiodło się',
 			errors: {
 				invalidCredentials: 'Nieprawidłowy email lub hasło',
 				emailRequired: 'Email jest wymagany',
@@ -18,6 +19,7 @@ export const authPlLocales = {
 		},
 		register: {
 			title: 'Stwórz konto',
+			subtitle: 'Wprowadź swój email, aby stworzyć konto',
 			email: 'Email',
 			emailPlaceholder: 'twoj@email.com',
 			password: 'Hasło',
@@ -25,12 +27,11 @@ export const authPlLocales = {
 			confirmPassword: 'Potwierdź hasło',
 			confirmPasswordPlaceholder: '••••••••',
 			passwordHint: 'Minimum 8 znaków',
-			submit: 'Zarejestruj się',
-			loading: 'Rejestracja...',
 			hasAccount: 'Masz już konto?',
-			signInLink: 'Zaloguj się',
 			success:
 				'Rejestracja zakończona pomyślnie! Sprawdź swoją skrzynkę email.',
+			successTitle: 'Konto utworzone',
+			failed: 'Rejestracja nie powiodła się',
 			errors: {
 				emailExists: 'Ten email jest już zajęty',
 				passwordMismatch: 'Hasła nie są identyczne',
@@ -40,6 +41,5 @@ export const authPlLocales = {
 				confirmPasswordRequired: 'Potwierdzenie hasła jest wymagane',
 			},
 		},
-		logout: 'Wyloguj się',
 	},
 };

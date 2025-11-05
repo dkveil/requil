@@ -12,7 +12,9 @@
 		"test": "echo 'No tests yet' && exit 0"
 	},
 	"dependencies": {
+		"@hookform/resolvers": "^5.2.2",
 		"@radix-ui/react-dropdown-menu": "^2.1.16",
+		"@radix-ui/react-label": "^2.1.8",
 		"@radix-ui/react-slot": "^1.2.4",
 		"@requil/types": "workspace:*",
 		"@requil/utils": "workspace:*",
@@ -24,7 +26,10 @@
 		"next-themes": "^0.4.6",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
-		"tailwind-merge": "^3.3.1"
+		"react-hook-form": "^7.66.0",
+		"sonner": "^2.0.7",
+		"tailwind-merge": "^3.3.1",
+		"zod": "^4.1.12"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.2.0",

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { getLocale, getMessages } from 'next-intl/server';
+import { Toaster } from '@/components/ui/sonner';
 import { Providers } from './providers';
 
 const geistSans = Geist({
@@ -39,8 +40,9 @@ export default async function RootLayout({
 					locale={locale}
 					messages={messages}
 				>
-					{children}
+					<main>{children}</main>
 				</Providers>
+				<Toaster />
 			</body>
 		</html>
 	);

@@ -1,15 +1,16 @@
 export const authEnLocales = {
 	auth: {
 		login: {
-			title: 'Sign In to Requil',
+			title: 'Login to your account',
+			subtitle: 'Enter your email below to login to your account',
 			email: 'Email',
 			emailPlaceholder: 'your@email.com',
 			password: 'Password',
 			passwordPlaceholder: '••••••••',
-			submit: 'Sign In',
-			loading: 'Signing in...',
+			forgotPassword: 'Forgot your password?',
 			noAccount: "Don't have an account?",
-			signUpLink: 'Sign Up',
+			success: 'Welcome back!',
+			failed: 'Login failed',
 			errors: {
 				invalidCredentials: 'Invalid email or password',
 				emailRequired: 'Email is required',
@@ -17,7 +18,8 @@ export const authEnLocales = {
 			},
 		},
 		register: {
-			title: 'Create Account',
+			title: 'Create an account',
+			subtitle: 'Enter your email below to create your account',
 			email: 'Email',
 			emailPlaceholder: 'your@email.com',
 			password: 'Password',
@@ -25,11 +27,10 @@ export const authEnLocales = {
 			confirmPassword: 'Confirm Password',
 			confirmPasswordPlaceholder: '••••••••',
 			passwordHint: 'Minimum 8 characters',
-			submit: 'Sign Up',
-			loading: 'Registering...',
 			hasAccount: 'Already have an account?',
-			signInLink: 'Sign In',
 			success: 'Registration successful! Check your email inbox.',
+			successTitle: 'Account created',
+			failed: 'Registration failed',
 			errors: {
 				emailExists: 'This email is already taken',
 				passwordMismatch: 'Passwords do not match',
@@ -39,6 +40,5 @@ export const authEnLocales = {
 				confirmPasswordRequired: 'Password confirmation is required',
 			},
 		},
-		logout: 'Sign Out',
 	},
 };

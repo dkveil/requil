@@ -13,6 +13,10 @@
 			"types": "./dist/api-routes.d.ts",
 			"default": "./dist/api-routes.js"
 		},
+		"./dashboard-routes": {
+			"types": "./dist/dashboard-routes.d.ts",
+			"default": "./dist/dashboard-routes.js"
+		},
 		"./logger": {
 			"types": "./dist/logger.d.ts",
 			"default": "./dist/logger.js"

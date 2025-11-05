@@ -1,5 +1,5 @@
 import type { ErrorCode, ErrorResponse } from '@requil/types';
-import { ERROR_MESSAGES_PL } from '@requil/types';
+import { ERROR_MESSAGES, ERROR_MESSAGES_PL } from '@requil/types';
 
 export class ApiClientError extends Error {
 	public readonly code: string;
@@ -23,16 +23,19 @@ export class ApiClientError extends Error {
 	}
 }
 
-export function getErrorMessage(error: unknown): string {
+export function getErrorMessage(error: unknown, locale = 'pl'): string {
 	if (error instanceof ApiClientError) {
-		return ERROR_MESSAGES_PL[error.code as ErrorCode] || error.message;
+		const messages = locale === 'en' ? ERROR_MESSAGES : ERROR_MESSAGES_PL;
+		return messages[error.code as ErrorCode] || error.message;
 	}
 
 	if (error instanceof Error) {
 		return error.message;
 	}
 
-	return 'Wystąpił nieoczekiwany błąd';
+	return locale === 'en'
+		? 'An unexpected error occurred'
+		: 'Wystąpił nieoczekiwany błąd';
 }
 
 export function parseApiError(
