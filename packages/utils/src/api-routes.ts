@@ -6,4 +6,11 @@ export const API_ROUTES = {
 		REFRESH: '/auth/refresh',
 		SESSION: '/auth/session',
 	},
+	WORKSPACE: {
+		CREATE: '/workspace',
+		LIST: '/workspace',
+		GET: '/workspace/:id',
+		UPDATE: '/workspace/:id',
+		DELETE: '/workspace/:id',
+	},
 } as const;
