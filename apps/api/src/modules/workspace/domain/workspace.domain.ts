@@ -17,6 +17,7 @@ export class WorkspaceEntity {
 		return new WorkspaceEntity({
 			id: crypto.randomUUID(),
 			name: props.name.trim(),
+			type: 'personal' as const, // MVP: hardcoded to personal
 			createdBy: userId,
 			createdAt: now,
 		});
@@ -65,10 +66,15 @@ export class WorkspaceEntity {
 		return this.props.createdAt;
 	}
 
+	get type(): 'personal' | 'team' {
+		return this.props.type;
+	}
+
 	toPersistence(): Workspace {
 		return {
 			id: this.props.id,
 			name: this.props.name,
+			type: this.props.type,
 			createdBy: this.props.createdBy,
 			createdAt: this.props.createdAt,
 		};

@@ -26,11 +26,3 @@ export type AuthUser = {
 	createdAt: string;
 	emailConfirmed: boolean;
 };
-
-export type WorkspaceMember = {
-	userId: string;
-	workspaceId: string;
-	role: UserRole;
-	invitedAt: string;
-	acceptedAt: string | null;
-};

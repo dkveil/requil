@@ -21,12 +21,14 @@ import { plan, transportState, transportType } from './enums';
 import { bytea, citext } from './types';
 
 export const workspaceRole = pgEnum('workspace_role', ['owner', 'member']);
+export const workspaceType = pgEnum('workspace_type', ['personal', 'team']);
 
 export const workspaces = pgTable(
 	'workspaces',
 	{
 		id: uuid().defaultRandom().primaryKey().notNull(),
 		name: text().notNull(),
+		type: workspaceType().default('personal').notNull(),
 		createdBy: uuid('created_by').notNull(),
 		createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
 			.defaultNow()

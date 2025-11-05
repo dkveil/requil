@@ -1,5 +1,4 @@
 export * from './api-keys';
-export * from './auth';
 export * from './builder-types';
 export * from './enums';
 export * from './events';

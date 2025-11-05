@@ -20,7 +20,21 @@ export default function createWorkspaceHandler({
 	): Promise<CreateWorkspaceResponse> => {
 		logger.info({ payload: action.payload }, 'Creating workspace');
 
-		// Check if workspace with this name already exists
+		const userId = action.meta?.userId as string;
+
+		if (!userId) {
+			throw new Error('User ID is required');
+		}
+
+		const existingPersonal =
+			await workspaceRepository.findPersonalByUserId(userId);
+
+		if (existingPersonal) {
+			throw new WorkspaceConflictError(
+				'You already have a personal workspace. Team workspaces are coming soon!'
+			);
+		}
+
 		const exists = await workspaceRepository.existsByName(action.payload.name);
 
 		if (exists) {
@@ -32,17 +46,8 @@ export default function createWorkspaceHandler({
 			);
 		}
 
-		// Get user ID from action metadata
-		const userId = action.meta?.userId as string;
-
-		if (!userId) {
-			throw new Error('User ID is required');
-		}
-
-		// Create workspace entity
 		const workspace = WorkspaceEntity.create(action.payload, userId);
 
-		// Save workspace with member
 		const result = await workspaceRepository.createWithMember(
 			workspace,
 			userId,
