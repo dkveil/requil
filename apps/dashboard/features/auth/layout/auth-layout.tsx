@@ -26,6 +26,19 @@ export default function AuthLayout({
 				<div className='flex flex-1 items-center justify-center'>
 					<div className='w-full'>{children}</div>
 				</div>
+				<div className='text-center'>
+					<p className='text-muted-foreground text-sm'>
+						designed by{' '}
+						<a
+							href='https://reveil.dev'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='hover:text-foreground font-medium transition-colors underline-offset-4 hover:underline'
+						>
+							reveil.dev
+						</a>
+					</p>
+				</div>
 			</div>
 			<div className='bg-muted relative hidden lg:block'>
 				{/* <Image
