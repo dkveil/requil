@@ -1,15 +1,16 @@
 import { ERROR_CODES, successResponseSchema } from '@requil/types';
 import { errorResponseSchema } from '@requil/types/api';
 import { refreshTokenResponseSchema } from '@requil/types/auth';
+import { API_ROUTES } from '@requil/utils/api-routes';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { sendSuccess } from '@/shared/app/response-wrapper';
+import { sendError, sendSuccess } from '@/shared/app/response-wrapper';
 import { refreshTokenHandler } from './refresh-token.handler';
 
 const refreshTokenRoute: FastifyPluginAsync = async (fastify) => {
 	fastify.withTypeProvider<ZodTypeProvider>().route({
 		method: 'POST',
-		url: '/auth/refresh',
+		url: API_ROUTES.AUTH.REFRESH,
 		schema: {
 			response: {
 				200: successResponseSchema(refreshTokenResponseSchema),
@@ -21,14 +22,14 @@ const refreshTokenRoute: FastifyPluginAsync = async (fastify) => {
 			const refreshToken = request.cookies.requil_refresh_token;
 
 			if (!refreshToken) {
-				return reply.code(401).send({
-					success: false,
-					status: 401,
-					error: {
+				return sendError(
+					reply,
+					{
 						message: 'No refresh token',
 						code: ERROR_CODES.REFRESH_TOKEN_NOT_FOUND,
 					},
-				});
+					401
+				);
 			}
 
 			const result = await refreshTokenHandler(

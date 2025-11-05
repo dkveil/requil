@@ -1,3 +1,4 @@
+import { ERROR_CODES } from '@requil/types';
 import type { ErrorResponse } from '@requil/types/api';
 import {
 	isRequilError,
@@ -13,6 +14,7 @@ import type {
 } from 'fastify';
 import fp from 'fastify-plugin';
 import { ZodError } from 'zod';
+import { sendError } from '@/shared/app/response-wrapper';
 
 function formatZodError(zodError: ZodError): ValidationError {
 	const errors = zodError.issues.map((issue) => ({
@@ -90,7 +92,7 @@ async function errorHandlerPlugin(fastify: FastifyInstance) {
 				);
 			}
 
-			reply.status(finalStatusCode).send(response);
+			sendError(reply, response.error, finalStatusCode);
 		}
 	);
 
@@ -106,15 +108,15 @@ async function errorHandlerPlugin(fastify: FastifyInstance) {
 			`Route not found: ${request.method} ${request.url}`
 		);
 
-		reply.status(404).send({
-			success: false,
-			status: 404,
-			error: {
+		sendError(
+			reply,
+			{
 				message: `Route ${request.method} ${request.url} not found`,
-				code: 'NOT_FOUND',
+				code: ERROR_CODES.NOT_FOUND,
 				traceId,
 			},
-		});
+			404
+		);
 	});
 }
 

@@ -9,6 +9,10 @@
 			"types": "./dist/index.d.ts",
 			"default": "./dist/index.js"
 		},
+		"./api-routes": {
+			"types": "./dist/api-routes.d.ts",
+			"default": "./dist/api-routes.js"
+		},
 		"./logger": {
 			"types": "./dist/logger.d.ts",
 			"default": "./dist/logger.js"

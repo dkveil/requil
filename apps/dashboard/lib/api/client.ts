@@ -11,7 +11,7 @@ function isError(error: unknown): error is Error {
 	return error instanceof Error;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 
 export async function fetchAPI<T>(
 	endpoint: string,
@@ -23,9 +23,12 @@ export async function fetchAPI<T>(
 	const timeoutId = setTimeout(() => controller.abort(), timeout);
 
 	const defaultHeaders: HeadersInit = {
-		'Content-Type': 'application/json',
 		Accept: 'application/json',
 	};
+
+	if (rest.body) {
+		defaultHeaders['Content-Type'] = 'application/json';
+	}
 
 	const headers: HeadersInit = {
 		...defaultHeaders,
@@ -46,33 +49,23 @@ export async function fetchAPI<T>(
 
 		clearTimeout(timeoutId);
 
-		if (!response.ok) {
-			const errorData: ErrorResponse = await response.json().catch(() => ({
-				success: false,
-				status: response.status,
-				error: {
-					message: 'Wystąpił nieoczekiwany błąd',
-					code: ERROR_CODES.UNKNOWN_ERROR,
-				},
-			}));
+		const responseData = await response.json();
 
+		if (!response.ok) {
+			const errorData: ErrorResponse = responseData as ErrorResponse;
 			throw parseApiError(errorData, response.status);
 		}
 
-		return await response.json();
+		return responseData as SuccessResponse<T>;
 	} catch (err) {
+		clearTimeout(timeoutId);
+
 		if (err instanceof ApiClientError) {
 			throw err;
 		}
 
 		const error = isError(err) ? err : new Error('Unknown error');
 
-		throw new ApiClientError(
-			error.message,
-			ERROR_CODES.INTERNAL_ERROR,
-			500,
-			undefined,
-			undefined
-		);
+		throw new ApiClientError(error.message, ERROR_CODES.INTERNAL_ERROR, 500);
 	}
 }

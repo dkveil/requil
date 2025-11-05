@@ -4,6 +4,7 @@ import {
 	registerInputSchema,
 	registerResponseSchema,
 } from '@requil/types/auth';
+import { API_ROUTES } from '@requil/utils/api-routes';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { sendSuccess } from '@/shared/app/response-wrapper';
@@ -12,7 +13,7 @@ import { registerHandler } from './register.handler';
 const registerRoute: FastifyPluginAsync = async (fastify) => {
 	fastify.withTypeProvider<ZodTypeProvider>().route({
 		method: 'POST',
-		url: '/auth/register',
+		url: API_ROUTES.AUTH.REGISTER,
 		schema: {
 			body: registerInputSchema,
 			response: {

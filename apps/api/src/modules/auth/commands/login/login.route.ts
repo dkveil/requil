@@ -1,6 +1,7 @@
 import { successResponseSchema } from '@requil/types';
 import { errorResponseSchema } from '@requil/types/api';
 import { loginResponseSchema, loginSchema } from '@requil/types/auth';
+import { API_ROUTES } from '@requil/utils/api-routes';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { sendSuccess } from '@/shared/app/response-wrapper';
@@ -9,7 +10,7 @@ import { loginHandler } from './login.handler';
 const loginRoute: FastifyPluginAsync = async (fastify) => {
 	fastify.withTypeProvider<ZodTypeProvider>().route({
 		method: 'POST',
-		url: '/auth/login',
+		url: API_ROUTES.AUTH.LOGIN,
 		schema: {
 			body: loginSchema,
 			response: {

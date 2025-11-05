@@ -1,9 +1,11 @@
 import { db, workspaceMembers } from '@requil/db';
+import { ERROR_CODES } from '@requil/types';
 import { and, eq } from 'drizzle-orm';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 import { verify } from 'jsonwebtoken';
 import { env } from '@/config';
+import { sendError } from '@/shared/app/response-wrapper';
 
 export type AuthOptions = {
 	requireWorkspace?: boolean;
@@ -15,18 +17,18 @@ async function authPlugin(fastify: FastifyInstance) {
 		'authenticate',
 		async (request: FastifyRequest, reply: FastifyReply) => {
 			try {
-				const authHeader = request.headers.authorization;
+				const token = request.cookies.requil_access_token;
 
-				if (!authHeader?.startsWith('Bearer ')) {
-					return reply.code(401).send({
-						error: {
-							code: 'AUTHENTICATION_ERROR',
-							message: 'Missing or invalid authorization header',
+				if (!token) {
+					return sendError(
+						reply,
+						{
+							code: ERROR_CODES.AUTHENTICATION_ERROR,
+							message: 'Missing authentication token',
 						},
-					});
+						401
+					);
 				}
-
-				const token = authHeader.substring(7);
 
 				const decoded = verify(token, env.supabase.jwtSecret) as {
 					sub: string;
@@ -41,12 +43,14 @@ async function authPlugin(fastify: FastifyInstance) {
 				};
 			} catch (error) {
 				fastify.log.error(error, 'Authentication failed');
-				return reply.code(401).send({
-					error: {
-						code: 'AUTHENTICATION_ERROR',
+				return sendError(
+					reply,
+					{
+						code: ERROR_CODES.AUTHENTICATION_ERROR,
 						message: 'Invalid or expired token',
 					},
-				});
+					401
+				);
 			}
 		}
 	);
@@ -55,23 +59,27 @@ async function authPlugin(fastify: FastifyInstance) {
 		'requireWorkspace',
 		async (request: FastifyRequest, reply: FastifyReply) => {
 			if (!request.supabaseUser) {
-				return reply.code(401).send({
-					error: {
-						code: 'AUTHENTICATION_ERROR',
+				return sendError(
+					reply,
+					{
+						code: ERROR_CODES.AUTHENTICATION_ERROR,
 						message: 'Authentication required',
 					},
-				});
+					401
+				);
 			}
 
 			const workspaceId = request.headers['x-workspace-id'] as string;
 
 			if (!workspaceId) {
-				return reply.code(400).send({
-					error: {
-						code: 'VALIDATION_ERROR',
+				return sendError(
+					reply,
+					{
+						code: ERROR_CODES.VALIDATION_ERROR,
 						message: 'x-workspace-id header is required',
 					},
-				});
+					400
+				);
 			}
 
 			const membership = await db
@@ -86,12 +94,14 @@ async function authPlugin(fastify: FastifyInstance) {
 				.limit(1);
 
 			if (!(membership.length && membership[0]?.acceptedAt)) {
-				return reply.code(403).send({
-					error: {
-						code: 'AUTHORIZATION_ERROR',
+				return sendError(
+					reply,
+					{
+						code: ERROR_CODES.AUTHORIZATION_ERROR,
 						message: 'Access denied to this workspace',
 					},
-				});
+					403
+				);
 			}
 
 			request.workspaceId = workspaceId;
@@ -103,21 +113,25 @@ async function authPlugin(fastify: FastifyInstance) {
 		'requireOwner',
 		async (request: FastifyRequest, reply: FastifyReply) => {
 			if (!request.workspaceRole) {
-				return reply.code(403).send({
-					error: {
-						code: 'AUTHORIZATION_ERROR',
+				return sendError(
+					reply,
+					{
+						code: ERROR_CODES.AUTHORIZATION_ERROR,
 						message: 'Workspace context required',
 					},
-				});
+					403
+				);
 			}
 
 			if (request.workspaceRole !== 'owner') {
-				return reply.code(403).send({
-					error: {
-						code: 'AUTHORIZATION_ERROR',
+				return sendError(
+					reply,
+					{
+						code: ERROR_CODES.AUTHORIZATION_ERROR,
 						message: 'Owner role required',
 					},
-				});
+					403
+				);
 			}
 		}
 	);
