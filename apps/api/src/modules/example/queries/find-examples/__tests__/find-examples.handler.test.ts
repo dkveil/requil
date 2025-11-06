@@ -62,14 +62,15 @@ describe('FindExamplesHandler', () => {
 			});
 			const result = await handler.handler(action);
 
-			expect(mockExampleRepository.findAllPaginated).toHaveBeenCalledWith({
-				limit,
-				offset: 0,
-				orderBy: {
-					field: orderBy,
-					direction: orderDirection,
-				},
-			});
+		expect(mockExampleRepository.findAllPaginated).toHaveBeenCalledWith({
+			page,
+			limit,
+			offset: 0,
+			orderBy: {
+				field: orderBy,
+				direction: orderDirection,
+			},
+		});
 
 			expect(mockLogger.info).toHaveBeenCalledWith(
 				{ page, limit, orderBy },
@@ -103,14 +104,15 @@ describe('FindExamplesHandler', () => {
 			});
 			await handler.handler(action);
 
-			expect(mockExampleRepository.findAllPaginated).toHaveBeenCalledWith({
-				limit,
-				offset: 10,
-				orderBy: {
-					field: 'createdAt',
-					direction: 'desc',
-				},
-			});
+		expect(mockExampleRepository.findAllPaginated).toHaveBeenCalledWith({
+			page,
+			limit,
+			offset: 10,
+			orderBy: {
+				field: 'createdAt',
+				direction: 'desc',
+			},
+		});
 		});
 
 		it('should calculate correct offset for page 2', async () => {
@@ -130,14 +132,15 @@ describe('FindExamplesHandler', () => {
 			});
 			await handler.handler(action);
 
-			expect(mockExampleRepository.findAllPaginated).toHaveBeenCalledWith({
-				limit,
-				offset: 40,
-				orderBy: {
-					field: 'createdAt',
-					direction: 'asc',
-				},
-			});
+		expect(mockExampleRepository.findAllPaginated).toHaveBeenCalledWith({
+			page,
+			limit,
+			offset: 40,
+			orderBy: {
+				field: 'createdAt',
+				direction: 'asc',
+			},
+		});
 		});
 
 		it('should return empty array when no examples found', async () => {
@@ -177,14 +180,15 @@ describe('FindExamplesHandler', () => {
 			});
 			await handler.handler(actionAsc);
 
-			expect(mockExampleRepository.findAllPaginated).toHaveBeenLastCalledWith({
-				limit: 10,
-				offset: 0,
-				orderBy: {
-					field: 'name',
-					direction: 'asc',
-				},
-			});
+		expect(mockExampleRepository.findAllPaginated).toHaveBeenLastCalledWith({
+			page: 0,
+			limit: 10,
+			offset: 0,
+			orderBy: {
+				field: 'name',
+				direction: 'asc',
+			},
+		});
 		});
 	});
 

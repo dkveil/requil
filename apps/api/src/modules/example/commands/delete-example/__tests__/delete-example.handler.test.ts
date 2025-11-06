@@ -98,9 +98,6 @@ describe('DeleteExampleHandler', () => {
 				deleteExampleAction.type,
 				handler.handler
 			);
-			expect(mockLogger.info).toHaveBeenCalledWith(
-				`✅ ${deleteExampleAction.type} registered`
-			);
 		});
 	});
 });

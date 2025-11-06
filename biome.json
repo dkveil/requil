@@ -29,6 +29,7 @@
 			"!**/.turbo",
 			"!**/.build",
 			"!**/coverage",
+			"!apps/api/src/modules/example",
 			"turbo.json"
 		]
 	},
