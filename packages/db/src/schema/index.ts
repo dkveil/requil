@@ -11,4 +11,5 @@ export * from './suppression';
 export * from './templates';
 export * from './types';
 export * from './usage';
+export * from './user-accounts';
 export * from './workspace';

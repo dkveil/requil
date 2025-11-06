@@ -13,7 +13,7 @@ export const apiScope = pgEnum('api_scope', [
 ]);
 
 export const eventType = pgEnum('event_type', ['sent', 'delivered', 'bounced']);
-export const plan = pgEnum('plan', ['starter', 'pro']);
+export const plan = pgEnum('plan', ['free']);
 export const recipientStatus = pgEnum('recipient_status', [
 	'pending',
 	'sent',

@@ -25,7 +25,11 @@ const registerRoute: FastifyPluginAsync = async (fastify) => {
 			tags: ['auth'],
 		},
 		handler: async (request, reply) => {
-			const result = await registerHandler(request.body, fastify.supabase);
+			const result = await registerHandler(
+				request.body,
+				fastify.supabase,
+				request.diScope.cradle as Dependencies
+			);
 			return sendSuccess(reply, result, 201);
 		},
 	});

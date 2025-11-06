@@ -2,7 +2,7 @@
 
 import { Languages } from 'lucide-react';
 import { useLocale } from 'next-intl';
-import { setLocale } from '@/app/actions/locale';
+import { setLocale } from '@/actions/locale';
 import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,

@@ -13,4 +13,7 @@ export const API_ROUTES = {
 		UPDATE: '/workspace/:id',
 		DELETE: '/workspace/:id',
 	},
+	ACCOUNT: {
+		GET: '/account',
+	},
 } as const;

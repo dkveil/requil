@@ -20,6 +20,11 @@
 			"require": "./dist/auth/index.js",
 			"default": "./dist/auth/index.js"
 		},
+		"./billing": {
+			"types": "./dist/billing/index.d.ts",
+			"require": "./dist/billing/index.js",
+			"default": "./dist/billing/index.js"
+		},
 		"./workspace": {
 			"types": "./dist/workspace/index.d.ts",
 			"require": "./dist/workspace/index.js",

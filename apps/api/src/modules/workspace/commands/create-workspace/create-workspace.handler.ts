@@ -2,6 +2,7 @@ import type {
 	CreateWorkspaceInput,
 	CreateWorkspaceResponse,
 } from '@requil/types';
+import { canCreateWorkspace } from '@/modules/billing/domain/plan-limits.config';
 import type { Action } from '@/shared/cqrs/bus.types';
 import { WorkspaceEntity } from '../../domain/workspace.domain';
 import { WorkspaceConflictError } from '../../domain/workspace.error';
@@ -13,6 +14,7 @@ export const createWorkspaceAction =
 export default function createWorkspaceHandler({
 	commandBus,
 	workspaceRepository,
+	userAccountRepository,
 	logger,
 }: Dependencies) {
 	const handler = async (
@@ -26,12 +28,27 @@ export default function createWorkspaceHandler({
 			throw new Error('User ID is required');
 		}
 
-		const existingPersonal =
-			await workspaceRepository.findPersonalByUserId(userId);
+		let userAccount = await userAccountRepository.findByUserId(userId);
 
-		if (existingPersonal) {
+		if (!userAccount) {
+			logger.warn(
+				{ userId },
+				'User account not found, creating lazily (should have been created during registration)'
+			);
+			userAccount = await userAccountRepository.create(userId, 'free');
+		}
+
+		const existingWorkspaces = await workspaceRepository.findByUserId(userId);
+		const workspaceCount = existingWorkspaces?.length || 0;
+
+		if (!canCreateWorkspace(workspaceCount, userAccount.limits)) {
 			throw new WorkspaceConflictError(
-				'You already have a personal workspace. Team workspaces are coming soon!'
+				`Your ${userAccount.plan} plan allows maximum ${userAccount.limits.workspacesMax} workspace(s). Please upgrade to create more.`,
+				{
+					currentPlan: userAccount.plan,
+					currentCount: workspaceCount,
+					maxAllowed: userAccount.limits.workspacesMax,
+				}
 			);
 		}
 

@@ -4,7 +4,8 @@ import { mapSupabaseAuthError } from '@/modules/auth/domain/auth.error';
 
 export async function registerHandler(
 	input: RegisterInput,
-	supabase: SupabaseClient
+	supabase: SupabaseClient,
+	deps: Dependencies
 ): Promise<RegisterResponse> {
 	const { email, password } = input;
 
@@ -22,6 +23,19 @@ export async function registerHandler(
 
 	if (!authData.user) {
 		throw new Error('User creation failed');
+	}
+
+	try {
+		await deps.userAccountRepository.create(authData.user.id, 'free');
+		deps.logger.info(
+			{ userId: authData.user.id },
+			'User account created with FREE plan'
+		);
+	} catch (error) {
+		deps.logger.error(
+			{ userId: authData.user.id, error },
+			'Failed to create user account during registration'
+		);
 	}
 
 	return {

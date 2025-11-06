@@ -30,6 +30,7 @@ export default {
 				// Modules
 				'auth',
 				'workspace',
+				'billing',
 				// Packages
 				'email-engine',
 				'transports',
