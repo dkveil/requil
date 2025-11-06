@@ -35,13 +35,28 @@ export default function createWorkspaceHandler({
 			);
 		}
 
-		const exists = await workspaceRepository.existsByName(action.payload.name);
+		const nameExists = await workspaceRepository.existsByName(
+			action.payload.name
+		);
 
-		if (exists) {
+		if (nameExists) {
 			throw new WorkspaceConflictError(
 				'Workspace with this name already exists',
 				{
 					name: action.payload.name,
+				}
+			);
+		}
+
+		const slugExists = await workspaceRepository.existsBySlug(
+			action.payload.slug
+		);
+
+		if (slugExists) {
+			throw new WorkspaceConflictError(
+				'Workspace with this slug already exists',
+				{
+					slug: action.payload.slug,
 				}
 			);
 		}
@@ -62,6 +77,7 @@ export default function createWorkspaceHandler({
 		return {
 			id: result.id,
 			name: result.name,
+			slug: result.slug,
 			createdBy: result.createdBy || userId,
 			createdAt: result.createdAt,
 		};

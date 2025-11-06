@@ -1,8 +1,10 @@
 import { authEnLocales } from '@/features/auth/locales/en';
+import { welcomeEnLocales } from '@/features/welcome/locales';
 
 export default {
 	common: {
 		loading: 'Loading...',
+		redirecting: 'Redirecting...',
 		error: 'An error occurred',
 		success: 'Success',
 		cancel: 'Cancel',
@@ -25,4 +27,5 @@ export default {
 		},
 	},
 	...authEnLocales,
+	...welcomeEnLocales,
 };

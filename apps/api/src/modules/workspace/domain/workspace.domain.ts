@@ -7,6 +7,8 @@ import type {
 	WorkspaceProps,
 } from './workspace.type';
 
+const SLUG_REGEX = /^[a-z0-9-]+$/;
+
 export class WorkspaceEntity {
 	private constructor(private readonly props: WorkspaceProps) {
 		this.validate();
@@ -17,6 +19,7 @@ export class WorkspaceEntity {
 		return new WorkspaceEntity({
 			id: crypto.randomUUID(),
 			name: props.name.trim(),
+			slug: props.slug.toLowerCase().trim(),
 			createdBy: userId,
 			createdAt: now,
 		});
@@ -42,6 +45,28 @@ export class WorkspaceEntity {
 				'Name must be at most 255 characters long'
 			);
 		}
+
+		if (!this.props.slug || this.props.slug.trim().length === 0) {
+			throw new WorkspaceValidationError('Slug is required');
+		}
+
+		if (this.props.slug.length < 3) {
+			throw new WorkspaceValidationError(
+				'Slug must be at least 3 characters long'
+			);
+		}
+
+		if (this.props.slug.length > 63) {
+			throw new WorkspaceValidationError(
+				'Slug must be at most 63 characters long'
+			);
+		}
+
+		if (!SLUG_REGEX.test(this.props.slug)) {
+			throw new WorkspaceValidationError(
+				'Slug must contain only lowercase letters, numbers, and hyphens'
+			);
+		}
 	}
 
 	updateName(name: string): void {
@@ -57,6 +82,10 @@ export class WorkspaceEntity {
 		return this.props.name;
 	}
 
+	get slug(): string {
+		return this.props.slug;
+	}
+
 	get createdBy(): string {
 		return this.props.createdBy || '';
 	}
@@ -69,6 +98,7 @@ export class WorkspaceEntity {
 		return {
 			id: this.props.id,
 			name: this.props.name,
+			slug: this.props.slug,
 			createdBy: this.props.createdBy,
 			createdAt: this.props.createdAt,
 		};

@@ -55,9 +55,11 @@ export function LoginForm({
 	const onSubmit = async (values: LoginFormValues) => {
 		try {
 			await signIn(values.email, values.password);
+
 			toast.success(tAuth('title'), {
 				description: tAuth('success'),
 			});
+
 			router.push('/');
 			router.refresh();
 		} catch (err) {

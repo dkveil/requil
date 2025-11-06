@@ -1,8 +1,10 @@
 import { authPlLocales } from '@/features/auth/locales/pl';
+import { welcomePlLocales } from '@/features/welcome/locales';
 
 export default {
 	common: {
 		loading: 'Ładowanie...',
+		redirecting: 'Przekierowanie...',
 		error: 'Wystąpił błąd',
 		success: 'Sukces',
 		cancel: 'Anuluj',
@@ -25,4 +27,5 @@ export default {
 		},
 	},
 	...authPlLocales,
+	...welcomePlLocales,
 };

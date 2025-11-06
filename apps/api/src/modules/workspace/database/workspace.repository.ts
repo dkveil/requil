@@ -33,6 +33,7 @@ export default function workspaceRepository({
 			.select({
 				id: workspaces.id,
 				name: workspaces.name,
+				slug: workspaces.slug,
 				createdBy: workspaces.createdBy,
 				createdAt: workspaces.createdAt,
 				role: workspaceMembers.role,
@@ -48,6 +49,7 @@ export default function workspaceRepository({
 		return results.map((row) => ({
 			id: row.id,
 			name: row.name,
+			slug: row.slug,
 			createdBy: row.createdBy || '',
 			createdAt: row.createdAt,
 			role: row.role,
@@ -63,6 +65,7 @@ export default function workspaceRepository({
 			.select({
 				id: workspaces.id,
 				name: workspaces.name,
+				slug: workspaces.slug,
 				createdBy: workspaces.createdBy,
 				createdAt: workspaces.createdAt,
 				role: workspaceMembers.role,
@@ -87,6 +90,7 @@ export default function workspaceRepository({
 		return {
 			id: row.id,
 			name: row.name,
+			slug: row.slug,
 			createdBy: row.createdBy || '',
 			createdAt: row.createdAt,
 			role: row.role,
@@ -99,6 +103,16 @@ export default function workspaceRepository({
 			.select({ exists: sql<boolean>`1` })
 			.from(workspaces)
 			.where(eq(workspaces.name, name))
+			.limit(1);
+
+		return result.length > 0;
+	};
+
+	const existsBySlug = async (slug: string): Promise<boolean> => {
+		const result = await db
+			.select({ exists: sql<boolean>`1` })
+			.from(workspaces)
+			.where(eq(workspaces.slug, slug))
 			.limit(1);
 
 		return result.length > 0;
@@ -150,6 +164,7 @@ export default function workspaceRepository({
 		return {
 			id: workspace.id,
 			name: workspace.name,
+			slug: workspace.slug,
 			createdBy: workspace.createdBy,
 			createdAt: workspace.createdAt,
 			role: role,
@@ -162,6 +177,7 @@ export default function workspaceRepository({
 		findByUserId,
 		findByIdWithRole,
 		existsByName,
+		existsBySlug,
 		findPersonalByUserId,
 		createWithMember,
 	};

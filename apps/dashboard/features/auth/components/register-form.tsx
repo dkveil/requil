@@ -66,9 +66,11 @@ export function RegisterForm({
 		try {
 			await signUp(values.email, values.password);
 			await signIn(values.email, values.password);
+
 			toast.success(tAuth('successTitle'), {
 				description: tAuth('success'),
 			});
+
 			router.push('/');
 			router.refresh();
 		} catch (err) {

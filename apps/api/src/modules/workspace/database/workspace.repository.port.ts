@@ -15,6 +15,7 @@ export interface IWorkspaceRepository
 		userId: UserId
 	): Promise<WorkspaceWithRole | undefined>;
 	existsByName(name: string): Promise<boolean>;
+	existsBySlug(slug: string): Promise<boolean>;
 	findPersonalByUserId(userId: UserId): Promise<WorkspaceEntity | undefined>;
 	createWithMember(
 		workspace: WorkspaceEntity,

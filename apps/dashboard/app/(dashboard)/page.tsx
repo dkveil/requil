@@ -1,14 +1,38 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
+import { LoadingScreen } from '@/components/loading-screen';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/features/auth/stores/auth-store';
+import { useWorkspaceStore } from '@/features/workspace';
 
 export default function DashboardPage() {
+	const t = useTranslations('common');
 	const user = useAuthStore((state) => state.user);
 	const signOut = useAuthStore((state) => state.signOut);
-	const loading = useAuthStore((state) => state.loading);
+	const authLoading = useAuthStore((state) => state.loading);
 	const router = useRouter();
+
+	const {
+		workspaces,
+		loading: workspaceLoading,
+		initialized: workspaceInitialized,
+		loadWorkspaces,
+	} = useWorkspaceStore();
+
+	useEffect(() => {
+		if (user && !workspaceInitialized) {
+			loadWorkspaces();
+		}
+	}, [user, workspaceInitialized, loadWorkspaces]);
+
+	useEffect(() => {
+		if (workspaceInitialized && workspaces.length === 0) {
+			router.push('/welcome');
+		}
+	}, [workspaceInitialized, workspaces, router]);
 
 	const handleSignOut = async () => {
 		try {
@@ -19,12 +43,12 @@ export default function DashboardPage() {
 		}
 	};
 
-	if (loading) {
-		return (
-			<div className='flex min-h-screen items-center justify-center'>
-				<p className='text-gray-600'>Ładowanie...</p>
-			</div>
-		);
+	if (authLoading || workspaceLoading || !workspaceInitialized) {
+		return <LoadingScreen text={t('loading')} />;
+	}
+
+	if (workspaces.length === 0) {
+		return <LoadingScreen text={t('redirecting')} />;
 	}
 
 	return (
