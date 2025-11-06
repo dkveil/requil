@@ -31,8 +31,8 @@ describe('error formatter', () => {
 				expect(formatted).toHaveLength(1);
 				expect(formatted[0]).toMatchObject({
 					field: 'email',
-					message: 'Invalid email',
-					code: 'invalid_string',
+					message: 'Invalid email address',
+					code: 'invalid_format',
 				});
 			}
 		});
@@ -217,7 +217,7 @@ describe('error formatter', () => {
 				const validationError = zodErrorToValidationError(error as ZodError);
 
 				expect(validationError.message).toContain('email');
-				expect(validationError.message).toContain('Invalid email');
+				expect(validationError.message).toContain('Invalid email address');
 			}
 		});
 
@@ -250,7 +250,7 @@ describe('error formatter', () => {
 				expect(validationError.context.errors).toHaveLength(1);
 				expect(validationError.context.errors[0]).toMatchObject({
 					field: 'email',
-					message: 'Invalid email',
+					message: 'Invalid email address',
 				});
 			}
 		});
