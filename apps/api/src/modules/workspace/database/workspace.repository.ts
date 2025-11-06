@@ -33,7 +33,6 @@ export default function workspaceRepository({
 			.select({
 				id: workspaces.id,
 				name: workspaces.name,
-				type: workspaces.type,
 				createdBy: workspaces.createdBy,
 				createdAt: workspaces.createdAt,
 				role: workspaceMembers.role,
@@ -49,7 +48,6 @@ export default function workspaceRepository({
 		return results.map((row) => ({
 			id: row.id,
 			name: row.name,
-			type: row.type,
 			createdBy: row.createdBy || '',
 			createdAt: row.createdAt,
 			role: row.role,
@@ -65,7 +63,6 @@ export default function workspaceRepository({
 			.select({
 				id: workspaces.id,
 				name: workspaces.name,
-				type: workspaces.type,
 				createdBy: workspaces.createdBy,
 				createdAt: workspaces.createdAt,
 				role: workspaceMembers.role,
@@ -90,7 +87,6 @@ export default function workspaceRepository({
 		return {
 			id: row.id,
 			name: row.name,
-			type: row.type,
 			createdBy: row.createdBy || '',
 			createdAt: row.createdAt,
 			role: row.role,
@@ -118,12 +114,7 @@ export default function workspaceRepository({
 				workspaceMembers,
 				eq(workspaces.id, workspaceMembers.workspaceId)
 			)
-			.where(
-				and(
-					eq(workspaceMembers.userId, userId),
-					eq(workspaces.type, 'personal')
-				)
-			)
+			.where(eq(workspaceMembers.userId, userId))
 			.limit(1);
 
 		if (result.length === 0 || !result[0]) return undefined;
@@ -159,7 +150,6 @@ export default function workspaceRepository({
 		return {
 			id: workspace.id,
 			name: workspace.name,
-			type: workspace.type,
 			createdBy: workspace.createdBy,
 			createdAt: workspace.createdAt,
 			role: role,
