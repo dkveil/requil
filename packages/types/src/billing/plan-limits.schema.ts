@@ -2,6 +2,10 @@ import { z } from 'zod';
 
 export const planNameSchema = z.enum(['free']);
 
+export const planFeaturesSchema = z.object({
+	communitySupport: z.boolean(),
+});
+
 export const planLimitsSchema = z.object({
 	workspacesMax: z.number().int(), // -1 = unlimited
 	emailsPerMonth: z.number().int().positive(),
@@ -10,6 +14,7 @@ export const planLimitsSchema = z.object({
 	templatesPerWorkspace: z.number().int(), // -1 = unlimited
 	// customDomainsTotal: z.number().int().nonnegative(),
 	// webhooksTotal: z.number().int().nonnegative(),
+	features: planFeaturesSchema,
 });
 
 export const accountSchema = z.object({

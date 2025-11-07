@@ -12,7 +12,7 @@ import {
 import { plan } from './enums';
 
 export const accounts = pgTable(
-	'user_accounts',
+	'accounts',
 	{
 		userId: uuid('user_id').primaryKey().notNull(),
 		plan: plan().default('free').notNull(),

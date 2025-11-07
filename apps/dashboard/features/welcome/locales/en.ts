@@ -13,10 +13,10 @@ export const welcomeEnLocales = {
 				notice:
 					'During the beta phase, all features are free with strict usage limits',
 				features: {
-					emails: 'Up to {count} emails/month',
+					emails: 'Up to {count} emails per month',
 					workspaces: '{count} workspace',
-					templates: 'Up to {count} templates',
-					apiCalls: 'Up to {count} API calls/day',
+					templates: 'Up to {count} templates per workspace',
+					apiCalls: 'Up to {count} API calls per month',
 					support: 'Community support',
 				},
 			},
