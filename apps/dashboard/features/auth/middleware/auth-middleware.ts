@@ -1,5 +1,7 @@
 import { API_ROUTES } from '@requil/utils/api-routes';
+import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import { type NextRequest, NextResponse } from 'next/server';
+import { WORKSPACE_COOKIE } from '@/lib/cookies/cookie-utils';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8121/api';
 
@@ -82,12 +84,27 @@ export async function authMiddleware(request: NextRequest) {
 	const accessToken = request.cookies.get('requil_access_token')?.value;
 	const refreshToken = request.cookies.get('requil_refresh_token')?.value;
 	const isAuthRoute = request.nextUrl.pathname.startsWith('/auth');
+	const isDashboardRoot = request.nextUrl.pathname === '/';
 
 	const hasAnyToken = Boolean(accessToken) || Boolean(refreshToken);
 
+	if (isDashboardRoot && hasAnyToken) {
+		const lastWorkspaceId = request.cookies.get(WORKSPACE_COOKIE.NAME)?.value;
+		if (lastWorkspaceId) {
+			return NextResponse.redirect(
+				new URL(
+					DASHBOARD_ROUTES.WORKSPACE.CURRENT(lastWorkspaceId),
+					request.url
+				)
+			);
+		}
+	}
+
 	if (!hasAnyToken) {
 		if (!isAuthRoute) {
-			return NextResponse.redirect(new URL('/auth/login', request.url));
+			return NextResponse.redirect(
+				new URL(DASHBOARD_ROUTES.AUTH.LOGIN, request.url)
+			);
 		}
 		return NextResponse.next();
 	}
@@ -99,7 +116,7 @@ export async function authMiddleware(request: NextRequest) {
 		const { success, newCookies } = await refreshTokens(cookieString);
 		if (!success) {
 			const response = NextResponse.redirect(
-				new URL('/auth/login', request.url)
+				new URL(DASHBOARD_ROUTES.AUTH.LOGIN, request.url)
 			);
 			response.cookies.delete('requil_access_token');
 			response.cookies.delete('requil_refresh_token');
@@ -127,14 +144,16 @@ export async function authMiddleware(request: NextRequest) {
 	}
 
 	if (!valid) {
-		const response = NextResponse.redirect(new URL('/auth/login', request.url));
+		const response = NextResponse.redirect(
+			new URL(DASHBOARD_ROUTES.AUTH.LOGIN, request.url)
+		);
 		response.cookies.delete('requil_access_token');
 		response.cookies.delete('requil_refresh_token');
 		return response;
 	}
 
 	if (valid && isAuthRoute) {
-		return NextResponse.redirect(new URL('/', request.url));
+		return NextResponse.redirect(new URL(DASHBOARD_ROUTES.HOME, request.url));
 	}
 
 	return NextResponse.next();

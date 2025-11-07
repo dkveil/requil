@@ -1,6 +1,7 @@
 import type { User } from '@requil/types';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { workspaceService } from '@/features/workspace';
 import { authApi } from '../api/auth-api';
 
 type AuthState = {
@@ -52,6 +53,9 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 				} catch {
 					// Ignore logout errors
 				}
+
+				workspaceService.reset();
+
 				set({ user: null }, false, 'signOut');
 			},
 

@@ -5,4 +5,8 @@ export const DASHBOARD_ROUTES = {
 		REGISTER: '/auth/register',
 		FORGOT_PASSWORD: '/auth/forgot-password',
 	},
+	WELCOME: '/welcome',
+	WORKSPACE: {
+		CURRENT: (slug: string) => `/workspace/${slug}`,
+	},
 } as const;

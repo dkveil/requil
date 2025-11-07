@@ -25,7 +25,7 @@ export const welcomePlLocales = {
 		workspace: {
 			title: 'Utwórz Swój Workspace',
 			description:
-				'Workspace to miejsce, gdzie zarządzasz szablonami i kampaniami email',
+				'Workspace to miejsce, gdzie zarządzasz szablonami i kampaniami email.',
 			form: {
 				name: {
 					label: 'Nazwa Workspace',
