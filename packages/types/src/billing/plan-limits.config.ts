@@ -5,7 +5,7 @@ export const ACCOUNT_PLAN_LIMITS: Record<PlanName, PlanLimits> = {
 		workspacesMax: 1,
 		emailsPerMonth: 80,
 		teamMembersTotal: 1,
-		apiCallsPerMonth: 1000,
+		apiCallsPerMonth: 200,
 		templatesPerWorkspace: 5,
 		features: {
 			communitySupport: true,

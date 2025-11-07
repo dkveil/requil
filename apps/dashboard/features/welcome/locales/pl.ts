@@ -13,10 +13,10 @@ export const welcomePlLocales = {
 				notice:
 					'W fazie beta wszystkie funkcje są darmowe z restrykcyjnymi limitami użycia',
 				features: {
-					emails: 'Do {count} emaili/miesiąc',
+					emails: 'Do {count} emaili na miesiąc',
 					workspaces: '{count} workspace',
-					templates: 'Do {count} szablonów',
-					apiCalls: 'Do {count} wywołań API/dzień',
+					templates: 'Do {count} szablonów na workspace',
+					apiCalls: 'Do {count} wywołań API na miesiąc',
 					support: 'Wsparcie społeczności',
 				},
 			},

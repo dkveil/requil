@@ -25,7 +25,7 @@ export const welcomeEnLocales = {
 		workspace: {
 			title: 'Create Your Workspace',
 			description:
-				'A workspace is where you manage your email templates and campaigns',
+				'A workspace is where you manage your email templates and campaigns.',
 			form: {
 				name: {
 					label: 'Workspace Name',
