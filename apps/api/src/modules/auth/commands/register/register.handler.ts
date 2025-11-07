@@ -26,15 +26,15 @@ export async function registerHandler(
 	}
 
 	try {
-		await deps.userAccountRepository.create(authData.user.id, 'free');
+		await deps.accountRepository.create(authData.user.id, 'free');
 		deps.logger.info(
 			{ userId: authData.user.id },
-			'User account created with FREE plan'
+			'Account created with FREE plan'
 		);
 	} catch (error) {
 		deps.logger.error(
 			{ userId: authData.user.id, error },
-			'Failed to create user account during registration'
+			'Failed to create account during registration'
 		);
 	}
 

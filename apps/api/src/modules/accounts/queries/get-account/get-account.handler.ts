@@ -1,26 +1,26 @@
-import type { UserAccount } from '@requil/types';
+import type { Account } from '@requil/types';
 import type { Action } from '@/shared/cqrs/bus.types';
-import { billingActionCreator } from '../../index';
+import { accountActionCreator } from '../../index';
 
-export const getAccountAction = billingActionCreator('GET_ACCOUNT');
+export const getAccountAction = accountActionCreator('GET_ACCOUNT');
 
 export default function getAccountHandler({
 	queryBus,
-	userAccountRepository,
+	accountRepository,
 	logger,
 }: Dependencies) {
 	const handler = async (
 		action: Action<undefined>
-	): Promise<UserAccount | null> => {
+	): Promise<Account | null> => {
 		const userId = action.meta?.userId as string;
 
 		if (!userId) {
 			throw new Error('User ID is required');
 		}
 
-		logger.info({ userId }, 'Getting user account');
+		logger.info({ userId }, 'Getting account');
 
-		const account = await userAccountRepository.findByUserId(userId);
+		const account = await accountRepository.findByUserId(userId);
 
 		if (!account) {
 			return null;

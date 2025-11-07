@@ -2,7 +2,7 @@ import type {
 	CreateWorkspaceInput,
 	CreateWorkspaceResponse,
 } from '@requil/types';
-import { canCreateWorkspace } from '@/modules/users/billing/domain/plan-limits.config';
+import { canCreateWorkspace } from '@/modules/accounts/domain/plan-limits.config';
 import type { Action } from '@/shared/cqrs/bus.types';
 import { WorkspaceEntity } from '../../domain/workspace.domain';
 import { WorkspaceConflictError } from '../../domain/workspace.error';
@@ -14,7 +14,7 @@ export const createWorkspaceAction =
 export default function createWorkspaceHandler({
 	commandBus,
 	workspaceRepository,
-	userAccountRepository,
+	accountRepository,
 	logger,
 }: Dependencies) {
 	const handler = async (
@@ -28,26 +28,26 @@ export default function createWorkspaceHandler({
 			throw new Error('User ID is required');
 		}
 
-		let userAccount = await userAccountRepository.findByUserId(userId);
+		let account = await accountRepository.findByUserId(userId);
 
-		if (!userAccount) {
+		if (!account) {
 			logger.warn(
 				{ userId },
-				'User account not found, creating lazily (should have been created during registration)'
+				'Account not found, creating lazily (should have been created during registration)'
 			);
-			userAccount = await userAccountRepository.create(userId, 'free');
+			account = await accountRepository.create(userId, 'free');
 		}
 
 		const existingWorkspaces = await workspaceRepository.findByUserId(userId);
 		const workspaceCount = existingWorkspaces?.length || 0;
 
-		if (!canCreateWorkspace(workspaceCount, userAccount.limits)) {
+		if (!canCreateWorkspace(workspaceCount, account.limits)) {
 			throw new WorkspaceConflictError(
-				`Your ${userAccount.plan} plan allows maximum ${userAccount.limits.workspacesMax} workspace(s). Please upgrade to create more.`,
+				`Your ${account.plan} plan allows maximum ${account.limits.workspacesMax} workspace(s). Please upgrade to create more.`,
 				{
-					currentPlan: userAccount.plan,
+					currentPlan: account.plan,
 					currentCount: workspaceCount,
-					maxAllowed: userAccount.limits.workspacesMax,
+					maxAllowed: account.limits.workspacesMax,
 				}
 			);
 		}

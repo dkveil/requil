@@ -12,7 +12,7 @@ export const planLimitsSchema = z.object({
 	// webhooksTotal: z.number().int().nonnegative(),
 });
 
-export const userAccountSchema = z.object({
+export const accountSchema = z.object({
 	userId: z.uuid(),
 	plan: planNameSchema,
 	limits: planLimitsSchema,
@@ -25,4 +25,4 @@ export const userAccountSchema = z.object({
 
 export type PlanLimits = z.infer<typeof planLimitsSchema>;
 export type PlanName = z.infer<typeof planNameSchema>;
-export type UserAccount = z.infer<typeof userAccountSchema>;
+export type Account = z.infer<typeof accountSchema>;

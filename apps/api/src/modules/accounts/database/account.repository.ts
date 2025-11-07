@@ -1,20 +1,18 @@
-import { type UserAccount, userAccounts } from '@requil/db';
+import { type Account, accounts } from '@requil/db';
 import type { PlanName } from '@requil/types';
 import { eq } from 'drizzle-orm';
 import { getPlanLimits } from '../domain/plan-limits.config';
-import type { IUserAccountRepository } from './user-account.repository.port';
+import type { IAccountRepository } from './account.repository.port';
 
-export default function userAccountRepository({
+export default function accountRepository({
 	db,
 	logger,
-}: Dependencies): IUserAccountRepository {
-	const findByUserId = async (
-		userId: string
-	): Promise<UserAccount | undefined> => {
+}: Dependencies): IAccountRepository {
+	const findByUserId = async (userId: string): Promise<Account | undefined> => {
 		const result = await db
 			.select()
-			.from(userAccounts)
-			.where(eq(userAccounts.userId, userId))
+			.from(accounts)
+			.where(eq(accounts.userId, userId))
 			.limit(1);
 
 		return result[0];
@@ -22,9 +20,9 @@ export default function userAccountRepository({
 
 	const exists = async (userId: string): Promise<boolean> => {
 		const result = await db
-			.select({ userId: userAccounts.userId })
-			.from(userAccounts)
-			.where(eq(userAccounts.userId, userId))
+			.select({ userId: accounts.userId })
+			.from(accounts)
+			.where(eq(accounts.userId, userId))
 			.limit(1);
 
 		return result.length > 0;
@@ -33,14 +31,14 @@ export default function userAccountRepository({
 	const create = async (
 		userId: string,
 		planName: PlanName = 'free'
-	): Promise<UserAccount> => {
+	): Promise<Account> => {
 		const limits = getPlanLimits(planName);
 		const now = new Date();
 		const periodEnd = new Date(now);
 		periodEnd.setMonth(periodEnd.getMonth() + 1);
 
 		const [account] = await db
-			.insert(userAccounts)
+			.insert(accounts)
 			.values({
 				userId,
 				plan: planName,
@@ -52,10 +50,10 @@ export default function userAccountRepository({
 			})
 			.returning();
 
-		logger.info({ userId, plan: planName }, 'User account created');
+		logger.info({ userId, plan: planName }, 'Account created');
 
 		if (!account) {
-			throw new Error('Failed to create user account');
+			throw new Error('Failed to create account');
 		}
 
 		return account;
@@ -68,15 +66,15 @@ export default function userAccountRepository({
 		const limits = getPlanLimits(planName);
 
 		await db
-			.update(userAccounts)
+			.update(accounts)
 			.set({
 				plan: planName,
 				limits,
 				updatedAt: new Date().toISOString(),
 			})
-			.where(eq(userAccounts.userId, userId));
+			.where(eq(accounts.userId, userId));
 
-		logger.info({ userId, plan: planName }, 'User plan updated');
+		logger.info({ userId, plan: planName }, 'Account plan updated');
 	};
 
 	return {

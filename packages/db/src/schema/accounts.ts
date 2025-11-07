@@ -3,17 +3,15 @@ import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
 import {
 	jsonb,
-	pgEnum,
 	pgPolicy,
 	pgTable,
 	text,
 	timestamp,
 	uuid,
 } from 'drizzle-orm/pg-core';
+import { plan } from './enums';
 
-export const plan = pgEnum('plan', ['free']);
-
-export const userAccounts = pgTable(
+export const accounts = pgTable(
 	'user_accounts',
 	{
 		userId: uuid('user_id').primaryKey().notNull(),
@@ -66,5 +64,5 @@ export const userAccounts = pgTable(
 	]
 );
 
-export type UserAccount = InferSelectModel<typeof userAccounts>;
-export type NewUserAccount = InferInsertModel<typeof userAccounts>;
+export type Account = InferSelectModel<typeof accounts>;
+export type NewAccount = InferInsertModel<typeof accounts>;

@@ -1,10 +1,9 @@
 import { successResponseSchema } from '@requil/types';
 import { errorResponseSchema } from '@requil/types/api';
-import { userAccountSchema } from '@requil/types/billing';
+import { accountSchema } from '@requil/types/billing';
 import { API_ROUTES } from '@requil/utils/api-routes';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { z } from 'zod';
 import { sendSuccess } from '@/shared/app/response-wrapper';
 import { getAccountAction } from './get-account.handler';
 
@@ -14,7 +13,7 @@ const getAccountRoute: FastifyPluginAsync = async (fastify) => {
 		url: API_ROUTES.ACCOUNT.GET,
 		schema: {
 			response: {
-				200: successResponseSchema(userAccountSchema.nullable()),
+				200: successResponseSchema(accountSchema.nullable()),
 				401: errorResponseSchema,
 			},
 			tags: ['account'],
