@@ -294,6 +294,9 @@ importers:
       '@requil/config':
         specifier: workspace:*
         version: link:../config
+      '@requil/types':
+        specifier: workspace:*
+        version: link:../types
       '@types/node':
         specifier: ^24.9.1
         version: 24.10.0

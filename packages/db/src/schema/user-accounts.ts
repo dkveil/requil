@@ -1,3 +1,4 @@
+import type { PlanLimits } from '@requil/types';
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
 import {
@@ -10,20 +11,12 @@ import {
 } from 'drizzle-orm/pg-core';
 import { plan } from './enums';
 
-export interface PlanLimitsJson {
-	workspacesMax: number;
-	emailsPerMonth: number;
-	teamMembersTotal: number;
-	apiCallsPerMonth: number;
-	templatesPerWorkspace: number;
-}
-
 export const userAccounts = pgTable(
 	'user_accounts',
 	{
 		userId: uuid('user_id').primaryKey().notNull(),
 		plan: plan().default('free').notNull(),
-		limits: jsonb().$type<PlanLimitsJson>().notNull(),
+		limits: jsonb().$type<PlanLimits>().notNull(),
 		currentPeriodStart: timestamp('current_period_start', {
 			withTimezone: true,
 			mode: 'string',
