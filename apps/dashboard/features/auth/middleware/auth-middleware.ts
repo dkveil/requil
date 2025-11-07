@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@requil/utils/api-routes';
 import { type NextRequest, NextResponse } from 'next/server';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8121/api';
 
 async function verifySession(
 	cookies: string

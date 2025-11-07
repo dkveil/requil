@@ -3,13 +3,15 @@ import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
 import {
 	jsonb,
+	pgEnum,
 	pgPolicy,
 	pgTable,
 	text,
 	timestamp,
 	uuid,
 } from 'drizzle-orm/pg-core';
-import { plan } from './enums';
+
+export const plan = pgEnum('plan', ['free']);
 
 export const userAccounts = pgTable(
 	'user_accounts',

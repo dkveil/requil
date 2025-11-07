@@ -2,7 +2,7 @@ import type {
 	CreateWorkspaceInput,
 	CreateWorkspaceResponse,
 } from '@requil/types';
-import { canCreateWorkspace } from '@/modules/billing/domain/plan-limits.config';
+import { canCreateWorkspace } from '@/modules/users/billing/domain/plan-limits.config';
 import type { Action } from '@/shared/cqrs/bus.types';
 import { WorkspaceEntity } from '../../domain/workspace.domain';
 import { WorkspaceConflictError } from '../../domain/workspace.error';
