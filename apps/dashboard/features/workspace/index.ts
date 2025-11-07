@@ -3,13 +3,16 @@ export * from './api/workspace-api';
 
 // Hooks
 export * from './hooks/use-workspace';
+
 // Providers
 export { WorkspaceProvider } from './providers/workspace-provider';
-// Services (Client-side)
-export * from './services/workspace.service';
-export * from './services/workspace-cache.service';
 
-// Stores (legacy - możesz usunąć po migracji do RxJS)
+// Stores
 export * from './stores/workspace-store';
+
+// Legacy RxJS services (kept for reference, prefixed with _rxjs)
+// To use legacy services, import directly from:
+// - './services/workspace_rxjs.service'
+// - './services/workspace-cache_rxjs.service'
 
 // UWAGA: Dla Server Components użyj '@/features/workspace/server'

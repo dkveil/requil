@@ -14,7 +14,7 @@ import {
 	tap,
 } from 'rxjs/operators';
 import { workspaceApi } from '../api/workspace-api';
-import { workspaceCacheService } from './workspace-cache.service';
+import { workspaceCacheService } from './workspace-cache_rxjs.service';
 
 export type WorkspaceState = {
 	workspaces: UserWorkspace[];
