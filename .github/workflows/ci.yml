@@ -46,20 +46,20 @@ jobs:
     runs-on: ubuntu-latest
     needs: quality-and-test
     timeout-minutes: 10
-  
+
     strategy:
       matrix:
-        app: [dashboard]
-  
+        app: [dashboard, api]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-  
+
       - name: Setup Node.js with pnpm
         uses: ./.github/actions/setup-node
-  
+
       - name: Build ${{ matrix.app }}
         run: pnpm turbo build --filter=${{ matrix.app }}
 
