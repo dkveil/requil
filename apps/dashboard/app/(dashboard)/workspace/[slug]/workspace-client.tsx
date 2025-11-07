@@ -52,27 +52,31 @@ export function WorkspaceClient({ workspaceSlug, lastViewedSlug }: Props) {
 	}
 
 	return (
-		<div className='min-h-screen bg-gray-50 p-8'>
+		<div className='min-h-screen bg-background p-8'>
 			<div className='mx-auto max-w-7xl'>
 				<header className='mb-8'>
-					<h1 className='text-3xl font-bold text-gray-900'>
+					<h1 className='text-3xl font-bold text-foreground'>
 						{currentWorkspace.name}
 					</h1>
-					<p className='mt-2 text-gray-600'>
+					<p className='mt-2 text-muted-foreground'>
 						Slug: {currentWorkspace.slug} • ID: {currentWorkspace.id}
 					</p>
 				</header>
 
-				<div className='rounded-lg bg-white p-8 shadow'>
-					<h2 className='text-xl font-semibold text-gray-900'>
+				<div className='rounded-lg bg-card p-8 shadow'>
+					<h2 className='text-xl font-semibold text-card-foreground'>
 						Workspace Content
 					</h2>
-					<p className='mt-4 text-gray-600'>Workspace content here...</p>
+					<p className='mt-4 text-muted-foreground'>
+						Workspace content here...
+					</p>
 
 					{process.env.NODE_ENV === 'development' && (
-						<div className='mt-8 rounded bg-gray-100 p-4'>
-							<h3 className='font-mono text-sm font-bold'>Debug Info:</h3>
-							<pre className='mt-2 text-xs'>
+						<div className='mt-8 rounded bg-muted p-4'>
+							<h3 className='font-mono text-sm font-bold text-foreground'>
+								Debug Info:
+							</h3>
+							<pre className='mt-2 text-xs text-muted-foreground'>
 								{JSON.stringify(
 									{
 										currentWorkspace,

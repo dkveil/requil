@@ -1,4 +1,5 @@
 import { authPlLocales } from '@/features/auth/locales/pl';
+import { navigationPlLocales } from '@/features/navigation/locale/pl';
 import { welcomePlLocales } from '@/features/welcome/locales';
 
 export default {
@@ -28,4 +29,5 @@ export default {
 	},
 	...authPlLocales,
 	...welcomePlLocales,
+	...navigationPlLocales,
 };

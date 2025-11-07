@@ -92,10 +92,7 @@ export async function authMiddleware(request: NextRequest) {
 		const lastWorkspaceId = request.cookies.get(WORKSPACE_COOKIE.NAME)?.value;
 		if (lastWorkspaceId) {
 			return NextResponse.redirect(
-				new URL(
-					DASHBOARD_ROUTES.WORKSPACE.CURRENT(lastWorkspaceId),
-					request.url
-				)
+				new URL(DASHBOARD_ROUTES.WORKSPACE.HOME(lastWorkspaceId), request.url)
 			);
 		}
 	}

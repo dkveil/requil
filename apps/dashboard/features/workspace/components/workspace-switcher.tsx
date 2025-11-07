@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { Briefcase, Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,9 +11,20 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 import { useWorkspace } from '../hooks/use-workspace';
 
-export function WorkspaceSwitcher() {
+type Props = {
+	isCollapsed?: boolean;
+};
+
+export function WorkspaceSwitcher({ isCollapsed = false }: Props) {
 	const router = useRouter();
 	const { workspaces, currentWorkspace } = useWorkspace();
 
@@ -23,18 +34,29 @@ export function WorkspaceSwitcher() {
 
 	if (workspaces.length === 0) return null;
 
-	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button
-					variant='outline'
-					role='combobox'
-					className='w-[200px] justify-between'
-				>
+	const trigger = (
+		<Button
+			variant='outline'
+			role='combobox'
+			className={cn(
+				'justify-between',
+				isCollapsed ? 'h-10 w-10 p-0' : 'w-full'
+			)}
+		>
+			{isCollapsed ? (
+				<Briefcase className='h-4 w-4' />
+			) : (
+				<>
 					{currentWorkspace?.name || 'Select Workspace'}
 					<ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-				</Button>
-			</DropdownMenuTrigger>
+				</>
+			)}
+		</Button>
+	);
+
+	const menu = (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
 			<DropdownMenuContent
 				align='end'
 				className='w-[200px]'
@@ -60,4 +82,23 @@ export function WorkspaceSwitcher() {
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);
+
+	if (isCollapsed) {
+		return (
+			<TooltipProvider delayDuration={0}>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<div>{menu}</div>
+					</TooltipTrigger>
+					<TooltipContent side='right'>
+						<p className='font-medium'>
+							{currentWorkspace?.name || 'Select Workspace'}
+						</p>
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
+		);
+	}
+
+	return menu;
 }

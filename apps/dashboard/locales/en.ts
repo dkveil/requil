@@ -1,4 +1,5 @@
 import { authEnLocales } from '@/features/auth/locales/en';
+import { navigationEnLocales } from '@/features/navigation/locale/en';
 import { welcomeEnLocales } from '@/features/welcome/locales';
 
 export default {
@@ -28,4 +29,5 @@ export default {
 	},
 	...authEnLocales,
 	...welcomeEnLocales,
+	...navigationEnLocales,
 };
