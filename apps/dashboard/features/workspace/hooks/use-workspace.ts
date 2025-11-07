@@ -1,53 +1,39 @@
 import type { UserWorkspace } from '@requil/types/workspace';
 import { useCallback } from 'react';
-import { useObservable } from '@/lib/hooks/use-observable';
-import { workspaceService } from '../services/workspace.service';
+import { useWorkspaceStore } from '../stores/workspace-store';
 
 export function useWorkspace() {
-	const workspaces = useObservable(workspaceService.workspaces$, []);
-	const currentWorkspace = useObservable(
-		workspaceService.currentWorkspace$,
-		null
+	// State selectors
+	const workspaces = useWorkspaceStore((state) => state.workspaces);
+	const currentWorkspace = useWorkspaceStore((state) => state.currentWorkspace);
+	const loading = useWorkspaceStore((state) => state.loading);
+	const initialized = useWorkspaceStore((state) => state.initialized);
+	const error = useWorkspaceStore((state) => state.error);
+
+	// Actions
+	const loadWorkspaces = useWorkspaceStore((state) => state.loadWorkspaces);
+	const setCurrentWorkspace = useWorkspaceStore(
+		(state) => state.setCurrentWorkspace
 	);
-	const loading = useObservable(workspaceService.loading$, false);
-	const initialized = useObservable(workspaceService.initialized$, false);
-	const error = useObservable(workspaceService.error$, null);
-	const recommendedWorkspace = useObservable(
-		workspaceService.recommendedWorkspace$,
-		null
+	const setCurrentWorkspaceById = useWorkspaceStore(
+		(state) => state.setCurrentWorkspaceById
 	);
+	const setCurrentWorkspaceBySlug = useWorkspaceStore(
+		(state) => state.setCurrentWorkspaceBySlug
+	);
+	const hasAccessToWorkspace = useWorkspaceStore(
+		(state) => state.hasAccessToWorkspace
+	);
+	const hasAccessToWorkspaceBySlug = useWorkspaceStore(
+		(state) => state.hasAccessToWorkspaceBySlug
+	);
+	const reset = useWorkspaceStore((state) => state.reset);
 
-	const loadWorkspaces = useCallback(() => {
-		workspaceService.loadWorkspaces().subscribe({
-			error: (err) => console.error('Failed to load workspaces', err),
-		});
-	}, []);
-
-	const setCurrentWorkspace = useCallback((workspace: UserWorkspace) => {
-		workspaceService.setCurrentWorkspace(workspace);
-	}, []);
-
-	const setCurrentWorkspaceById = useCallback((workspaceId: string) => {
-		workspaceService.setCurrentWorkspaceById(workspaceId);
-	}, []);
-
-	const setCurrentWorkspaceBySlug = useCallback((slug: string) => {
-		workspaceService.setCurrentWorkspaceBySlug(slug);
-	}, []);
-
-	const hasAccessToWorkspace = useCallback((workspaceId: string): boolean => {
-		return workspaceService.hasAccessToWorkspace(workspaceId);
-	}, []);
-
-	const hasAccessToWorkspaceBySlug = useCallback((slug: string): boolean => {
-		return workspaceService.hasAccessToWorkspaceBySlug(slug);
-	}, []);
-
-	const reset = useCallback(() => {
-		workspaceService.reset();
-	}, []);
-
+	// Computed values
 	const hasWorkspaces = workspaces.length > 0;
+	const recommendedWorkspace = useWorkspaceStore((state) =>
+		state.getRecommendedWorkspace()
+	);
 
 	return {
 		// State
