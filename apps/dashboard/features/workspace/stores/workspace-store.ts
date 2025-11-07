@@ -2,9 +2,9 @@ import type { UserWorkspace } from '@requil/types/workspace';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import {
+	deleteCookie,
 	getCookieValue,
 	setCookieValue,
-	deleteCookie,
 	WORKSPACE_COOKIE,
 } from '@/lib/cookies/cookie-utils';
 import { workspaceApi } from '../api/workspace-api';

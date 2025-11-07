@@ -13,8 +13,9 @@ import {
 	shareReplay,
 	tap,
 } from 'rxjs/operators';
+import logger from '@/lib/logger';
 import { workspaceApi } from '../api/workspace-api';
-import { workspaceCacheService } from './workspace-cache_rxjs.service';
+import { workspaceCacheService } from './workspace-cache-rxjs.service';
 
 export type WorkspaceState = {
 	workspaces: UserWorkspace[];
@@ -72,7 +73,10 @@ class WorkspaceService {
 
 		const exists = currentState.workspaces.find((w) => w.id === workspace.id);
 		if (!exists) {
-			console.warn('Workspace not found in user workspaces', workspace.id);
+			logger.warn(
+				{ workspaceId: workspace.id },
+				'Workspace not found in user workspaces'
+			);
 			return;
 		}
 
@@ -127,7 +131,7 @@ class WorkspaceService {
 				});
 			}),
 			catchError((error) => {
-				console.error('Failed to load workspaces', error);
+				logger.error(error, 'Failed to load workspaces');
 				this.updateState({
 					error: 'Failed to load workspaces',
 					loading: false,
@@ -146,7 +150,7 @@ class WorkspaceService {
 		const workspace = currentState.workspaces.find((w) => w.id === workspaceId);
 
 		if (!workspace) {
-			console.warn('Workspace not found by ID', workspaceId);
+			logger.warn({ workspaceId }, 'Workspace not found by ID');
 			return;
 		}
 
@@ -161,7 +165,7 @@ class WorkspaceService {
 		const workspace = currentState.workspaces.find((w) => w.slug === slug);
 
 		if (!workspace) {
-			console.warn('Workspace not found by slug', slug);
+			logger.warn({ slug }, 'Workspace not found by slug');
 			return;
 		}
 

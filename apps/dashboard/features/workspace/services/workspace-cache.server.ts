@@ -1,12 +1,13 @@
 import { cookies } from 'next/headers';
 import { WORKSPACE_COOKIE } from '@/lib/cookies/cookie-utils';
+import logger from '@/lib/logger';
 
 export async function getLastWorkspaceIdServer(): Promise<string | null> {
 	try {
 		const cookieStore = await cookies();
 		return cookieStore.get(WORKSPACE_COOKIE.NAME)?.value || null;
 	} catch (error) {
-		console.error('Failed to get workspace cookie on server', error);
+		logger.error(error, 'Failed to get workspace cookie on server');
 		return null;
 	}
 }
@@ -23,7 +24,7 @@ export async function setLastWorkspaceIdServer(
 			secure: process.env.NODE_ENV === 'production',
 		});
 	} catch (error) {
-		console.error('Failed to set workspace cookie on server', error);
+		logger.error(error, 'Failed to set workspace cookie on server');
 	}
 }
 
@@ -32,6 +33,6 @@ export async function clearLastWorkspaceIdServer(): Promise<void> {
 		const cookieStore = await cookies();
 		cookieStore.delete(WORKSPACE_COOKIE.NAME);
 	} catch (error) {
-		console.error('Failed to clear workspace cookie on server', error);
+		logger.error(error, 'Failed to clear workspace cookie on server');
 	}
 }

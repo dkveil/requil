@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
 	turbopack: {
 		root: path.join(__dirname, '../../'),
 	},
+	logging: {
+		fetches: {
+			fullUrl: true,
+		},
+	},
+	serverExternalPackages: ['pino', 'pino-pretty'],
 };
 
 export default withNextIntl(nextConfig);
