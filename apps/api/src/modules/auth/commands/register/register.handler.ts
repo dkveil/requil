@@ -36,6 +36,9 @@ export async function registerHandler(
 			{ userId: authData.user.id, error },
 			'Failed to create account during registration'
 		);
+
+		await supabase.auth.admin.deleteUser(authData.user.id);
+		throw new Error('Registration failed. Please try again.');
 	}
 
 	return {
