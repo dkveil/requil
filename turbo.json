@@ -28,34 +28,6 @@
 			"cache": true,
 			"inputs": ["src/**/*.{ts,tsx}", "**/*.test.{ts,tsx}"],
 			"outputs": ["coverage/**"]
-		},
-		"db:pull": {
-			"cache": false
-		},
-		"db:push": {
-			"cache": false
-		},
-		"db:generate": {
-			"cache": false,
-			"inputs": ["src/schema/**/*.ts", "drizzle.config.ts"],
-			"outputs": ["src/migrations/**"]
-		},
-		"db:migrate": {
-			"cache": false
-		},
-		"db:studio": {
-			"cache": false,
-			"persistent": true
-		},
-		"db:drop": {
-			"cache": false
-		},
-		"db:check": {
-			"cache": false,
-			"inputs": ["src/schema/**/*.ts", "src/migrations/**"]
-		},
-		"db:up": {
-			"cache": false
 		}
 	}
 }
