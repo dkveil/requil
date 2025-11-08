@@ -5,6 +5,8 @@ export const API_ROUTES = {
 		LOGOUT: '/auth/logout',
 		REFRESH: '/auth/refresh',
 		SESSION: '/auth/session',
+		OAUTH: '/auth/oauth',
+		OAUTH_CALLBACK: '/auth/oauth/callback',
 	},
 	WORKSPACE: {
 		CREATE: '/workspace',
