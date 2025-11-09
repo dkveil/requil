@@ -1,10 +1,12 @@
 import type {
+	GetOAuthUrlResponse,
 	GetSessionResponse,
 	LoginResponse,
 	LogoutResponse,
+	OAuthProvider,
 	RefreshTokenResponse,
 	RegisterResponse,
-} from '@requil/types';
+} from '@requil/types/auth';
 import { API_ROUTES } from '@requil/utils/api-routes';
 import { fetchAPI } from '@/lib/api/client';
 
@@ -53,6 +55,35 @@ export const authApi = {
 			}
 		);
 
+		return response.data;
+	},
+
+	async getOAuthUrl(
+		provider: OAuthProvider,
+		redirectUrl?: string
+	): Promise<GetOAuthUrlResponse> {
+		const params = new URLSearchParams({ provider });
+
+		if (redirectUrl) {
+			params.set('redirectUrl', redirectUrl);
+		}
+
+		const response = await fetchAPI<GetOAuthUrlResponse>(
+			`${API_ROUTES.AUTH.OAUTH}?${params.toString()}`,
+			{
+				method: 'GET',
+			}
+		);
+		return response.data;
+	},
+
+	async handleOAuthCallback(code: string): Promise<LoginResponse> {
+		const response = await fetchAPI<LoginResponse>(
+			`${API_ROUTES.AUTH.OAUTH_CALLBACK}?code=${code}`,
+			{
+				method: 'GET',
+			}
+		);
 		return response.data;
 	},
 };

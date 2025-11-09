@@ -15,7 +15,7 @@ const oauthRoute: FastifyPluginAsync = async (fastify) => {
 		method: 'GET',
 		url: API_ROUTES.AUTH.OAUTH,
 		schema: {
-			body: getOAuthUrlInputSchema,
+			querystring: getOAuthUrlInputSchema,
 			tags: ['auth'],
 			response: {
 				200: successResponseSchema(getOAuthUrlResponseSchema),
@@ -24,7 +24,7 @@ const oauthRoute: FastifyPluginAsync = async (fastify) => {
 			},
 		},
 		handler: async (request, reply) => {
-			const result = await getOAuthUrlHandler(request.body, fastify.supabase);
+			const result = await getOAuthUrlHandler(request.query, fastify.supabase);
 			return sendSuccess(reply, result);
 		},
 	});

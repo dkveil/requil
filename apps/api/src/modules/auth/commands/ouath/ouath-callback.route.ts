@@ -15,7 +15,7 @@ const ouathCallbackRoute: FastifyPluginAsync = async (fastify) => {
 		method: 'GET',
 		url: API_ROUTES.AUTH.OAUTH_CALLBACK,
 		schema: {
-			body: oauthCallbackInputSchema,
+			querystring: oauthCallbackInputSchema,
 			response: {
 				200: successResponseSchema(loginResponseSchema),
 				400: errorResponseSchema,
@@ -25,10 +25,27 @@ const ouathCallbackRoute: FastifyPluginAsync = async (fastify) => {
 		},
 		handler: async (request, reply) => {
 			const result = await oauthCallbackHandler(
-				request.body,
+				request.query,
 				fastify.supabase,
 				request.diScope.cradle as Dependencies
 			);
+
+			reply
+				.setCookie('requil_access_token', result.accessToken, {
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'production',
+					sameSite: 'lax',
+					path: '/',
+					maxAge: result.expiresIn,
+				})
+				.setCookie('requil_refresh_token', result.refreshToken, {
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'production',
+					sameSite: 'lax',
+					path: '/',
+					maxAge: 60 * 60 * 24 * 7,
+				});
+
 			return sendSuccess(reply, result);
 		},
 	});

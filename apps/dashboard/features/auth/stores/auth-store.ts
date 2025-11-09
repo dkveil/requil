@@ -1,4 +1,5 @@
-import type { User } from '@requil/types';
+import type { OAuthProvider, User } from '@requil/types';
+import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { useWorkspaceStore } from '@/features/workspace';
@@ -16,6 +17,8 @@ type AuthActions = {
 	signUp: (email: string, password: string) => Promise<void>;
 	signOut: () => Promise<void>;
 	setUser: (user: User | null) => void;
+	signInWithOAuth: (provider: OAuthProvider) => Promise<string>;
+	handleOAuthCallback: (code: string) => Promise<void>;
 };
 
 export const useAuthStore = create<AuthState & AuthActions>()(
@@ -61,6 +64,23 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
 			setUser: (user: User | null) => {
 				set({ user }, false, 'setUser');
+			},
+
+			signInWithOAuth: async (provider: OAuthProvider): Promise<string> => {
+				const currentUrl = window.location.origin;
+				const callbackUrl = `${currentUrl}${DASHBOARD_ROUTES.AUTH.OAUTH_CALLBACK}`;
+
+				console.log('callbackUrl', callbackUrl);
+				console.log('provider', provider);
+
+				const { url } = await authApi.getOAuthUrl(provider, callbackUrl);
+
+				return url;
+			},
+
+			handleOAuthCallback: async (code: string): Promise<void> => {
+				const response = await authApi.handleOAuthCallback(code);
+				set({ user: response.user }, false, 'oauthCallback');
 			},
 		}),
 		{ name: 'AuthStore' }

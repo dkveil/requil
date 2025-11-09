@@ -24,6 +24,7 @@ async function supabasePlugin(fastify: FastifyInstance) {
 		auth: {
 			autoRefreshToken: false,
 			persistSession: false,
+			flowType: 'pkce' as const,
 		},
 	});
 

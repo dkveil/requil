@@ -25,6 +25,8 @@ export default {
 			signingUp: 'Rejestracja...',
 			loginWithGithub: 'Zaloguj się przez GitHub',
 			signUpWithGithub: 'Zarejestruj się przez GitHub',
+			loginWithGoogle: 'Zaloguj się przez Google',
+			signUpWithGoogle: 'Zarejestruj się przez Google',
 		},
 	},
 	...authPlLocales,

@@ -25,6 +25,8 @@ export default {
 			signingUp: 'Registering...',
 			loginWithGithub: 'Login with GitHub',
 			signUpWithGithub: 'Sign up with GitHub',
+			loginWithGoogle: 'Login with Google',
+			signUpWithGoogle: 'Sign up with Google',
 		},
 	},
 	...authEnLocales,

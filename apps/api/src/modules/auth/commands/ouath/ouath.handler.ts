@@ -5,7 +5,7 @@ export async function getOAuthUrlHandler(
 	input: GetOAuthUrlInput,
 	supabase: SupabaseClient
 ): Promise<GetOAuthUrlResponse> {
-	const { provider, redirectUrl = 'localhost:54321' } = input;
+	const { provider, redirectUrl = 'http://localhost:54321' } = input;
 
 	const { data, error } = await supabase.auth.signInWithOAuth({
 		provider,
