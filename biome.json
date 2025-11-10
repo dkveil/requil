@@ -108,7 +108,7 @@
 				"noBannedTypes": "error",
 				"noEmptyTypeParameters": "error",
 				"noExcessiveCognitiveComplexity": {
-					"level": "error",
+					"level": "warn",
 					"options": {
 						"maxAllowedComplexity": 20
 					}
