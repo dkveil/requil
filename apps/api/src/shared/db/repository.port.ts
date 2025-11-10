@@ -12,7 +12,8 @@ export type OrderBy = {
 };
 
 export type RepositoryPort<Entity, TId = string> = {
-	create: (entity: Entity | Entity[]) => Promise<void>;
+	create: (entity: Entity) => Promise<Entity>;
+	createMany: (entities: Entity[]) => Promise<Entity[]>;
 	findOneById: (id: TId) => Promise<Entity | undefined>;
 	delete: (id: TId) => Promise<void>;
 	findAll: (params: PaginatedQueryParams) => Promise<Entity[]>;

@@ -35,6 +35,9 @@ export const ERROR_CODES = {
 	USAGE_LIMIT_EXCEEDED: 'USAGE_LIMIT_EXCEEDED',
 	UNKNOWN_ERROR: 'UNKNOWN_ERROR',
 	WORKSPACE_VALIDATION_ERROR: 'WORKSPACE_VALIDATION_ERROR',
+	TEMPLATE_VALIDATION_ERROR: 'TEMPLATE_VALIDATION_ERROR',
+	TEMPLATE_CONFLICT: 'TEMPLATE_CONFLICT',
+	TEMPLATE_NOT_FOUND: 'TEMPLATE_NOT_FOUND',
 } as const;
 
 export type ErrorCode = keyof typeof ERROR_CODES;
@@ -76,6 +79,9 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
 	USAGE_LIMIT_EXCEEDED: 'Usage limit exceeded',
 	UNKNOWN_ERROR: 'Unknown error',
 	WORKSPACE_VALIDATION_ERROR: 'Workspace validation error',
+	TEMPLATE_VALIDATION_ERROR: 'Template validation error',
+	TEMPLATE_CONFLICT: 'Template conflict',
+	TEMPLATE_NOT_FOUND: 'Template not found',
 };
 
 export const ERROR_MESSAGES_PL: Record<ErrorCode, string> = {
@@ -116,4 +122,7 @@ export const ERROR_MESSAGES_PL: Record<ErrorCode, string> = {
 	USAGE_LIMIT_EXCEEDED: 'Przekroczono limit użycia',
 	UNKNOWN_ERROR: 'Nieznany błąd',
 	WORKSPACE_VALIDATION_ERROR: 'Błąd walidacji przestrzeni roboczej',
+	TEMPLATE_VALIDATION_ERROR: 'Błąd walidacji szablonu',
+	TEMPLATE_CONFLICT: 'Konflikt szablonu',
+	TEMPLATE_NOT_FOUND: 'Szablon nie znaleziony',
 };

@@ -4,7 +4,9 @@ import { events } from './events';
 import { sendJobs, sendRecipients } from './sending';
 import { subscribers, subscriberTags } from './subscribers';
 import { suppression } from './suppression';
-import { templateSnapshots, templates } from './templates';
+import { templates } from './templates';
+// TODO: Uncomment after MVP when snapshots are ready
+// import { templateSnapshots } from './templates';
 import { usageCountersDaily } from './usage';
 import {
 	workspaceBrandkit,
@@ -64,36 +66,38 @@ export const apiKeysRelations = relations(apiKeys, ({ one, many }) => ({
 	apiKeyScopes: many(apiKeyScopes),
 }));
 
-export const templatesRelations = relations(templates, ({ one, many }) => ({
+export const templatesRelations = relations(templates, ({ one }) => ({
 	workspace: one(workspaces, {
 		fields: [templates.workspaceId],
 		references: [workspaces.id],
 	}),
-	templateSnapshot: one(templateSnapshots, {
-		fields: [templates.currentSnapshotId],
-		references: [templateSnapshots.id],
-		relationName: 'templates_currentSnapshotId_templateSnapshots_id',
-	}),
-	templateSnapshots: many(templateSnapshots, {
-		relationName: 'templateSnapshots_templateId_templates_id',
-	}),
+	// TODO: snapshots relations will be available after MVP
+	// templateSnapshot: one(templateSnapshots, {
+	// 	fields: [templates.currentSnapshotId],
+	// 	references: [templateSnapshots.id],
+	// 	relationName: 'templates_currentSnapshotId_templateSnapshots_id',
+	// }),
+	// templateSnapshots: many(templateSnapshots, {
+	// 	relationName: 'templateSnapshots_templateId_templates_id',
+	// }),
 }));
 
-export const templateSnapshotsRelations = relations(
-	templateSnapshots,
-	({ one, many }) => ({
-		templates: many(templates, {
-			relationName: 'templates_currentSnapshotId_templateSnapshots_id',
-		}),
-		template: one(templates, {
-			fields: [templateSnapshots.templateId],
-			references: [templates.id],
-			relationName: 'templateSnapshots_templateId_templates_id',
-		}),
-		sendJobs: many(sendJobs),
-		events: many(events),
-	})
-);
+// TODO: Uncomment after MVP when snapshots are ready
+// export const templateSnapshotsRelations = relations(
+// 	templateSnapshots,
+// 	({ one, many }) => ({
+// 		templates: many(templates, {
+// 			relationName: 'templates_currentSnapshotId_templateSnapshots_id',
+// 		}),
+// 		template: one(templates, {
+// 			fields: [templateSnapshots.templateId],
+// 			references: [templates.id],
+// 			relationName: 'templateSnapshots_templateId_templates_id',
+// 		}),
+// 		sendJobs: many(sendJobs),
+// 		events: many(events),
+// 	})
+// );
 
 export const workspaceBrandkitRelations = relations(
 	workspaceBrandkit,
@@ -115,18 +119,18 @@ export const workspaceTransportsRelations = relations(
 	})
 );
 
-export const sendJobsRelations = relations(sendJobs, ({ one, many }) => ({
-	workspace: one(workspaces, {
-		fields: [sendJobs.workspaceId],
-		references: [workspaces.id],
-	}),
-	templateSnapshot: one(templateSnapshots, {
-		fields: [sendJobs.templateSnapshotId],
-		references: [templateSnapshots.id],
-	}),
-	sendRecipients: many(sendRecipients),
-	events: many(events),
-}));
+// export const sendJobsRelations = relations(sendJobs, ({ one, many }) => ({
+// 	workspace: one(workspaces, {
+// 		fields: [sendJobs.workspaceId],
+// 		references: [workspaces.id],
+// 	}),
+// 	templateSnapshot: one(templateSnapshots, {
+// 		fields: [sendJobs.templateSnapshotId],
+// 		references: [templateSnapshots.id],
+// 	}),
+// 	sendRecipients: many(sendRecipients),
+// 	events: many(events),
+// }));
 
 export const sendRecipientsRelations = relations(sendRecipients, ({ one }) => ({
 	sendJob: one(sendJobs, {
@@ -180,17 +184,17 @@ export const usageCountersDailyRelations = relations(
 	})
 );
 
-export const eventsRelations = relations(events, ({ one }) => ({
-	workspace: one(workspaces, {
-		fields: [events.workspaceId],
-		references: [workspaces.id],
-	}),
-	sendJob: one(sendJobs, {
-		fields: [events.jobId],
-		references: [sendJobs.id],
-	}),
-	templateSnapshot: one(templateSnapshots, {
-		fields: [events.templateSnapshotId],
-		references: [templateSnapshots.id],
-	}),
-}));
+// export const eventsRelations = relations(events, ({ one }) => ({
+// 	workspace: one(workspaces, {
+// 		fields: [events.workspaceId],
+// 		references: [workspaces.id],
+// 	}),
+// 	sendJob: one(sendJobs, {
+// 		fields: [events.jobId],
+// 		references: [sendJobs.id],
+// 	}),
+// 	templateSnapshot: one(templateSnapshots, {
+// 		fields: [events.templateSnapshotId],
+// 		references: [templateSnapshots.id],
+// 	}),
+// }));

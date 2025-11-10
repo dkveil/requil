@@ -25,6 +25,11 @@
 			"require": "./dist/billing/index.js",
 			"default": "./dist/billing/index.js"
 		},
+		"./templates": {
+			"types": "./dist/templates/index.d.ts",
+			"require": "./dist/templates/index.js",
+			"default": "./dist/templates/index.js"
+		},
 		"./workspace": {
 			"types": "./dist/workspace/index.d.ts",
 			"require": "./dist/workspace/index.js",

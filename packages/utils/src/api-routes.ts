@@ -18,4 +18,11 @@ export const API_ROUTES = {
 	ACCOUNT: {
 		GET: '/account',
 	},
+	TEMPLATE: {
+		CREATE: '/template',
+		LIST: '/template',
+		GET: '/template/:id',
+		UPDATE: '/template/:id',
+		DELETE: '/template/:id',
+	},
 } as const;

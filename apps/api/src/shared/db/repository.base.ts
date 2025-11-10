@@ -48,19 +48,38 @@ export function RepositoryBase<
 		throw new Error('No id column found in table');
 	}
 
-	const create = async (entity: Entity | Entity[]): Promise<void> => {
-		if (Array.isArray(entity)) {
-			const dataArray = entity.map(mapper.toPersistence);
-			// biome-ignore lint/suspicious/noExplicitAny: Drizzle insert requires any for dynamic values
-			await db.insert(table).values(dataArray as any);
-			logger.info({ count: dataArray.length }, 'Created multiple entities');
-			return;
-		}
+	// const create = async (entity: Entity | Entity[]): Promise<Entity | Entity[]> => {
+	// 	if (Array.isArray(entity)) {
+	// 		const dataArray = entity.map(mapper.toPersistence);
+	// 		// biome-ignore lint/suspicious/noExplicitAny: Drizzle insert requires any for dynamic values
+	// 		const result = await db.insert(table).values(dataArray as any).returning();
+	// 		logger.info({ count: dataArray.length }, 'Created multiple entities');
+	// 		return result.map((data) => mapper.toDomain(data as PersistenceModel));
+	// 	}
 
+	// 	const data = mapper.toPersistence(entity);
+	// 	// biome-ignore lint/suspicious/noExplicitAny: Drizzle insert requires any for dynamic values
+	// 	await db.insert(table).values(data as any);
+	// 	logger.info('Created entity');
+	// };
+
+	const create = async (entity: Entity): Promise<Entity> => {
 		const data = mapper.toPersistence(entity);
 		// biome-ignore lint/suspicious/noExplicitAny: Drizzle insert requires any for dynamic values
 		await db.insert(table).values(data as any);
 		logger.info('Created entity');
+		return entity;
+	};
+
+	const createMany = async (entities: Entity[]): Promise<Entity[]> => {
+		const dataArray = entities.map(mapper.toPersistence);
+		// biome-ignore lint/suspicious/noExplicitAny: Drizzle insert requires any for dynamic values
+		const result = await db
+			.insert(table)
+			.values(dataArray as any)
+			.returning();
+		logger.info({ count: dataArray.length }, 'Created multiple entities');
+		return result.map((data) => mapper.toDomain(data as PersistenceModel));
 	};
 
 	const findOneById = async (entityId: string): Promise<Entity | undefined> => {
@@ -146,6 +165,7 @@ export function RepositoryBase<
 
 	return {
 		create,
+		createMany,
 		findOneById,
 		delete: deleteRecord,
 		findAll,

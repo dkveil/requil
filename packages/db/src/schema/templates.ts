@@ -1,3 +1,4 @@
+import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
 import {
 	foreignKey,
@@ -20,14 +21,15 @@ export const templates = pgTable(
 		id: uuid().defaultRandom().primaryKey().notNull(),
 		workspaceId: uuid('workspace_id').notNull(),
 		stableId: citext('stable_id').notNull(),
-		name: text(),
-		currentSnapshotId: uuid('current_snapshot_id'),
+		name: text().notNull(),
+		description: text(),
+		// currentSnapshotId: uuid('current_snapshot_id'),
 		builderStructure: jsonb('builder_structure'),
 		mjml: text(),
 		variablesSchema: jsonb('variables_schema'),
 		subjectLines: text('subject_lines').array(),
 		preheader: text(),
-		createdBy: uuid('created_by'),
+		createdBy: uuid('created_by').notNull(),
 		createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
 			.defaultNow()
 			.notNull(),
@@ -89,6 +91,10 @@ export const templates = pgTable(
 	]
 );
 
+export type Template = InferSelectModel<typeof templates>;
+export type NewTemplate = InferInsertModel<typeof templates>;
+
+// TODO: snapshots will be available after MVP
 export const templateSnapshots = pgTable(
 	'template_snapshots',
 	{
