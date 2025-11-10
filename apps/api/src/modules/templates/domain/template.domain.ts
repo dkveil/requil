@@ -126,7 +126,7 @@ export class TemplateEntity {
 		return this.props.mjml;
 	}
 
-	get createdBy(): string | null {
+	get createdBy(): string {
 		return this.props.createdBy;
 	}
 

@@ -27,7 +27,6 @@ export default function findWorkspaceTemplatesHandler({
 
 		const { workspaceId } = action.payload;
 
-		// Sprawdź dostęp do workspace
 		const workspace = await workspaceRepository.findByIdWithRole(
 			workspaceId,
 			userId
@@ -37,7 +36,6 @@ export default function findWorkspaceTemplatesHandler({
 			throw new Error('Workspace not found or access denied');
 		}
 
-		// Pobierz wszystkie templates
 		const templates = await templateRepository.findByWorkspaceId(workspaceId);
 
 		return {

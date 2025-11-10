@@ -8,9 +8,9 @@ export const templateItemSchema = z.object({
 	id: z.uuid(),
 	workspaceId: z.uuid(),
 	stableId: z.string(),
-	name: z.string().nullable(),
+	name: z.string(),
 	description: z.string().nullable(),
-	createdBy: z.uuid().nullable(),
+	createdBy: z.uuid(),
 	createdAt: z.string(),
 	updatedAt: z.string(),
 });
