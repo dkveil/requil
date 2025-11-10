@@ -25,6 +25,11 @@
 			"require": "./dist/billing/index.js",
 			"default": "./dist/billing/index.js"
 		},
+		"./editor": {
+			"types": "./dist/editor/index.d.ts",
+			"require": "./dist/editor/index.js",
+			"default": "./dist/editor/index.js"
+		},
 		"./templates": {
 			"types": "./dist/templates/index.d.ts",
 			"require": "./dist/templates/index.js",

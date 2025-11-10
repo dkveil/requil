@@ -43,7 +43,18 @@ export default function EditorHeader() {
 				</div>
 
 				<div className='flex justify-end items-center flex-1 gap-2'>
-					<Button variant='outline'>{t('testEmail')}</Button>
+					<Button
+						variant='outline'
+						disabled
+					>
+						API
+					</Button>
+					<Button
+						variant='outline'
+						disabled
+					>
+						{t('testEmail')}
+					</Button>
 
 					<Separator
 						orientation='vertical'
