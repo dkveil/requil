@@ -29,6 +29,13 @@ export default {
 			signUpWithGoogle: 'Sign up with Google',
 		},
 	},
+	header: {
+		searchPlaceholder: 'Search...',
+		new: 'New',
+		newTemplate: 'Template',
+		accountSettings: 'Account Settings',
+		guest: 'Guest',
+	},
 	...authEnLocales,
 	...welcomeEnLocales,
 	...navigationEnLocales,

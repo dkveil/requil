@@ -1,13 +1,29 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Mail } from 'lucide-react';
+import {
+	ChevronLeft,
+	ChevronRight,
+	ChevronUp,
+	FileText,
+	Headphones,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { LanguageToggle } from '@/components/layout/language-toggle';
 import { ModeToggle } from '@/components/layout/theme-toggle';
-import Logo from '@/components/logo';
-import LogoSmall from '@/components/logo-small';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useWorkspace } from '@/features/workspace';
 import { WorkspaceSwitcher } from '@/features/workspace/components/workspace-switcher';
 import { cn } from '@/lib/utils';
@@ -52,16 +68,7 @@ export function Sidebar() {
 		>
 			<div className='flex h-full flex-col'>
 				<div className='border-b border-sidebar-border p-4'>
-					<Link
-						href='/'
-						className={cn(
-							'flex items-center gap-2',
-							isCollapsed && 'justify-center'
-						)}
-					>
-						{isCollapsed && <LogoSmall />}
-						{!isCollapsed && <Logo />}
-					</Link>
+					<div className='h-[33px]' />
 				</div>
 
 				<div className='border-b border-sidebar-border p-4'>
@@ -98,38 +105,69 @@ export function Sidebar() {
 					</div>
 				</nav>
 
+				<button
+					type='button'
+					onClick={toggle}
+					className='absolute right-0 top-1/2 z-50 flex h-8 w-4 -translate-y-1/2 translate-x-full items-center justify-center rounded-r-md border border-l-0 border-sidebar-border bg-sidebar hover:bg-sidebar-accent transition-colors'
+					aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+				>
+					{isCollapsed ? (
+						<ChevronRight className='h-4 w-4 text-sidebar-foreground/60' />
+					) : (
+						<ChevronLeft className='h-4 w-4 text-sidebar-foreground/60' />
+					)}
+				</button>
+
 				<div className='border-t border-sidebar-border p-4'>
-					<div
-						className={cn(
-							'flex items-center',
-							isCollapsed ? 'flex-col gap-2' : 'justify-between'
-						)}
-					>
-						{!isCollapsed && (
-							<p className='text-xs text-muted-foreground'>Requil Dashboard</p>
-						)}
-						<div
-							className={cn(
-								'flex items-center gap-1',
-								isCollapsed && 'flex-col'
-							)}
-						>
-							<ModeToggle iconClassName='h-[.85rem] w-[.85rem]' />
-							<LanguageToggle iconClassName='h-[.85rem] w-[.85rem]' />
-						</div>
+					<div className='space-y-3'>
+						<TooltipProvider>
+							<DropdownMenu>
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<DropdownMenuTrigger asChild>
+											<button
+												type='button'
+												className={cn(
+													'flex w-full items-center gap-2 rounded-lg p-2 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors',
+													isCollapsed && 'justify-center'
+												)}
+											>
+												<ChevronUp className='h-4 w-4' />
+												{!isCollapsed && <span>Requil Status</span>}
+											</button>
+										</DropdownMenuTrigger>
+									</TooltipTrigger>
+									{isCollapsed && (
+										<TooltipContent side='right'>Requil Status</TooltipContent>
+									)}
+								</Tooltip>
+								<DropdownMenuContent
+									side='top'
+									align='start'
+									className='w-56'
+								>
+									<DropdownMenuItem asChild>
+										<Link
+											href='/changelog'
+											className='flex items-center gap-2 cursor-pointer'
+										>
+											<FileText className='h-4 w-4' />
+											<span>Changelog</span>
+										</Link>
+									</DropdownMenuItem>
+									<DropdownMenuItem asChild>
+										<Link
+											href='/support'
+											className='flex items-center gap-2 cursor-pointer'
+										>
+											<Headphones className='h-4 w-4' />
+											<span>Contact support</span>
+										</Link>
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</TooltipProvider>
 					</div>
-					<button
-						type='button'
-						onClick={toggle}
-						className='mt-3 flex w-full items-center justify-center rounded-lg p-2 text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
-						aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-					>
-						{isCollapsed ? (
-							<ChevronRight className='h-5 w-5' />
-						) : (
-							<ChevronLeft className='h-5 w-5' />
-						)}
-					</button>
 				</div>
 			</div>
 		</aside>

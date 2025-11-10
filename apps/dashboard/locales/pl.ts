@@ -29,6 +29,13 @@ export default {
 			signUpWithGoogle: 'Zarejestruj się przez Google',
 		},
 	},
+	header: {
+		searchPlaceholder: 'Szukaj...',
+		new: 'Nowy',
+		newTemplate: 'Szablon',
+		accountSettings: 'Ustawienia konta',
+		guest: 'Gość',
+	},
 	...authPlLocales,
 	...welcomePlLocales,
 	...navigationPlLocales,

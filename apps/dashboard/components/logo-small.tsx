@@ -1,9 +1,27 @@
-import { Mail } from 'lucide-react';
+import Image from 'next/image';
+import logoIconBlack from 'public/images/logo/logo-icon-black.webp';
+import logoIconWhite from 'public/images/logo/logo-icon-white.webp';
 
-export default function LogoSmall() {
+interface LogoSmallProps {
+	variant?: 'light' | 'dark';
+	size?: number;
+}
+
+export default function LogoSmall({
+	variant = 'light',
+	size = 32,
+}: LogoSmallProps) {
+	const logoSrc = variant === 'light' ? logoIconWhite : logoIconBlack;
+
 	return (
-		<div className='flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-primary'>
-			<Mail className='h-5 w-5 text-sidebar-primary-foreground' />
+		<div className='flex items-center justify-center'>
+			<Image
+				src={logoSrc}
+				alt='Requil'
+				width={size}
+				height={size}
+				priority
+			/>
 		</div>
 	);
 }

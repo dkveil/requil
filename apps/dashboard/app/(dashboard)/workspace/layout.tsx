@@ -1,9 +1,9 @@
 'use client';
 
+import { Header } from '@/components/layout';
 import { LoadingScreen } from '@/components/loading-screen';
-import { Sidebar, useSidebar } from '@/features/navigation';
+import { Sidebar } from '@/features/navigation';
 import { useWorkspace } from '@/features/workspace';
-import { cn } from '@/lib/utils';
 
 type Props = {
 	children: React.ReactNode;
@@ -11,7 +11,6 @@ type Props = {
 
 function DashboardContent({ children }: Props) {
 	const { initialized, loading } = useWorkspace();
-	const { isCollapsed } = useSidebar();
 
 	if (!initialized || loading) {
 		return <LoadingScreen text='Loading workspace...' />;
@@ -20,14 +19,10 @@ function DashboardContent({ children }: Props) {
 	return (
 		<div className='flex min-h-screen'>
 			<Sidebar />
-			<main
-				className={cn(
-					'flex-1 transition-all duration-300',
-					isCollapsed ? 'ml-16' : 'ml-64'
-				)}
-			>
-				{children}
-			</main>
+			<div className='flex flex-1 flex-col'>
+				<Header />
+				<main className='flex-1'>{children}</main>
+			</div>
 		</div>
 	);
 }
