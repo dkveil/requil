@@ -1,9 +1,8 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { LoadingScreen } from '@/components/loading-screen';
 import { useWorkspace } from '@/features/workspace';
+import { useWorkspaceAccess } from '@/features/workspace/hooks/use-workspace-access';
 
 type Props = {
 	workspaceSlug: string;
@@ -11,48 +10,15 @@ type Props = {
 };
 
 export function WorkspaceClient({ workspaceSlug, lastViewedSlug }: Props) {
-	const router = useRouter();
-	const {
-		workspaces,
-		currentWorkspace,
-		initialized,
-		loading,
-		setCurrentWorkspaceBySlug,
-		hasAccessToWorkspaceBySlug,
-	} = useWorkspace();
+	const { currentWorkspace, workspaces } = useWorkspace();
+	const { accessChecked } = useWorkspaceAccess(workspaceSlug);
 
-	const [accessChecked, setAccessChecked] = useState(false);
-
-	useEffect(() => {
-		if (!initialized) return;
-
-		const hasAccess = hasAccessToWorkspaceBySlug(workspaceSlug);
-
-		if (!hasAccess) {
-			router.replace('/welcome');
-			return;
-		}
-
-		setCurrentWorkspaceBySlug(workspaceSlug);
-		setAccessChecked(true);
-	}, [
-		workspaceSlug,
-		initialized,
-		hasAccessToWorkspaceBySlug,
-		setCurrentWorkspaceBySlug,
-		router,
-	]);
-
-	if (loading || !initialized || !accessChecked) {
-		return <LoadingScreen text='Loading workspace...' />;
-	}
-
-	if (!currentWorkspace || currentWorkspace.slug !== workspaceSlug) {
+	if (!(accessChecked && currentWorkspace)) {
 		return <LoadingScreen text='Loading workspace...' />;
 	}
 
 	return (
-		<div className='min-h-screen bg-background p-8'>
+		<div className='bg-background p-8'>
 			<div className='mx-auto max-w-7xl'>
 				<header className='mb-8'>
 					<h1 className='text-3xl font-bold text-foreground'>

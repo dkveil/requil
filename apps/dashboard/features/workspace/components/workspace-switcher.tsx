@@ -40,7 +40,7 @@ export function WorkspaceSwitcher({ isCollapsed = false }: Props) {
 			role='combobox'
 			className={cn(
 				'justify-between',
-				isCollapsed ? 'h-10 w-10 p-0' : 'w-full'
+				isCollapsed ? 'h-10 w-10 justify-center p-0!' : 'w-full'
 			)}
 		>
 			{isCollapsed ? (

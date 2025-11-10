@@ -7,8 +7,8 @@ export const navigationEnLocales = {
 					title: 'Dashboard',
 					description: 'Overview & analytics',
 				},
-				templates: {
-					title: 'Templates',
+				'email-templates': {
+					title: 'Email Templates',
 					description: 'Email templates',
 				},
 			},
@@ -38,9 +38,6 @@ export const navigationEnLocales = {
 					description: 'Manage billing',
 				},
 			},
-		},
-		developer: {
-			title: 'Developer',
 		},
 	},
 };

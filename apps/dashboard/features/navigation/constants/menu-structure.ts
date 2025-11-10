@@ -30,9 +30,9 @@ export const MENU_SECTIONS: MenuSection[] = [
 				route: (slug) => DASHBOARD_ROUTES.WORKSPACE.HOME(slug),
 			},
 			{
-				id: 'templates',
+				id: 'email-templates',
 				icon: FileText,
-				route: (slug) => DASHBOARD_ROUTES.WORKSPACE.TEMPLATES(slug),
+				route: (slug) => DASHBOARD_ROUTES.WORKSPACE.EMAIL_TEMPLATES(slug),
 			},
 		],
 	},

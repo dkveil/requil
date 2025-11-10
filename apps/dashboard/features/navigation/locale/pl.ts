@@ -1,46 +1,43 @@
 export const navigationPlLocales = {
 	navigation: {
 		general: {
-			title: 'General',
+			title: 'Ogólne',
 			items: {
 				dashboard: {
-					title: 'Dashboard',
-					description: 'Overview & analytics',
+					title: 'Panel główny',
+					description: 'Przegląd i analityka',
 				},
-				templates: {
-					title: 'Templates',
-					description: 'Email templates',
+				'email-templates': {
+					title: 'Szablony e-mail',
+					description: 'Szablony wiadomości e-mail',
 				},
 			},
 		},
 		analytics: {
-			title: 'Analytics',
+			title: 'Analityka',
 			items: {
 				events: {
-					title: 'Events',
-					description: 'View all sent emails',
+					title: 'Zdarzenia',
+					description: 'Zobacz wszystkie wysłane e-maile',
 				},
 			},
 		},
 		settings: {
-			title: 'Settings',
+			title: 'Ustawienia',
 			items: {
-				'email-transports': {
-					title: 'Email Transports',
-					description: 'Configure email transports',
+				transports: {
+					title: 'Transporty e-mail',
+					description: 'Konfiguruj transporty e-mail',
 				},
 				'api-keys': {
-					title: 'API Keys',
-					description: 'Manage API keys',
+					title: 'Klucze API',
+					description: 'Zarządzaj kluczami API',
 				},
 				billing: {
-					title: 'Billing',
-					description: 'Manage billing',
+					title: 'Płatności',
+					description: 'Zarządzaj płatnościami',
 				},
 			},
-		},
-		developer: {
-			title: 'Developer',
 		},
 	},
 };

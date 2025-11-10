@@ -9,7 +9,13 @@ export const DASHBOARD_ROUTES = {
 	WELCOME: '/welcome',
 	WORKSPACE: {
 		HOME: (slug: string) => `/workspace/${slug}`,
-		TEMPLATES: (slug: string) => `/workspace/${slug}/templates`,
+		EMAIL_TEMPLATES: (slug: string) => `/workspace/${slug}/email-templates`,
+		NEW_EMAIL_TEMPLATE: (slug: string) =>
+			`/workspace/${slug}/email-templates/new`,
+		EMAIL_TEMPLATE: (slug: string, id: string) =>
+			`/workspace/${slug}/email-templates/${id}`,
+		EMAIL_TEMPLATE_EDITOR: (slug: string, id: string) =>
+			`/workspace/${slug}/email-templates/${id}/edit`,
 		ANALYTICS: {
 			EVENTS: (slug: string) => `/workspace/${slug}/analytics/events`,
 		},
@@ -18,5 +24,8 @@ export const DASHBOARD_ROUTES = {
 			API_KEYS: (slug: string) => `/workspace/${slug}/settings/api-keys`,
 			BILLING: (slug: string) => `/workspace/${slug}/settings/billing`,
 		},
+	},
+	ACCOUNT: {
+		SETTINGS: '/account/settings',
 	},
 } as const;

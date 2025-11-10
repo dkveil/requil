@@ -1,6 +1,8 @@
 'use client';
 
+import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import { LogOut, Plus, Settings } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
@@ -27,11 +29,11 @@ export function Header() {
 
 	const handleSignOut = async () => {
 		await signOut();
-		router.push('/auth/login');
+		router.push(DASHBOARD_ROUTES.AUTH.LOGIN);
 	};
 
 	const handleAccountSettings = () => {
-		router.push('/workspace/settings/account');
+		router.push(DASHBOARD_ROUTES.ACCOUNT.SETTINGS);
 	};
 
 	const handleNewTemplate = () => {};
@@ -51,11 +53,13 @@ export function Header() {
 		<header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
 			<div className='flex h-16 items-center justify-between gap-4 px-4'>
 				<div className='flex items-center'>
-					<Logo
-						variant={logoVariant}
-						width={100}
-						height={33}
-					/>
+					<Link href={DASHBOARD_ROUTES.HOME}>
+						<Logo
+							variant={logoVariant}
+							width={100}
+							height={33}
+						/>
+					</Link>
 				</div>
 
 				<div className='flex-1 max-w-xl'>
@@ -71,7 +75,7 @@ export function Header() {
 								variant='default'
 								size='default'
 							>
-								<Plus className='h-4 w-4 mr-2' />
+								<Plus className='h-4 w-4' />
 								{t('header.new')}
 							</Button>
 						</DropdownMenuTrigger>

@@ -62,15 +62,11 @@ export function Sidebar() {
 	return (
 		<aside
 			className={cn(
-				'fixed left-0 top-0 z-40 h-screen border-r bg-sidebar border-sidebar-border transition-all duration-300',
+				'sticky top-16 h-[calc(100vh-4rem)] z-40 border-r bg-sidebar border-sidebar-border transition-all duration-300',
 				isCollapsed ? 'w-16' : 'w-64'
 			)}
 		>
 			<div className='flex h-full flex-col'>
-				<div className='border-b border-sidebar-border p-4'>
-					<div className='h-[33px]' />
-				</div>
-
 				<div className='border-b border-sidebar-border p-4'>
 					<WorkspaceSwitcher isCollapsed={isCollapsed} />
 				</div>
@@ -108,7 +104,7 @@ export function Sidebar() {
 				<button
 					type='button'
 					onClick={toggle}
-					className='absolute right-0 top-1/2 z-50 flex h-8 w-4 -translate-y-1/2 translate-x-full items-center justify-center rounded-r-md border border-l-0 border-sidebar-border bg-sidebar hover:bg-sidebar-accent transition-colors'
+					className='absolute right-0 top-3/4 cursor-pointer z-50 flex h-8 w-4 -translate-y-1/2 translate-x-full items-center justify-center rounded-r-md border border-l-0 border-sidebar-border bg-sidebar hover:bg-sidebar-accent transition-colors'
 					aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
 				>
 					{isCollapsed ? (

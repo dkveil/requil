@@ -1,5 +1,7 @@
 import { authEnLocales } from '@/features/auth/locales/en';
+import { editorEnLocales } from '@/features/editor/locale/en';
 import { navigationEnLocales } from '@/features/navigation/locale/en';
+import { templatesEnLocales } from '@/features/templates/locale';
 import { welcomeEnLocales } from '@/features/welcome/locales';
 
 export default {
@@ -39,4 +41,6 @@ export default {
 	...authEnLocales,
 	...welcomeEnLocales,
 	...navigationEnLocales,
+	...templatesEnLocales,
+	...editorEnLocales,
 };

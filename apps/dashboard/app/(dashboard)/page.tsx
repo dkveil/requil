@@ -1,5 +1,6 @@
 'use client';
 
+import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
@@ -30,9 +31,11 @@ export default function DashboardPage() {
 		if (!workspaceInitialized) return;
 
 		if (recommendedWorkspace) {
-			router.replace(`/workspace/${recommendedWorkspace.slug}`);
+			router.replace(
+				DASHBOARD_ROUTES.WORKSPACE.HOME(recommendedWorkspace.slug)
+			);
 		} else {
-			router.replace('/welcome');
+			router.replace(DASHBOARD_ROUTES.WELCOME);
 		}
 	}, [workspaceInitialized, recommendedWorkspace, router]);
 

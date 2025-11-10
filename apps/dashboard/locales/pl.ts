@@ -1,5 +1,7 @@
 import { authPlLocales } from '@/features/auth/locales/pl';
+import { editorPlLocales } from '@/features/editor/locale/pl';
 import { navigationPlLocales } from '@/features/navigation/locale/pl';
+import { templatesPlLocales } from '@/features/templates/locale';
 import { welcomePlLocales } from '@/features/welcome/locales';
 
 export default {
@@ -39,4 +41,6 @@ export default {
 	...authPlLocales,
 	...welcomePlLocales,
 	...navigationPlLocales,
+	...templatesPlLocales,
+	...editorPlLocales,
 };

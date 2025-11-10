@@ -3,13 +3,13 @@
 import { Header } from '@/components/layout';
 import { LoadingScreen } from '@/components/loading-screen';
 import { Sidebar } from '@/features/navigation';
-import { useWorkspace } from '@/features/workspace';
+import { useWorkspace } from '../hooks/use-workspace';
 
 type Props = {
 	children: React.ReactNode;
 };
 
-function DashboardContent({ children }: Props) {
+export default function WorkspaceLayout({ children }: Props) {
 	const { initialized, loading } = useWorkspace();
 
 	if (!initialized || loading) {
@@ -17,16 +17,12 @@ function DashboardContent({ children }: Props) {
 	}
 
 	return (
-		<div className='flex min-h-screen'>
-			<Sidebar />
-			<div className='flex flex-1 flex-col'>
-				<Header />
-				<main className='flex-1'>{children}</main>
+		<div className='flex flex-col min-h-screen'>
+			<Header />
+			<div className='flex flex-1'>
+				<Sidebar />
+				<main className='flex-1 w-full'>{children}</main>
 			</div>
 		</div>
 	);
-}
-
-export default function WorkspaceLayout({ children }: Props) {
-	return <DashboardContent>{children}</DashboardContent>;
 }
