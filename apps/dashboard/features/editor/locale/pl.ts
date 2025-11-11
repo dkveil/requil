@@ -62,5 +62,6 @@ export const editorPlLocales = {
 			backgroundColor: 'Kolor tła',
 			animationComingSoon: 'Animacje wkrótce...',
 		},
+		movedBlock: 'Blok przeniesiony pomyślnie',
 	},
 };

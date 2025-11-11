@@ -9,6 +9,7 @@ import {
 	useSensor,
 	useSensors,
 } from '@dnd-kit/core';
+import type { Block } from '@requil/types';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -21,7 +22,8 @@ import { ElementsSidebar } from './elements-sidebar';
 import { SettingsSidebar } from './settings-sidebar';
 
 export default function EditorLayout() {
-	const { selectedBlockId, document, addBlock, selectBlock } = useCanvas();
+	const { selectedBlockId, document, addBlock, selectBlock, moveBlock } =
+		useCanvas();
 	const t = useTranslations('editor');
 	const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -33,6 +35,37 @@ export default function EditorLayout() {
 		})
 	);
 
+	// Helper functions - inside component to access document from state
+	const findBlockById = (
+		block: Block | undefined,
+		blockId: string
+	): Block | null => {
+		if (!block) return null;
+		if (block.id === blockId) return block;
+		if (block.children) {
+			for (const child of block.children) {
+				const found = findBlockById(child, blockId);
+				if (found) return found;
+			}
+		}
+		return null;
+	};
+
+	const hasDescendant = (block: Block, blockId: string): boolean => {
+		if (block.id === blockId) return true;
+		if (!block.children) return false;
+		return block.children.some((child) => hasDescendant(child, blockId));
+	};
+
+	// Check if targetId is a descendant of blockId (or the same block)
+	// Returns true if we should BLOCK the operation
+	const isDescendantOrSelf = (blockId: string, targetId: string): boolean => {
+		if (blockId === targetId) return true; // Can't drop block into itself
+		const block = findBlockById(document?.root, blockId);
+		if (!block) return false;
+		return hasDescendant(block, targetId); // Check if targetId is inside blockId
+	};
+
 	const handleDragStart = (event: DragStartEvent) => {
 		setActiveId(event.active.id as string);
 	};
@@ -42,6 +75,12 @@ export default function EditorLayout() {
 		setActiveId(null);
 
 		if (!over) return;
+
+		const activeData = active.data.current as {
+			type: string;
+			blockId?: string;
+			blockType?: string;
+		};
 
 		// Check if dragging a component type from sidebar
 		if (typeof active.id === 'string' && active.id.startsWith('sidebar-')) {
@@ -83,13 +122,43 @@ export default function EditorLayout() {
 			}
 		}
 
-		// Reordering existing blocks
-		if (
-			active.id !== over.id &&
-			typeof active.id === 'string' &&
-			active.id.startsWith('block-')
-		) {
-			toast.info('Block reordering coming soon');
+		// Handle dragging existing blocks (reordering)
+		if (activeData?.type === 'canvas-block' && activeData.blockId) {
+			const targetId = over.id as string;
+
+			// Drop on drop zone (specific position)
+			if (targetId.startsWith('dropzone-')) {
+				const overData = over.data.current as {
+					type: string;
+					parentId: string;
+					position: number;
+				};
+
+				if (overData?.type === 'drop-zone') {
+					// Prevent dropping block into itself or its descendants
+					if (!isDescendantOrSelf(activeData.blockId, overData.parentId)) {
+						moveBlock(activeData.blockId, overData.parentId, overData.position);
+						toast.success(t('movedBlock'));
+					}
+					return;
+				}
+			}
+
+			// Drop on block directly (append as last child)
+			if (targetId.startsWith('block-')) {
+				const targetBlockId = targetId.replace('block-', '');
+
+				// Prevent dropping block into itself or its descendants
+				if (!isDescendantOrSelf(activeData.blockId, targetBlockId)) {
+					const targetBlock = findBlockById(document?.root, targetBlockId);
+					if (targetBlock) {
+						const position = targetBlock.children?.length || 0;
+						moveBlock(activeData.blockId, targetBlockId, position);
+						toast.success(t('movedBlock'));
+					}
+				}
+				return;
+			}
 		}
 	};
 
@@ -133,11 +202,17 @@ export default function EditorLayout() {
 				</div>
 			</div>
 			<DragOverlay>
-				{activeId?.startsWith('sidebar-') ? (
-					<div className='p-3 rounded-md border-2 border-primary bg-background shadow-lg flex flex-col items-center justify-center gap-2'>
-						<div className='w-12 h-12 rounded border border-dashed border-primary flex items-center justify-center text-primary'>
-							<ComponentIcon type={activeId.replace('sidebar-', '')} />
-						</div>
+				{activeId ? (
+					<div className='p-3 rounded-md border-2 border-primary bg-background shadow-lg opacity-90'>
+						{activeId.startsWith('sidebar-') ? (
+							<div className='w-12 h-12 rounded border border-dashed border-primary flex items-center justify-center text-primary'>
+								<ComponentIcon type={activeId.replace('sidebar-', '')} />
+							</div>
+						) : activeId.startsWith('canvas-block-') ? (
+							<div className='px-4 py-2 text-sm font-medium text-primary'>
+								Moving block...
+							</div>
+						) : null}
 					</div>
 				) : null}
 			</DragOverlay>

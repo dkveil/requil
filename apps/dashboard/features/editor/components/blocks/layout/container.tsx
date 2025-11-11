@@ -41,9 +41,20 @@ export function ContainerBlock({
 
 	const Element = blockType === 'Section' ? 'section' : 'div';
 
+	const dragRef = (interactionProps as { ref?: React.Ref<HTMLElement> }).ref;
+	const dropRef = isEmpty && isCanvas ? setNodeRef : null;
+
+	const combinedRef = (element: HTMLElement | null) => {
+		if (dropRef) dropRef(element);
+		if (typeof dragRef === 'function') dragRef(element);
+		else if (dragRef && typeof dragRef === 'object' && 'current' in dragRef) {
+			(dragRef as React.MutableRefObject<HTMLElement | null>).current = element;
+		}
+	};
+
 	return (
 		<Element
-			ref={isEmpty && isCanvas ? setNodeRef : undefined}
+			ref={combinedRef}
 			{...interactionProps}
 			style={{
 				...styles,

@@ -62,5 +62,6 @@ export const editorEnLocales = {
 			backgroundColor: 'Background Color',
 			animationComingSoon: 'Animation coming soon...',
 		},
+		movedBlock: 'Block moved successfully',
 	},
 };

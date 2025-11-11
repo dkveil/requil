@@ -1,3 +1,4 @@
+import { useDraggable } from '@dnd-kit/core';
 import type { Block } from '@requil/types';
 import React from 'react';
 import { cn } from '@/lib/utils';
@@ -102,6 +103,21 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 
 	const styles = convertPropsToStyles(block.props);
 
+	const {
+		attributes,
+		listeners,
+		setNodeRef: setDragNodeRef,
+		isDragging,
+	} = useDraggable({
+		id: `canvas-block-${block.id}`,
+		data: {
+			type: 'canvas-block',
+			blockId: block.id,
+			blockType: block.type,
+		},
+		disabled: !isCanvas || block.type === 'Root',
+	});
+
 	const interactionProps = isCanvas
 		? {
 				onClick: handleClick,
@@ -116,6 +132,25 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 			}
 		: {};
 
+	const combinedInteractionProps =
+		isCanvas && block.type !== 'Root'
+			? {
+					...interactionProps,
+					...listeners,
+					...attributes,
+					ref: setDragNodeRef,
+					className: cn(
+						(interactionProps as { className?: string }).className,
+						isDragging && 'opacity-50'
+					),
+					style: {
+						...((interactionProps as { style?: React.CSSProperties }).style ||
+							{}),
+						cursor: isDragging ? 'grabbing' : 'grab',
+					},
+				}
+			: interactionProps;
+
 	switch (block.type) {
 		case 'Root':
 			return (
@@ -123,7 +158,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}
@@ -137,7 +172,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					blockType='Container'
 					additionalStyles={{
 						maxWidth: (block.props.maxWidth as number | undefined) || 600,
@@ -157,7 +192,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}
@@ -171,7 +206,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}
@@ -185,7 +220,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}
@@ -199,7 +234,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}
@@ -213,7 +248,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}
@@ -227,7 +262,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}
@@ -241,7 +276,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}
@@ -255,7 +290,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}
@@ -269,7 +304,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}
-					interactionProps={interactionProps}
+					interactionProps={combinedInteractionProps}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}
