@@ -1,9 +1,11 @@
 import { useDroppable } from '@dnd-kit/core';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import {
 	BlockRendererProps,
 	renderChildrenWithDropZones,
 } from '../../block-renderer';
+import { DropZone } from '../../drop-zone';
 
 interface ContainerBlockProps extends BlockRendererProps {
 	styles: React.CSSProperties;
@@ -27,8 +29,9 @@ export function ContainerBlock({
 	hoveredBlockId,
 }: ContainerBlockProps) {
 	const isEmpty = !block.children || block.children.length === 0;
+	const [isDropZoneOver, setIsDropZoneOver] = useState(false);
 
-	const shouldBeDroppable = isEmpty && isCanvas;
+	// Make container droppable (for sidebar items)
 	const { setNodeRef, isOver } = useDroppable({
 		id: `block-${block.id}`,
 		data: {
@@ -36,13 +39,14 @@ export function ContainerBlock({
 			blockId: block.id,
 			accepts: ['sidebar'],
 		},
-		disabled: !shouldBeDroppable,
+		disabled: !isCanvas, // Only disable in preview mode
 	});
 
 	const Element = blockType === 'Section' ? 'section' : 'div';
 
+	// Combine refs: dragRef (from useDraggable) + dropRef (from useDroppable)
 	const dragRef = (interactionProps as { ref?: React.Ref<HTMLElement> }).ref;
-	const dropRef = isEmpty && isCanvas ? setNodeRef : null;
+	const dropRef = setNodeRef;
 
 	const combinedRef = (element: HTMLElement | null) => {
 		if (dropRef) dropRef(element);
@@ -72,9 +76,23 @@ export function ContainerBlock({
 			data-block-id={block.id}
 		>
 			{isEmpty && isCanvas ? (
-				// When empty, show message without drop zones - entire container is droppable
-				<div className='text-center text-gray-400 py-8 text-sm'>
-					{emptyMessage || `Empty ${blockType} - Drop elements here`}
+				// When empty, show drop zone with message - drop zone takes full height
+				<div className='relative h-full min-h-[100px]'>
+					<DropZone
+						id={`dropzone-${block.id}-0`}
+						parentId={block.id}
+						position={0}
+						onIsOverChange={setIsDropZoneOver}
+						fullHeight={true}
+					/>
+					<div
+						className={cn(
+							'absolute inset-0 flex items-center justify-center text-gray-400 text-sm pointer-events-none transition-opacity duration-200',
+							isDropZoneOver && 'opacity-0'
+						)}
+					>
+						{emptyMessage || `Empty ${blockType} - Drop elements here`}
+					</div>
 				</div>
 			) : (
 				// When not empty, render children with drop zones between them

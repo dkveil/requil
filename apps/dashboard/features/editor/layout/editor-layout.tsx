@@ -136,7 +136,12 @@ export default function EditorLayout() {
 
 				if (overData?.type === 'drop-zone') {
 					// Prevent dropping block into itself or its descendants
-					if (!isDescendantOrSelf(activeData.blockId, overData.parentId)) {
+					const shouldBlock = isDescendantOrSelf(
+						activeData.blockId,
+						overData.parentId
+					);
+
+					if (!shouldBlock) {
 						moveBlock(activeData.blockId, overData.parentId, overData.position);
 						toast.success(t('movedBlock'));
 					}
