@@ -2,16 +2,16 @@ import type {
 	ComponentCategory,
 	ComponentDefinition,
 } from '@requil/types/editor';
+import { CONTENT_COMPONENTS } from './content-components';
 import { LAYOUT_COMPONENTS } from './layout-components';
 
-// import { CONTENT_COMPONENTS } from './content-components'; // Future
 // import { MEDIA_COMPONENTS } from './media-components'; // Future
 
 class ComponentRegistryManager {
 	private registry: Map<string, ComponentDefinition> = new Map();
 
 	constructor() {
-		this.registerComponents(LAYOUT_COMPONENTS);
+		this.registerComponents({ ...LAYOUT_COMPONENTS, ...CONTENT_COMPONENTS });
 	}
 
 	registerComponents(components: Record<string, ComponentDefinition>) {

@@ -30,6 +30,7 @@ export const InspectorFieldSchema = z.object({
 		'slider',
 		'spacing',
 		'image',
+		'textarea',
 	]),
 	defaultValue: z.unknown().optional(),
 	options: z
@@ -46,6 +47,7 @@ export const InspectorFieldSchema = z.object({
 	placeholder: z.string().optional(),
 	description: z.string().optional(),
 	group: z.string().optional(),
+	rows: z.number().optional(),
 });
 
 export const InspectorConfigSchema = z.object({

@@ -1,4 +1,4 @@
-import { BlockRendererProps } from '../block-renderer';
+import { BlockRendererProps } from '../../block-renderer';
 
 export function SpacerBlock({
 	block,

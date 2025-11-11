@@ -1,4 +1,4 @@
-import { BlockRenderer, BlockRendererProps } from '../block-renderer';
+import { BlockRenderer, BlockRendererProps } from '../../block-renderer';
 
 export function ColumnsBlock({
 	block,

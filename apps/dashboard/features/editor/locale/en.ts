@@ -26,6 +26,9 @@ export const editorEnLocales = {
 			layout: {
 				title: 'Layout',
 			},
+			content: {
+				title: 'Content',
+			},
 			container: {
 				title: 'Container',
 			},

@@ -26,6 +26,9 @@ export const editorPlLocales = {
 			layout: {
 				title: 'Układ',
 			},
+			content: {
+				title: 'Treść',
+			},
 			container: {
 				title: 'Kontener',
 			},

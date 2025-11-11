@@ -1,7 +1,10 @@
-import { BlockRendererProps } from '../block-renderer';
+import {
+	BlockRendererProps,
+	renderChildrenWithDropZones,
+} from '../../block-renderer';
 import { ContainerBlock } from './container';
 
-export function ColumnBlock({
+export function SectionBlock({
 	block,
 	isCanvas,
 	styles,
@@ -20,12 +23,15 @@ export function ColumnBlock({
 			isCanvas={isCanvas}
 			styles={styles}
 			interactionProps={interactionProps}
-			blockType='Column'
+			blockType='Section'
 			additionalStyles={{
-				flex: block.props.width === 'auto' ? 1 : `0 0 ${block.props.width}`,
-				minWidth: 0, // Prevent flex overflow
+				width: block.props.fullWidth ? '100%' : 'auto',
+				backgroundImage: block.props.backgroundImage
+					? `url(${block.props.backgroundImage})`
+					: undefined,
+				backgroundSize: block.props.backgroundSize as string,
+				backgroundPosition: block.props.backgroundPosition as string,
 			}}
-			emptyMessage='Empty Column'
 			onSelect={onSelect}
 			onHover={onHover}
 			selectedBlockId={selectedBlockId}

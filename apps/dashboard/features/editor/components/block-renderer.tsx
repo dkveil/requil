@@ -2,13 +2,17 @@ import type { Block } from '@requil/types';
 import React from 'react';
 import { cn } from '@/lib/utils';
 import {
+	ButtonBlock,
 	ColumnBlock,
 	ColumnsBlock,
 	ContainerBlock,
 	DividerBlock,
+	HeadingBlock,
+	ImageBlock,
 	RootBlock,
 	SectionBlock,
 	SpacerBlock,
+	TextBlock,
 } from './blocks';
 import { DropZone } from './drop-zone';
 
@@ -206,6 +210,62 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 		case 'Divider':
 			return (
 				<DividerBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
+			);
+
+		case 'Text':
+			return (
+				<TextBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
+			);
+
+		case 'Heading':
+			return (
+				<HeadingBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
+			);
+
+		case 'Button':
+			return (
+				<ButtonBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
+			);
+
+		case 'Image':
+			return (
+				<ImageBlock
 					block={block}
 					isCanvas={isCanvas}
 					styles={styles}

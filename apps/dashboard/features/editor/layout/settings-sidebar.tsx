@@ -61,7 +61,7 @@ export function SettingsSidebar() {
 	};
 
 	return (
-		<div className='w-80 border-l h-full bg-card flex flex-col overflow-hidden'>
+		<div className='w-80 border-l h-full bg-card flex flex-col overflow-auto'>
 			{/* Tabs */}
 			<Tabs
 				defaultValue='layout'

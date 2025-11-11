@@ -7,6 +7,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 interface PropertyControlProps {
 	field: {
@@ -16,6 +17,7 @@ interface PropertyControlProps {
 		min?: number;
 		max?: number;
 		step?: number;
+		rows?: number;
 		placeholder?: string;
 		options?: Array<{ label: string; value: unknown }>;
 	};
@@ -115,6 +117,20 @@ export function PropertyControl({
 						onChange={(e) => onChange(e.target.value)}
 						placeholder={field.placeholder}
 						className='h-8 text-xs'
+					/>
+				</div>
+			);
+
+		case 'textarea':
+			return (
+				<div className='space-y-2'>
+					<Label className='text-xs text-muted-foreground'>{field.label}</Label>
+					<Textarea
+						value={String(value)}
+						onChange={(e) => onChange(e.target.value)}
+						placeholder={field.placeholder}
+						className='h-24 text-xs'
+						rows={field.rows}
 					/>
 				</div>
 			);

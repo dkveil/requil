@@ -35,7 +35,7 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [expandedCategories, setExpandedCategories] = useState<
 		Set<ComponentCategory>
-	>(new Set(['layout']));
+	>(new Set(['layout', 'content']));
 
 	// Get all components grouped by category (excluding hidden ones)
 	const componentsByCategory = CATEGORY_ORDER.reduce(

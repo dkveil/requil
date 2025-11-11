@@ -40,6 +40,7 @@ export function RootBlock({
 				width: '600px',
 				minHeight: !children.length ? '400px' : undefined,
 				margin: '0 auto',
+				overflow: 'hidden',
 			}}
 			className={cn(
 				(interactionProps as { className?: string }).className,
@@ -58,7 +59,7 @@ export function RootBlock({
 			)}
 
 			{!children.length && isCanvas && (
-				<div className='text-center text-muted-foreground py-16 text-sm'>
+				<div className='min-h-[400px] flex items-center justify-center text-center text-muted-foreground py-16 text-sm'>
 					Drag elements here to start building
 				</div>
 			)}

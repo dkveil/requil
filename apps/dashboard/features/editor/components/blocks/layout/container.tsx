@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import {
 	BlockRendererProps,
 	renderChildrenWithDropZones,
-} from '../block-renderer';
+} from '../../block-renderer';
 
 interface ContainerBlockProps extends BlockRendererProps {
 	styles: React.CSSProperties;
