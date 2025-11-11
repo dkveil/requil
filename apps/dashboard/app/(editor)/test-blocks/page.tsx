@@ -225,7 +225,7 @@ export default function TestBlocksPage() {
 						<div className='bg-gray-50 p-4 rounded'>
 							<BlockRenderer
 								block={(() => {
-									const container = createDefaultDocument();
+									const container = createDefaultDocument().root;
 									if (container) {
 										const section1 = createBlock('Section', {
 											backgroundColor: '#E0F2FE',

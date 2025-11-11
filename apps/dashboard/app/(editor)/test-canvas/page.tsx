@@ -1,12 +1,14 @@
 'use client';
 
 import { useEffect } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { BlockRenderer } from '@/features/editor/components/block-renderer';
 import {
 	useCanvas,
 	useCanvasKeyboardShortcuts,
 } from '@/features/editor/hooks/use-canvas';
+import { ElementsSidebar } from '@/features/editor/layout/elements-sidebar';
 import {
 	createBlock,
 	createDefaultDocument,
@@ -56,12 +58,12 @@ export default function TestCanvasPage() {
 			const columns = createBlock('Columns', { columnCount: 2, gap: 20 });
 
 			if (section1 && section2 && columns) {
-				container.children = [section1, section2, columns];
+				container.root.children = [section1, section2, columns];
 			}
 
 			setDocument({
 				version: '1.0',
-				root: container,
+				root: container.root,
 				metadata: {
 					title: 'Test Document',
 					description: 'Canvas Store Test',
@@ -154,6 +156,28 @@ export default function TestCanvasPage() {
 			</div>
 
 			<div className='flex flex-1 overflow-hidden'>
+				{/* Elements Sidebar */}
+				<ElementsSidebar
+					onAddBlock={(blockType) => {
+						const newBlock = createBlock(blockType);
+						if (!newBlock) {
+							toast.error('Failed to create block');
+							return;
+						}
+
+						if (selectedBlockId) {
+							addBlock(selectedBlockId, newBlock);
+							toast.success(`Added ${blockType} to selected block`);
+						} else if (document) {
+							// Add to root if nothing is selected
+							addBlock(document.root.id, newBlock);
+							toast.success(`Added ${blockType} to canvas`);
+						} else {
+							toast.error('No document available');
+						}
+					}}
+				/>
+
 				{/* Main Canvas */}
 				<div className='flex-1 overflow-auto bg-muted p-8'>
 					<div

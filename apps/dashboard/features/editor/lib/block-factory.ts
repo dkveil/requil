@@ -1,4 +1,4 @@
-import type { Block } from '@requil/types/editor';
+import type { Block, Document } from '@requil/types/editor';
 import { nanoid } from 'nanoid';
 import { componentRegistry } from '../registry/component-registry';
 
@@ -38,13 +38,21 @@ export function createBlock(
 	return block;
 }
 
-export function createDefaultDocument(): Block {
-	return (
-		createBlock('Container') || {
-			id: nanoid(),
-			type: 'Container',
-			props: {},
-			children: [],
-		}
-	);
+export function createDefaultDocument(): Document {
+	const rootBlock = createBlock('Container') || {
+		id: nanoid(),
+		type: 'Container',
+		props: {},
+		children: [],
+	};
+
+	return {
+		version: '1.0',
+		root: rootBlock,
+		metadata: {
+			title: 'Untitled Template',
+			createdAt: new Date().toISOString(),
+			updatedAt: new Date().toISOString(),
+		},
+	};
 }
