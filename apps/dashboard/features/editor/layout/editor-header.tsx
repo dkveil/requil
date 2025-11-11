@@ -1,7 +1,7 @@
 'use client';
 
 import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
-import { Monitor, Smartphone } from 'lucide-react';
+import { Minus, Monitor, Plus, Redo2, Smartphone, Undo2 } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import LogoSmall from '@/components/logo-small';
@@ -36,22 +36,24 @@ export default function EditorHeader() {
 						orientation='vertical'
 						className=' h-[24px]!'
 					/>
-					<div className='flex items-center gap-2'>
+					<div className='flex items-center gap-1'>
 						<Button
-							variant='outline'
-							size='sm'
+							variant='ghost'
+							size='icon-sm'
 							onClick={undo}
 							disabled={!canUndo}
+							title={t('undo')}
 						>
-							Undo
+							<Undo2 className='h-4 w-4' />
 						</Button>
 						<Button
-							variant='outline'
-							size='sm'
+							variant='ghost'
+							size='icon-sm'
 							onClick={redo}
 							disabled={!canRedo}
+							title={t('redo')}
 						>
-							Redo
+							<Redo2 className='h-4 w-4' />
 						</Button>
 					</div>
 				</div>
@@ -80,23 +82,25 @@ export default function EditorHeader() {
 				</div>
 
 				<div className='flex justify-end items-center flex-1 gap-2'>
-					<div className='flex items-center gap-2'>
+					<div className='flex items-center gap-1'>
 						<Button
-							variant='outline'
-							size='sm'
-							onClick={() => setZoom(zoom - 0.1)}
+							variant='ghost'
+							size='icon-sm'
+							onClick={() => setZoom(Math.max(0.1, zoom - 0.1))}
+							title='Zoom out'
 						>
-							-
+							<Minus className='h-4 w-4' />
 						</Button>
 						<span className='text-sm font-medium min-w-[60px] text-center text-foreground'>
 							{Math.round(zoom * 100)}%
 						</span>
 						<Button
-							variant='outline'
-							size='sm'
-							onClick={() => setZoom(zoom + 0.1)}
+							variant='ghost'
+							size='icon-sm'
+							onClick={() => setZoom(Math.min(2, zoom + 0.1))}
+							title='Zoom in'
 						>
-							+
+							<Plus className='h-4 w-4' />
 						</Button>
 					</div>
 

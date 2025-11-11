@@ -17,6 +17,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuthStore } from '@/features/auth';
+import { useWorkspace } from '@/features/workspace';
 import { LanguageToggle } from './language-toggle';
 import { SearchBar } from './search-bar';
 import { ModeToggle } from './theme-toggle';
@@ -26,6 +27,7 @@ export function Header() {
 	const router = useRouter();
 	const { user, signOut } = useAuthStore();
 	const { resolvedTheme } = useTheme();
+	const { currentWorkspace } = useWorkspace();
 
 	const handleSignOut = async () => {
 		await signOut();
@@ -36,7 +38,13 @@ export function Header() {
 		router.push(DASHBOARD_ROUTES.ACCOUNT.SETTINGS);
 	};
 
-	const handleNewTemplate = () => {};
+	const handleNewTemplate = () => {
+		router.push(
+			DASHBOARD_ROUTES.WORKSPACE.NEW_EMAIL_TEMPLATE(
+				currentWorkspace?.slug ?? ''
+			)
+		);
+	};
 
 	const logoVariant = resolvedTheme === 'dark' ? 'light' : 'dark';
 

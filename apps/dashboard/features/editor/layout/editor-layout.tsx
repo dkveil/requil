@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { Canvas } from '../components/canvas';
 import { useCanvas } from '../hooks/use-canvas';
@@ -9,25 +10,30 @@ import { ElementsSidebar } from './elements-sidebar';
 import { SettingsSidebar } from './settings-sidebar';
 
 export default function EditorLayout() {
-	const { selectedBlockId, document, addBlock } = useCanvas();
+	const { selectedBlockId, document, addBlock, selectBlock } = useCanvas();
+	const t = useTranslations('editor');
 
 	const handleAddBlock = (blockType: string) => {
 		const newBlock = createBlock(blockType);
 		if (!newBlock) {
-			toast.error('Failed to create block');
+			toast.error(t('failedToCreateBlock'));
 			return;
 		}
 
 		if (selectedBlockId) {
 			addBlock(selectedBlockId, newBlock);
-			toast.success(`Added ${blockType} to selected block`);
+			toast.success(t('addedBlockToSelectedBlock', { blockType }));
 		} else if (document) {
 			// Add to root if nothing is selected
 			addBlock(document.root.id, newBlock);
-			toast.success(`Added ${blockType} to canvas`);
+			toast.success(t('addedBlockToCanvas', { blockType }));
 		} else {
-			toast.error('No document available');
+			toast.error(t('noDocumentAvailable'));
+			return;
 		}
+
+		// Auto-select the newly added block
+		selectBlock(newBlock.id);
 	};
 
 	return (

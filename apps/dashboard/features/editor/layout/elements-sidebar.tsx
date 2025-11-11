@@ -2,6 +2,7 @@
 
 import type { ComponentCategory } from '@requil/types';
 import { ChevronDown, ChevronRight, Search } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -28,6 +29,7 @@ interface ElementsSidebarProps {
 }
 
 export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
+	const t = useTranslations('editor.elementsSidebar');
 	const [searchQuery, setSearchQuery] = useState('');
 	const [expandedCategories, setExpandedCategories] = useState<
 		Set<ComponentCategory>
@@ -88,7 +90,7 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 			{/* Header */}
 			<div className='p-4 border-b'>
 				<h2 className='text-sm font-semibold mb-3 text-foreground'>
-					Add Elements
+					{t('addElements')}
 				</h2>
 
 				{/* Search */}
@@ -96,7 +98,7 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 					<Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
 					<Input
 						type='search'
-						placeholder='Type to search'
+						placeholder={t('searchPlaceholder')}
 						className='pl-8 h-9 text-sm bg-background'
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
@@ -123,7 +125,7 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 								className='w-full px-4 py-2.5 flex items-center justify-between hover:bg-muted/50 transition-colors cursor-pointer'
 							>
 								<span className='text-sm font-medium text-foreground'>
-									{CATEGORY_LABELS[category as ComponentCategory] || category}
+									{t(`${category}.title`)}
 								</span>
 								{isExpanded ? (
 									<ChevronDown className='h-4 w-4 text-muted-foreground' />
@@ -155,6 +157,7 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 
 											{/* Name */}
 											<span className='text-xs font-medium text-center text-foreground group-hover:text-primary transition-colors'>
+												{/* {t(`${component.name.toLowerCase()}.title`)} */}
 												{component.name}
 											</span>
 										</button>
