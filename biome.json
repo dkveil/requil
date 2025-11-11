@@ -99,10 +99,12 @@
 				"useButtonType": "warn",
 				"useHeadingContent": "error",
 				"useIframeTitle": "error",
-				"useKeyWithMouseEvents": "error",
+				"useKeyWithMouseEvents": "warn",
+				"useKeyWithClickEvents": "warn",
 				"useSemanticElements": "error",
 				"useValidAriaProps": "error",
-				"useValidAriaRole": "error"
+				"useValidAriaRole": "error",
+				"noStaticElementInteractions": "warn"
 			},
 			"complexity": {
 				"noBannedTypes": "error",

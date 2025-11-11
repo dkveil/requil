@@ -59,6 +59,33 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 		: {};
 
 	switch (block.type) {
+		case 'Root':
+			return (
+				<div
+					{...interactionProps}
+					style={{
+						...styles,
+						width: '600px',
+						minHeight: !block.children?.length ? '400px' : '100%',
+						margin: '0 auto',
+					}}
+					data-block-type='Root'
+					data-block-id={block.id}
+				>
+					{block.children?.map((child) => (
+						<BlockRenderer
+							key={child.id}
+							block={child}
+							isCanvas={isCanvas}
+							onSelect={onSelect}
+							onHover={onHover}
+							selectedBlockId={selectedBlockId}
+							hoveredBlockId={hoveredBlockId}
+						/>
+					))}
+				</div>
+			);
+
 		case 'Container':
 			return (
 				<div

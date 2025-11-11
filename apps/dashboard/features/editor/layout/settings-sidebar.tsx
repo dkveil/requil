@@ -19,9 +19,9 @@ import { componentRegistry } from '../registry/component-registry';
 
 export function SettingsSidebar() {
 	const t = useTranslations('editor.settingsSidebar');
-	const { selectedBlock, updateBlock } = useCanvas();
+	const { selectedBlock, document, updateBlock } = useCanvas();
 	const [expandedSections, setExpandedSections] = useState<Set<string>>(
-		new Set(['spacing', 'typography', 'fill'])
+		new Set(['spacing', 'typography', 'fill', 'style'])
 	);
 
 	const toggleSection = (section: string) => {
@@ -36,7 +36,10 @@ export function SettingsSidebar() {
 		});
 	};
 
-	if (!selectedBlock) {
+	// If no block is selected, show Root properties
+	const blockToEdit = selectedBlock || document?.root;
+
+	if (!blockToEdit) {
 		return (
 			<div className='w-80 border-l h-full bg-card flex items-center justify-center'>
 				<p className='text-sm text-muted-foreground text-center px-4'>
@@ -46,12 +49,12 @@ export function SettingsSidebar() {
 		);
 	}
 
-	const componentDef = componentRegistry.get(selectedBlock.type);
+	const componentDef = componentRegistry.get(blockToEdit.type);
 
 	const handlePropChange = (propName: string, value: unknown) => {
-		updateBlock(selectedBlock.id, {
+		updateBlock(blockToEdit.id, {
 			props: {
-				...selectedBlock.props,
+				...blockToEdit.props,
 				[propName]: value,
 			},
 		});
@@ -96,15 +99,15 @@ export function SettingsSidebar() {
 									{t('blockType')}
 								</Label>
 								<Select
-									value={selectedBlock.type}
+									value={blockToEdit.type}
 									disabled
 								>
 									<SelectTrigger className='w-full'>
 										<SelectValue />
 									</SelectTrigger>
 									<SelectContent>
-										<SelectItem value={selectedBlock.type}>
-											{selectedBlock.type}
+										<SelectItem value={blockToEdit.type}>
+											{blockToEdit.type}
 										</SelectItem>
 									</SelectContent>
 								</Select>
@@ -122,10 +125,10 @@ export function SettingsSidebar() {
 							// Special handling for spacing group
 							if (group.id === 'spacing') {
 								const hasSpacing =
-									selectedBlock.props.paddingTop !== undefined ||
-									selectedBlock.props.paddingBottom !== undefined ||
-									selectedBlock.props.paddingLeft !== undefined ||
-									selectedBlock.props.paddingRight !== undefined;
+									blockToEdit.props.paddingTop !== undefined ||
+									blockToEdit.props.paddingBottom !== undefined ||
+									blockToEdit.props.paddingLeft !== undefined ||
+									blockToEdit.props.paddingRight !== undefined;
 
 								if (!hasSpacing) return null;
 
@@ -137,17 +140,15 @@ export function SettingsSidebar() {
 										onToggle={() => toggleSection(group.id)}
 									>
 										<SpacingEditor
-											paddingTop={
-												(selectedBlock.props.paddingTop as number) || 0
-											}
+											paddingTop={(blockToEdit.props.paddingTop as number) || 0}
 											paddingBottom={
-												(selectedBlock.props.paddingBottom as number) || 0
+												(blockToEdit.props.paddingBottom as number) || 0
 											}
 											paddingLeft={
-												(selectedBlock.props.paddingLeft as number) || 0
+												(blockToEdit.props.paddingLeft as number) || 0
 											}
 											paddingRight={
-												(selectedBlock.props.paddingRight as number) || 0
+												(blockToEdit.props.paddingRight as number) || 0
 											}
 											onPaddingChange={(side, value) => {
 												handlePropChange(`padding${side}`, value);
@@ -167,7 +168,7 @@ export function SettingsSidebar() {
 								>
 									<div className='space-y-3'>
 										{groupFields.map((field) => {
-											const value = selectedBlock.props[field.key];
+											const value = blockToEdit.props[field.key];
 											if (value === undefined) return null;
 
 											return (
@@ -195,7 +196,7 @@ export function SettingsSidebar() {
 									)
 							)
 							.map((field) => {
-								const value = selectedBlock.props[field.key];
+								const value = blockToEdit.props[field.key];
 								if (value === undefined) return null;
 
 								return (

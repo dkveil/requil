@@ -35,9 +35,20 @@ export function Canvas() {
 		);
 	}
 
+	const handleCanvasClick = (e: React.MouseEvent) => {
+		// Only deselect if clicking on the canvas background (not on a block)
+		const target = e.target as HTMLElement;
+		if (target.classList.contains('canvas-wrapper')) {
+			selectBlock(null);
+		}
+	};
+
 	return (
 		<div className='h-full flex flex-col bg-background'>
-			<div className='flex-1 overflow-auto bg-muted p-8'>
+			<div
+				onClick={handleCanvasClick}
+				className='flex-1 overflow-auto bg-muted p-8 canvas-wrapper'
+			>
 				<div
 					style={{
 						transform: `scale(${zoom})`,

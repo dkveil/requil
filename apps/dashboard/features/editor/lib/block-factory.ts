@@ -39,10 +39,12 @@ export function createBlock(
 }
 
 export function createDefaultDocument(): Document {
-	const rootBlock = createBlock('Container') || {
+	const rootBlock = createBlock('Root') || {
 		id: nanoid(),
-		type: 'Container',
-		props: {},
+		type: 'Root',
+		props: {
+			backgroundColor: '#F4F4F5',
+		},
 		children: [],
 	};
 

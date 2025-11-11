@@ -35,10 +35,12 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 		Set<ComponentCategory>
 	>(new Set(['layout']));
 
-	// Get all components grouped by category
+	// Get all components grouped by category (excluding hidden ones)
 	const componentsByCategory = CATEGORY_ORDER.reduce(
 		(acc, category) => {
-			const components = componentRegistry.getByCategory(category);
+			const components = componentRegistry
+				.getByCategory(category)
+				.filter((comp) => !comp.isHidden);
 			if (components.length > 0) {
 				acc[category] = components;
 			}
