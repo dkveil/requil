@@ -1,11 +1,13 @@
 'use client';
 
+import { useDraggable } from '@dnd-kit/core';
 import type { ComponentCategory } from '@requil/types';
 import { ChevronDown, ChevronRight, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { ComponentIcon } from '../components/component-icon';
 import { componentRegistry } from '../registry/component-registry';
 
 const CATEGORY_LABELS: Record<ComponentCategory, string> = {
@@ -140,29 +142,12 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 							{isExpanded && (
 								<div className='px-3 pb-3 grid grid-cols-2 gap-2'>
 									{components.map((component) => (
-										<button
+										<DraggableComponentButton
 											key={component.type}
-											type='button'
-											onClick={() => handleAddBlock(component.type)}
-											className={cn(
-												'p-3 rounded-md border border-border bg-background',
-												'hover:border-primary hover:bg-muted/50',
-												'transition-all duration-200',
-												'flex flex-col items-center justify-center gap-2',
-												'cursor-pointer group'
-											)}
-										>
-											{/* Icon/Preview */}
-											<div className='w-full h-12 rounded border border-dashed border-border flex items-center justify-center text-muted-foreground group-hover:border-primary group-hover:text-primary transition-colors'>
-												<ComponentIcon type={component.type} />
-											</div>
-
-											{/* Name */}
-											<span className='text-xs font-medium text-center text-foreground group-hover:text-primary transition-colors'>
-												{/* {t(`${component.name.toLowerCase()}.title`)} */}
-												{component.name}
-											</span>
-										</button>
+											componentType={component.type}
+											componentName={component.name}
+											onAddBlock={handleAddBlock}
+										/>
 									))}
 								</div>
 							)}
@@ -174,148 +159,51 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 	);
 }
 
-// Simple icon component for each block type
-function ComponentIcon({ type }: { type: string }) {
-	switch (type) {
-		case 'Container':
-			return (
-				<svg
-					className='w-6 h-6'
-					fill='none'
-					viewBox='0 0 24 24'
-					stroke='currentColor'
-				>
-					<title>Container icon</title>
-					<rect
-						x='4'
-						y='4'
-						width='16'
-						height='16'
-						rx='2'
-						strokeWidth='1.5'
-					/>
-				</svg>
-			);
-		case 'Section':
-			return (
-				<svg
-					className='w-6 h-6'
-					fill='none'
-					viewBox='0 0 24 24'
-					stroke='currentColor'
-				>
-					<title>Section icon</title>
-					<rect
-						x='3'
-						y='8'
-						width='18'
-						height='8'
-						rx='1'
-						strokeWidth='1.5'
-					/>
-				</svg>
-			);
-		case 'Columns':
-			return (
-				<svg
-					className='w-6 h-6'
-					fill='none'
-					viewBox='0 0 24 24'
-					stroke='currentColor'
-				>
-					<title>Columns icon</title>
-					<rect
-						x='4'
-						y='6'
-						width='6'
-						height='12'
-						rx='1'
-						strokeWidth='1.5'
-					/>
-					<rect
-						x='14'
-						y='6'
-						width='6'
-						height='12'
-						rx='1'
-						strokeWidth='1.5'
-					/>
-				</svg>
-			);
-		case 'Column':
-			return (
-				<svg
-					className='w-6 h-6'
-					fill='none'
-					viewBox='0 0 24 24'
-					stroke='currentColor'
-				>
-					<title>Column icon</title>
-					<rect
-						x='8'
-						y='4'
-						width='8'
-						height='16'
-						rx='1'
-						strokeWidth='1.5'
-					/>
-				</svg>
-			);
-		case 'Spacer':
-			return (
-				<svg
-					className='w-6 h-6'
-					fill='none'
-					viewBox='0 0 24 24'
-					stroke='currentColor'
-				>
-					<title>Spacer icon</title>
-					<line
-						x1='4'
-						y1='12'
-						x2='20'
-						y2='12'
-						strokeWidth='1.5'
-						strokeDasharray='2 2'
-					/>
-				</svg>
-			);
-		case 'Divider':
-			return (
-				<svg
-					className='w-6 h-6'
-					fill='none'
-					viewBox='0 0 24 24'
-					stroke='currentColor'
-				>
-					<title>Divider icon</title>
-					<line
-						x1='4'
-						y1='12'
-						x2='20'
-						y2='12'
-						strokeWidth='2'
-					/>
-				</svg>
-			);
-		default:
-			return (
-				<svg
-					className='w-6 h-6'
-					fill='none'
-					viewBox='0 0 24 24'
-					stroke='currentColor'
-				>
-					<title>Block icon</title>
-					<rect
-						x='6'
-						y='6'
-						width='12'
-						height='12'
-						rx='2'
-						strokeWidth='1.5'
-					/>
-				</svg>
-			);
-	}
+// Draggable component button
+interface DraggableComponentButtonProps {
+	componentType: string;
+	componentName: string;
+	onAddBlock: (blockType: string) => void;
+}
+
+function DraggableComponentButton({
+	componentType,
+	componentName,
+	onAddBlock,
+}: DraggableComponentButtonProps) {
+	const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+		id: `sidebar-${componentType}`,
+		data: {
+			type: componentType,
+			source: 'sidebar',
+		},
+	});
+
+	return (
+		<button
+			ref={setNodeRef}
+			type='button'
+			onClick={() => onAddBlock(componentType)}
+			className={cn(
+				'p-3 rounded-md border border-border bg-background',
+				'hover:border-primary hover:bg-muted/50',
+				'transition-all duration-200',
+				'flex flex-col items-center justify-center gap-2',
+				'cursor-grab active:cursor-grabbing group',
+				isDragging && 'opacity-50'
+			)}
+			{...listeners}
+			{...attributes}
+		>
+			{/* Icon/Preview */}
+			<div className='w-full h-12 rounded border border-dashed border-border flex items-center justify-center text-muted-foreground group-hover:border-primary group-hover:text-primary transition-colors'>
+				<ComponentIcon type={componentType} />
+			</div>
+
+			{/* Name */}
+			<span className='text-xs font-medium text-center text-foreground group-hover:text-primary transition-colors'>
+				{componentName}
+			</span>
+		</button>
+	);
 }

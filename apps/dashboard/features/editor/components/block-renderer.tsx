@@ -1,14 +1,68 @@
 import type { Block } from '@requil/types';
 import React from 'react';
 import { cn } from '@/lib/utils';
+import {
+	ColumnBlock,
+	ColumnsBlock,
+	ContainerBlock,
+	DividerBlock,
+	RootBlock,
+	SectionBlock,
+	SpacerBlock,
+} from './blocks';
+import { DropZone } from './drop-zone';
 
-interface BlockRendererProps {
+export interface BlockRendererProps {
 	block: Block;
 	isCanvas?: boolean; // true = editor mode, false = preview mode
 	onSelect?: (blockId: string) => void;
 	onHover?: (blockId: string | null) => void;
 	selectedBlockId?: string | null;
 	hoveredBlockId?: string | null;
+}
+
+// Helper function to render children with drop zones
+export function renderChildrenWithDropZones(
+	block: Block,
+	isCanvas = true,
+	onSelect?: (blockId: string) => void,
+	onHover?: (blockId: string | null) => void,
+	selectedBlockId?: string | null,
+	hoveredBlockId?: string | null
+) {
+	const children = block.children || [];
+
+	return (
+		<>
+			{isCanvas && (
+				<DropZone
+					id={`dropzone-${block.id}-0`}
+					parentId={block.id}
+					position={0}
+				/>
+			)}
+
+			{children.map((child, index) => (
+				<React.Fragment key={child.id}>
+					<BlockRenderer
+						block={child}
+						isCanvas={isCanvas}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+					/>
+					{isCanvas && (
+						<DropZone
+							id={`dropzone-${block.id}-${index + 1}`}
+							parentId={block.id}
+							position={index + 1}
+						/>
+					)}
+				</React.Fragment>
+			))}
+		</>
+	);
 }
 
 export const BlockRenderer: React.FC<BlockRendererProps> = ({
@@ -61,207 +115,106 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 	switch (block.type) {
 		case 'Root':
 			return (
-				<div
-					{...interactionProps}
-					style={{
-						...styles,
-						width: '600px',
-						minHeight: !block.children?.length ? '400px' : '100%',
-						margin: '0 auto',
-					}}
-					data-block-type='Root'
-					data-block-id={block.id}
-				>
-					{block.children?.map((child) => (
-						<BlockRenderer
-							key={child.id}
-							block={child}
-							isCanvas={isCanvas}
-							onSelect={onSelect}
-							onHover={onHover}
-							selectedBlockId={selectedBlockId}
-							hoveredBlockId={hoveredBlockId}
-						/>
-					))}
-				</div>
+				<RootBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
 			);
 
 		case 'Container':
 			return (
-				<div
-					{...interactionProps}
-					style={{
-						...styles,
+				<ContainerBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					blockType='Container'
+					additionalStyles={{
 						maxWidth: (block.props.maxWidth as number | undefined) || 600,
 						width: block.props.fullWidth ? '100%' : 'auto',
 						margin: '0 auto',
 					}}
-					data-block-type='Container'
-					data-block-id={block.id}
-				>
-					{block.children?.map((child) => (
-						<BlockRenderer
-							key={child.id}
-							block={child}
-							isCanvas={isCanvas}
-							onSelect={onSelect}
-							onHover={onHover}
-							selectedBlockId={selectedBlockId}
-							hoveredBlockId={hoveredBlockId}
-						/>
-					))}
-					{isCanvas && (!block.children || block.children.length === 0) && (
-						<div className='text-center text-gray-400 py-8 text-sm'>
-							Empty Container - Drop elements here
-						</div>
-					)}
-				</div>
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
 			);
 
 		case 'Section':
 			return (
-				<section
-					{...interactionProps}
-					style={{
-						...styles,
-						width: block.props.fullWidth ? '100%' : 'auto',
-						backgroundImage: block.props.backgroundImage
-							? `url(${block.props.backgroundImage})`
-							: undefined,
-						backgroundSize: block.props.backgroundSize as string,
-						backgroundPosition: block.props.backgroundPosition as string,
-					}}
-					data-block-type='Section'
-					data-block-id={block.id}
-				>
-					{block.children?.map((child) => (
-						<BlockRenderer
-							key={child.id}
-							block={child}
-							isCanvas={isCanvas}
-							onSelect={onSelect}
-							onHover={onHover}
-							selectedBlockId={selectedBlockId}
-							hoveredBlockId={hoveredBlockId}
-						/>
-					))}
-					{isCanvas && (!block.children || block.children.length === 0) && (
-						<div className='text-center text-gray-400 py-8 text-sm'>
-							Empty Section - Drop elements here
-						</div>
-					)}
-				</section>
+				<SectionBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
 			);
 
 		case 'Columns':
 			return (
-				<div
-					{...interactionProps}
-					style={{
-						...styles,
-						display: 'flex',
-						gap: typeof block.props.gap === 'number' ? block.props.gap : 0,
-						alignItems:
-							block.props.verticalAlign === 'middle'
-								? 'center'
-								: block.props.verticalAlign === 'bottom'
-									? 'flex-end'
-									: 'flex-start',
-					}}
-					data-block-type='Columns'
-					data-block-id={block.id}
-				>
-					{block.children?.map((child) => (
-						<BlockRenderer
-							key={child.id}
-							block={child}
-							isCanvas={isCanvas}
-							onSelect={onSelect}
-							onHover={onHover}
-							selectedBlockId={selectedBlockId}
-							hoveredBlockId={hoveredBlockId}
-						/>
-					))}
-				</div>
+				<ColumnsBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
 			);
 
 		case 'Column':
 			return (
-				<div
-					{...interactionProps}
-					style={{
-						...styles,
-						flex: block.props.width === 'auto' ? 1 : `0 0 ${block.props.width}`,
-						minWidth: 0, // Prevent flex overflow
-					}}
-					data-block-type='Column'
-					data-block-id={block.id}
-				>
-					{block.children?.map((child) => (
-						<BlockRenderer
-							key={child.id}
-							block={child}
-							isCanvas={isCanvas}
-							onSelect={onSelect}
-							onHover={onHover}
-							selectedBlockId={selectedBlockId}
-							hoveredBlockId={hoveredBlockId}
-						/>
-					))}
-					{isCanvas && (!block.children || block.children.length === 0) && (
-						<div className='text-center text-gray-400 py-4 text-xs'>
-							Empty Column
-						</div>
-					)}
-				</div>
+				<ColumnBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
 			);
 
 		case 'Spacer':
 			return (
-				<div
-					{...interactionProps}
-					style={{
-						...styles,
-						height:
-							typeof block.props.height === 'number' ? block.props.height : 20,
-						minHeight:
-							typeof block.props.height === 'number' ? block.props.height : 20,
-					}}
-					data-block-type='Spacer'
-					data-block-id={block.id}
-				>
-					{isCanvas && (
-						<div className='h-full border border-dashed border-gray-300 flex items-center justify-center'>
-							<span className='text-xs text-gray-400'>
-								{typeof block.props.height === 'number'
-									? `${block.props.height}px`
-									: '20px'}
-							</span>
-						</div>
-					)}
-				</div>
+				<SpacerBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
 			);
 
 		case 'Divider':
 			return (
-				<div
-					{...interactionProps}
-					style={styles}
-					data-block-type='Divider'
-					data-block-id={block.id}
-				>
-					<hr
-						style={{
-							border: 'none',
-							borderTop: `${block.props.thickness || 1}px ${block.props.style || 'solid'} ${block.props.color || '#DDDDDD'}`,
-							width:
-								typeof block.props.width === 'string'
-									? block.props.width
-									: '100%',
-							margin: 0,
-						}}
-					/>
-				</div>
+				<DividerBlock
+					block={block}
+					isCanvas={isCanvas}
+					styles={styles}
+					interactionProps={interactionProps}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+				/>
 			);
 
 		default:
