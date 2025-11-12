@@ -129,6 +129,93 @@ export function ComponentIcon({ type }: { type: string }) {
 					/>
 				</svg>
 			);
+		case 'Text':
+			return (
+				<svg
+					className='w-6 h-6'
+					fill='none'
+					viewBox='0 0 24 24'
+					stroke='currentColor'
+				>
+					<title>Text icon</title>
+					<path
+						d='M4 6h16M4 12h16M4 18h10'
+						strokeWidth='1.5'
+						strokeLinecap='round'
+					/>
+				</svg>
+			);
+		case 'Heading':
+			return (
+				<svg
+					className='w-6 h-6'
+					fill='none'
+					viewBox='0 0 24 24'
+					stroke='currentColor'
+				>
+					<title>Heading icon</title>
+					<path
+						d='M4 6v12M20 6v12M4 12h16'
+						strokeWidth='1.5'
+						strokeLinecap='round'
+					/>
+				</svg>
+			);
+		case 'Button':
+			return (
+				<svg
+					className='w-6 h-6'
+					fill='none'
+					viewBox='0 0 24 24'
+					stroke='currentColor'
+				>
+					<title>Button icon</title>
+					<rect
+						x='6'
+						y='8'
+						width='12'
+						height='8'
+						rx='1'
+						strokeWidth='1.5'
+					/>
+					<path
+						d='M10 12h4'
+						strokeWidth='1.5'
+						strokeLinecap='round'
+					/>
+				</svg>
+			);
+		case 'Image':
+			return (
+				<svg
+					className='w-6 h-6'
+					fill='none'
+					viewBox='0 0 24 24'
+					stroke='currentColor'
+				>
+					<title>Image icon</title>
+					<rect
+						x='4'
+						y='4'
+						width='16'
+						height='16'
+						rx='2'
+						strokeWidth='1.5'
+					/>
+					<circle
+						cx='9'
+						cy='9'
+						r='1.5'
+						fill='currentColor'
+					/>
+					<path
+						d='M4 16l6-6 10 10'
+						strokeWidth='1.5'
+						strokeLinecap='round'
+						strokeLinejoin='round'
+					/>
+				</svg>
+			);
 		default:
 			return (
 				<svg
