@@ -27,7 +27,7 @@ export function ColumnBlock({
 			blockType='Column'
 			additionalStyles={{
 				flex: block.props.width === 'auto' ? 1 : `0 0 ${block.props.width}`,
-				minWidth: 0, // Prevent flex overflow
+				minWidth: 0,
 			}}
 			emptyMessage='Empty Column'
 			onSelect={onSelect}

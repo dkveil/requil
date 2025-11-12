@@ -22,7 +22,7 @@ export function SettingsSidebar() {
 	const t = useTranslations('editor.settingsSidebar');
 	const { selectedBlock, document, updateBlock } = useCanvas();
 	const [expandedSections, setExpandedSections] = useState<Set<string>>(
-		new Set(['spacing', 'typography', 'fill', 'style'])
+		new Set(['content', 'spacing', 'typography', 'fill', 'style'])
 	);
 
 	const toggleSection = (section: string) => {

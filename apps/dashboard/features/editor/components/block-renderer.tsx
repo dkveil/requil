@@ -406,19 +406,29 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 		}
 	})();
 
-	// Wrap with BlockActions if selected and not Root
 	if (isSelected && block.type !== 'Root' && isCanvas) {
 		const canMoveUp = siblingIndex > 0;
 		const canMoveDown = siblingIndex < siblingCount - 1;
 
-		// For Column blocks, preserve flex layout
-		const wrapperStyle =
-			block.type === 'Column'
-				? { flex: 1, minWidth: 0, position: 'relative' as const }
-				: { position: 'relative' as const };
+		const isBlockWithWidth =
+			typeof block.props.width === 'number' ||
+			typeof block.props.width === 'string';
+
+		let wrapperClassName = 'block-wrapper-other';
+		wrapperClassName = isBlockWithWidth
+			? 'block-wrapper-column-explicit'
+			: 'block-wrapper-column-flex';
 
 		return (
-			<div style={wrapperStyle}>
+			<div
+				className={wrapperClassName}
+				style={{
+					position: 'relative',
+					width: isBlockWithWidth
+						? (block.props.width as string | number)
+						: 'auto',
+				}}
+			>
 				{blockContent}
 				<BlockActions
 					blockId={block.id}

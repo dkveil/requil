@@ -169,3 +169,23 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+@layer components {
+	.block-wrapper-column-flex {
+		@apply relative flex-1;
+	}
+
+	.block-wrapper-column-explicit {
+		@apply relative;
+	}
+
+	.block-wrapper-other {
+		@apply relative;
+	}
+}
+
+.block-wrapper-column-explicit {
+	& > [data-block-type] {
+		width: 100% !important;
+	}
+}
