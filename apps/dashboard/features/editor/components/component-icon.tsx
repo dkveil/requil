@@ -1,15 +1,22 @@
-// Icon component for each block type
-export function ComponentIcon({ type }: { type: string }) {
+import { cn } from '@/lib/utils';
+
+type ComponentIconProps = {
+	type: string;
+	title?: string;
+	className?: string;
+};
+
+export function ComponentIcon({ type, title, className }: ComponentIconProps) {
 	switch (type) {
 		case 'Container':
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Container icon</title>
+					<title>{title || 'Container icon'}</title>
 					<rect
 						x='4'
 						y='4'
@@ -23,12 +30,12 @@ export function ComponentIcon({ type }: { type: string }) {
 		case 'Section':
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Section icon</title>
+					<title>{title || 'Section icon'}</title>
 					<rect
 						x='3'
 						y='6'
@@ -49,12 +56,12 @@ export function ComponentIcon({ type }: { type: string }) {
 		case 'Columns':
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Columns icon</title>
+					<title>{title || 'Columns icon'}</title>
 					<rect
 						x='4'
 						y='4'
@@ -76,12 +83,12 @@ export function ComponentIcon({ type }: { type: string }) {
 		case 'Column':
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Column icon</title>
+					<title>{title || 'Column icon'}</title>
 					<rect
 						x='7'
 						y='4'
@@ -95,12 +102,12 @@ export function ComponentIcon({ type }: { type: string }) {
 		case 'Spacer':
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Spacer icon</title>
+					<title>{title || 'Spacer icon'}</title>
 					<line
 						x1='4'
 						y1='12'
@@ -114,12 +121,12 @@ export function ComponentIcon({ type }: { type: string }) {
 		case 'Divider':
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Divider icon</title>
+					<title>{title || 'Divider icon'}</title>
 					<line
 						x1='4'
 						y1='12'
@@ -132,12 +139,12 @@ export function ComponentIcon({ type }: { type: string }) {
 		case 'Text':
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Text icon</title>
+					<title>{title || 'Text icon'}</title>
 					<path
 						d='M4 6h16M4 12h16M4 18h10'
 						strokeWidth='1.5'
@@ -148,12 +155,12 @@ export function ComponentIcon({ type }: { type: string }) {
 		case 'Heading':
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Heading icon</title>
+					<title>{title || 'Heading icon'}</title>
 					<path
 						d='M4 6v12M20 6v12M4 12h16'
 						strokeWidth='1.5'
@@ -164,12 +171,12 @@ export function ComponentIcon({ type }: { type: string }) {
 		case 'Button':
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Button icon</title>
+					<title>{title || 'Button icon'}</title>
 					<rect
 						x='6'
 						y='8'
@@ -188,12 +195,12 @@ export function ComponentIcon({ type }: { type: string }) {
 		case 'Image':
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Image icon</title>
+					<title>{title || 'Image icon'}</title>
 					<rect
 						x='4'
 						y='4'
@@ -219,12 +226,12 @@ export function ComponentIcon({ type }: { type: string }) {
 		default:
 			return (
 				<svg
-					className='w-6 h-6'
+					className={cn('w-6 h-6', className)}
 					fill='none'
 					viewBox='0 0 24 24'
 					stroke='currentColor'
 				>
-					<title>Component icon</title>
+					<title>{title || 'Component icon'}</title>
 					<rect
 						x='4'
 						y='4'

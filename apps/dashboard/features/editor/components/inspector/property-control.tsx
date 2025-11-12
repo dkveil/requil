@@ -108,6 +108,8 @@ export function PropertyControl({
 			);
 
 		case 'text':
+		// TODO: Add image control
+		case 'image':
 			return (
 				<div className='space-y-2'>
 					<Label className='text-xs text-muted-foreground'>{field.label}</Label>

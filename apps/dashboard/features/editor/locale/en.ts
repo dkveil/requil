@@ -19,6 +19,7 @@ export const editorEnLocales = {
 		noDocumentAvailable: 'No document available',
 		elementsSidebar: {
 			addElements: 'Add elements',
+			layers: 'Layers',
 			search: 'Search',
 			category: 'Category',
 			component: 'Component',
@@ -61,6 +62,9 @@ export const editorEnLocales = {
 			blockType: 'Block Type',
 			backgroundColor: 'Background Color',
 			animationComingSoon: 'Animation coming soon...',
+		},
+		layersPanel: {
+			noDocument: 'No document available',
 		},
 		movedBlock: 'Block moved successfully',
 		blockActions: {

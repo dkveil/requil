@@ -36,7 +36,7 @@ export function BlockActions({
 						e.stopPropagation();
 						onSelectParent?.();
 					}}
-					title={t('editor.blockActions.selectParent')}
+					title={t('selectParent')}
 				>
 					<ChevronUp className='h-3 w-3' />
 				</Button>
@@ -50,7 +50,7 @@ export function BlockActions({
 					if (canMoveUp) onMoveUp?.();
 				}}
 				disabled={!canMoveUp}
-				title={t('editor.blockActions.moveUp')}
+				title={t('moveUp')}
 			>
 				<ArrowUp className='h-3 w-3' />
 			</Button>
@@ -66,7 +66,7 @@ export function BlockActions({
 					if (canMoveDown) onMoveDown?.();
 				}}
 				disabled={!canMoveDown}
-				title={t('editor.blockActions.moveDown')}
+				title={t('moveDown')}
 			>
 				<ArrowDown className='h-3 w-3' />
 			</Button>
@@ -78,7 +78,7 @@ export function BlockActions({
 					e.stopPropagation();
 					onDelete?.();
 				}}
-				title={t('editor.blockActions.delete')}
+				title={t('delete')}
 			>
 				<Trash2 className='h-3 w-3' />
 			</Button>

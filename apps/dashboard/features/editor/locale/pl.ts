@@ -19,6 +19,7 @@ export const editorPlLocales = {
 		noDocumentAvailable: 'Brak dokumentu',
 		elementsSidebar: {
 			addElements: 'Dodaj elementy',
+			layers: 'Warstwy',
 			search: 'Szukaj',
 			category: 'Kategoria',
 			component: 'Element',
