@@ -1,7 +1,7 @@
 export const authPlLocales = {
 	auth: {
 		login: {
-			title: 'Zaloguj się',
+			title: 'Zaloguj się do swojego konta',
 			subtitle: 'Wprowadź swój email, aby zalogować się do konta',
 			email: 'Email',
 			emailPlaceholder: 'twoj@email.com',
@@ -9,7 +9,15 @@ export const authPlLocales = {
 			passwordPlaceholder: '••••••••',
 			forgotPassword: 'Zapomniałeś hasła?',
 			noAccount: 'Nie masz konta?',
-			success: 'Witaj ponownie!',
+			processingAuthorization: 'Przetwarzanie autoryzacji...',
+			pleaseWait: 'Proszę czekać, logowanie trwa',
+			authorizationFailed: 'Autoryzacja nie powiodła się',
+			authorizationFailedDescription: 'Spróbuj ponownie',
+			authorizationFailedRedirecting: 'Przekierowanie do strony logowania...',
+			authorizationFailedRedirectingDescription: 'Spróbuj ponownie',
+			authorizationFailedRedirectingTimeoutDescription: 'Spróbuj ponownie',
+			authorizationFailedRedirectingTimeout:
+				'Przekierowanie do strony logowania...',
 			failed: 'Logowanie nie powiodło się',
 			errors: {
 				invalidCredentials: 'Nieprawidłowy email lub hasło',

@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
 	Select,
@@ -60,6 +61,12 @@ export function SettingsSidebar() {
 		});
 	};
 
+	const handleNameChange = (value: string) => {
+		updateBlock(blockToEdit.id, {
+			name: value || undefined,
+		});
+	};
+
 	return (
 		<div className='w-80 border-l h-full bg-card flex flex-col overflow-auto'>
 			{/* Tabs */}
@@ -94,23 +101,39 @@ export function SettingsSidebar() {
 							onToggle={() => toggleSection('selector')}
 							showToggle={false}
 						>
-							<div className='space-y-2'>
-								<Label className='text-xs text-muted-foreground'>
-									{t('blockType')}
-								</Label>
-								<Select
-									value={blockToEdit.type}
-									disabled
-								>
-									<SelectTrigger className='w-full'>
-										<SelectValue />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value={blockToEdit.type}>
-											{blockToEdit.type}
-										</SelectItem>
-									</SelectContent>
-								</Select>
+							<div className='space-y-3'>
+								{/* Block Name */}
+								<div className='space-y-2'>
+									<Label className='text-xs text-muted-foreground'>
+										{t('blockName')}
+									</Label>
+									<Input
+										value={blockToEdit.name || ''}
+										onChange={(e) => handleNameChange(e.target.value)}
+										placeholder={componentDef?.name || blockToEdit.type}
+										className='w-full'
+									/>
+								</div>
+
+								{/* Block Type */}
+								<div className='space-y-2'>
+									<Label className='text-xs text-muted-foreground'>
+										{t('blockType')}
+									</Label>
+									<Select
+										value={blockToEdit.type}
+										disabled
+									>
+										<SelectTrigger className='w-full'>
+											<SelectValue />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value={blockToEdit.type}>
+												{blockToEdit.type}
+											</SelectItem>
+										</SelectContent>
+									</Select>
+								</div>
 							</div>
 						</Section>
 

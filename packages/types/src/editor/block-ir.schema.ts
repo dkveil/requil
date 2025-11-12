@@ -3,6 +3,7 @@ import { z } from 'zod';
 export type Block = {
 	id: string;
 	type: string;
+	name?: string;
 	props: Record<string, unknown>;
 	children?: Block[];
 	slots?: Record<string, Block[]>;
@@ -12,6 +13,7 @@ export const BlockSchema: z.ZodType<Block> = z.lazy(() =>
 	z.object({
 		id: z.uuid(),
 		type: z.string(),
+		name: z.string().optional(),
 		props: z.record(z.string(), z.unknown()),
 		children: z.array(BlockSchema).optional(),
 		slots: z.record(z.string(), z.array(BlockSchema)).optional(),

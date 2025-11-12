@@ -59,6 +59,7 @@ export const editorEnLocales = {
 				fill: 'Fill',
 				properties: 'Properties',
 			},
+			blockName: 'Block Name',
 			blockType: 'Block Type',
 			backgroundColor: 'Background Color',
 			animationComingSoon: 'Animation coming soon...',

@@ -132,7 +132,7 @@ function LayerTreeNode({ block, level }: LayerTreeNodeProps) {
 						isSelected ? 'text-foreground font-medium' : 'text-foreground/80'
 					)}
 				>
-					{component?.name || block.type}
+					{block.name || component?.name || block.type}
 				</span>
 
 				{/* Delete Button */}

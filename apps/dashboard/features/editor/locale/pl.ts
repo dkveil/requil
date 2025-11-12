@@ -59,6 +59,7 @@ export const editorPlLocales = {
 				fill: 'Wypełnienie',
 				properties: 'Właściwości',
 			},
+			blockName: 'Nazwa bloku',
 			blockType: 'Typ bloku',
 			backgroundColor: 'Kolor tła',
 			animationComingSoon: 'Animacje wkrótce...',
