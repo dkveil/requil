@@ -27,6 +27,10 @@ export function ContainerBlock({
 	onHover,
 	selectedBlockId,
 	hoveredBlockId,
+	onMoveUp,
+	onMoveDown,
+	onDelete,
+	onSelectParent,
 }: ContainerBlockProps) {
 	const isEmpty = !block.children || block.children.length === 0;
 	const [isDropZoneOver, setIsDropZoneOver] = useState(false);
@@ -102,7 +106,11 @@ export function ContainerBlock({
 					onSelect,
 					onHover,
 					selectedBlockId,
-					hoveredBlockId
+					hoveredBlockId,
+					onMoveUp,
+					onMoveDown,
+					onDelete,
+					onSelectParent
 				)
 			)}
 		</Element>

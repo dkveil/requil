@@ -23,6 +23,9 @@ export function useCanvas() {
 	const addBlock = useCanvasStore((state) => state.addBlock);
 	const removeBlock = useCanvasStore((state) => state.removeBlock);
 	const moveBlock = useCanvasStore((state) => state.moveBlock);
+	const moveBlockUp = useCanvasStore((state) => state.moveBlockUp);
+	const moveBlockDown = useCanvasStore((state) => state.moveBlockDown);
+	const selectParentBlock = useCanvasStore((state) => state.selectParentBlock);
 	const duplicateBlock = useCanvasStore((state) => state.duplicateBlock);
 
 	const undo = useCanvasStore((state) => state.undo);
@@ -64,6 +67,9 @@ export function useCanvas() {
 		addBlock,
 		removeBlock,
 		moveBlock,
+		moveBlockUp,
+		moveBlockDown,
+		selectParentBlock,
 		duplicateBlock,
 
 		// History

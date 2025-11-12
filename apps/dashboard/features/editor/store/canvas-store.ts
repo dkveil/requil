@@ -38,6 +38,9 @@ interface CanvasActions {
 	addBlock: (parentId: string, block: Block, position?: number) => void;
 	removeBlock: (blockId: string) => void;
 	moveBlock: (blockId: string, newParentId: string, position: number) => void;
+	moveBlockUp: (blockId: string) => void;
+	moveBlockDown: (blockId: string) => void;
+	selectParentBlock: (blockId: string) => void;
 	duplicateBlock: (blockId: string) => void;
 
 	// History actions
@@ -191,6 +194,92 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 					},
 					isModified: true,
 				});
+			},
+
+			// Move block up in its parent's children
+			moveBlockUp: (blockId) => {
+				const { document, history } = get();
+				if (!document) return;
+				if (!history) return;
+
+				const parent = findParentOfBlock(document.root, blockId);
+				if (!parent) return;
+				if (!parent.children) return;
+
+				const currentIndex = parent.children.findIndex((b) => b.id === blockId);
+				if (currentIndex <= 0) return; // Already at top or not found
+
+				// Use moveBlock to swap positions
+				const block = parent.children[currentIndex];
+				if (!block) return;
+
+				// Remove from old location
+				let newRoot = removeBlockFromTree(document.root, blockId);
+				if (!newRoot) return;
+
+				// Add at new position (one up)
+				newRoot = addBlockToTree(newRoot, parent.id, block, currentIndex - 1);
+
+				const newDoc = { ...document, root: newRoot };
+
+				set({
+					document: newDoc,
+					history: {
+						past: [...history.past, history.present],
+						present: newDoc,
+						future: [],
+					},
+					isModified: true,
+				});
+			},
+
+			// Move block down in its parent's children
+			moveBlockDown: (blockId) => {
+				const { document, history } = get();
+				if (!document) return;
+				if (!history) return;
+
+				const parent = findParentOfBlock(document.root, blockId);
+				if (!parent) return;
+				if (!parent.children) return;
+
+				const currentIndex = parent.children.findIndex((b) => b.id === blockId);
+				if (currentIndex === -1) return; // Not found
+				if (currentIndex >= parent.children.length - 1) return; // Already at bottom
+
+				// Use moveBlock to swap positions
+				const block = parent.children[currentIndex];
+				if (!block) return;
+
+				// Remove from old location
+				let newRoot = removeBlockFromTree(document.root, blockId);
+				if (!newRoot) return;
+
+				// Add at new position (one down)
+				newRoot = addBlockToTree(newRoot, parent.id, block, currentIndex + 1);
+
+				const newDoc = { ...document, root: newRoot };
+
+				set({
+					document: newDoc,
+					history: {
+						past: [...history.past, history.present],
+						present: newDoc,
+						future: [],
+					},
+					isModified: true,
+				});
+			},
+
+			// Select parent block
+			selectParentBlock: (blockId) => {
+				const { document } = get();
+				if (!document) return;
+
+				const parent = findParentOfBlock(document.root, blockId);
+				if (parent) {
+					set({ selectedBlockId: parent.id });
+				}
 			},
 
 			// Duplicate a block

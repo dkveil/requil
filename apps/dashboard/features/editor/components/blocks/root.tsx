@@ -19,6 +19,10 @@ export function RootBlock({
 	onHover,
 	selectedBlockId,
 	hoveredBlockId,
+	onMoveUp,
+	onMoveDown,
+	onDelete,
+	onSelectParent,
 }: RootBlockProps) {
 	const { setNodeRef, isOver } = useDroppable({
 		id: `block-${block.id}`,
@@ -40,7 +44,6 @@ export function RootBlock({
 				width: '600px',
 				minHeight: !children.length ? '400px' : undefined,
 				margin: '0 auto',
-				overflow: 'hidden',
 			}}
 			className={cn(
 				(interactionProps as { className?: string }).className,
@@ -55,7 +58,11 @@ export function RootBlock({
 				onSelect,
 				onHover,
 				selectedBlockId,
-				hoveredBlockId
+				hoveredBlockId,
+				onMoveUp,
+				onMoveDown,
+				onDelete,
+				onSelectParent
 			)}
 
 			{!children.length && isCanvas && (

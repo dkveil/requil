@@ -2,6 +2,7 @@ import { useDraggable } from '@dnd-kit/core';
 import type { Block } from '@requil/types';
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { BlockActions } from './block-actions';
 import {
 	ButtonBlock,
 	ColumnBlock,
@@ -24,6 +25,13 @@ export interface BlockRendererProps {
 	onHover?: (blockId: string | null) => void;
 	selectedBlockId?: string | null;
 	hoveredBlockId?: string | null;
+	onMoveUp?: (blockId: string) => void;
+	onMoveDown?: (blockId: string) => void;
+	onDelete?: (blockId: string) => void;
+	onSelectParent?: (blockId: string) => void;
+	parentId?: string | null;
+	siblingIndex?: number;
+	siblingCount?: number;
 }
 
 // Helper function to render children with drop zones
@@ -33,7 +41,11 @@ export function renderChildrenWithDropZones(
 	onSelect?: (blockId: string) => void,
 	onHover?: (blockId: string | null) => void,
 	selectedBlockId?: string | null,
-	hoveredBlockId?: string | null
+	hoveredBlockId?: string | null,
+	onMoveUp?: (blockId: string) => void,
+	onMoveDown?: (blockId: string) => void,
+	onDelete?: (blockId: string) => void,
+	onSelectParent?: (blockId: string) => void
 ) {
 	const children = block.children || [];
 
@@ -56,6 +68,13 @@ export function renderChildrenWithDropZones(
 						onHover={onHover}
 						selectedBlockId={selectedBlockId}
 						hoveredBlockId={hoveredBlockId}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+						onSelectParent={onSelectParent}
+						parentId={block.id}
+						siblingIndex={index}
+						siblingCount={children.length}
 					/>
 					{isCanvas && (
 						<DropZone
@@ -77,6 +96,13 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 	onHover,
 	selectedBlockId,
 	hoveredBlockId,
+	onMoveUp,
+	onMoveDown,
+	onDelete,
+	onSelectParent,
+	parentId,
+	siblingIndex = 0,
+	siblingCount = 1,
 }) => {
 	const isSelected = isCanvas && selectedBlockId === block.id;
 	const isHovered = isCanvas && hoveredBlockId === block.id && !isSelected;
@@ -151,184 +177,272 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 				}
 			: interactionProps;
 
-	switch (block.type) {
-		case 'Root':
-			return (
-				<RootBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+	// Calculate if block can move up/down
+	// This would require parent's children info, which we'll compute when needed
+	// For now, we'll pass the handlers and let BlockActions determine if enabled
 
-		case 'Container':
-			return (
-				<ContainerBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					blockType='Container'
-					additionalStyles={{
-						maxWidth: (block.props.maxWidth as number | undefined) || 600,
-						width: block.props.fullWidth ? '100%' : 'auto',
-						margin: '0 auto',
-					}}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+	const blockContent = (() => {
+		switch (block.type) {
+			case 'Root':
+				return (
+					<RootBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
 
-		case 'Section':
-			return (
-				<SectionBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+			case 'Container':
+				return (
+					<ContainerBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						blockType='Container'
+						additionalStyles={{
+							maxWidth: (block.props.maxWidth as number | undefined) || 600,
+							width: block.props.fullWidth ? '100%' : 'auto',
+							margin: '0 auto',
+						}}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
 
-		case 'Columns':
-			return (
-				<ColumnsBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+			case 'Section':
+				return (
+					<SectionBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
 
-		case 'Column':
-			return (
-				<ColumnBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+			case 'Columns':
+				return (
+					<ColumnsBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
 
-		case 'Spacer':
-			return (
-				<SpacerBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+			case 'Column':
+				return (
+					<ColumnBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
 
-		case 'Divider':
-			return (
-				<DividerBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+			case 'Spacer':
+				return (
+					<SpacerBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
 
-		case 'Text':
-			return (
-				<TextBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+			case 'Divider':
+				return (
+					<DividerBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
 
-		case 'Heading':
-			return (
-				<HeadingBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+			case 'Text':
+				return (
+					<TextBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
 
-		case 'Button':
-			return (
-				<ButtonBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+			case 'Heading':
+				return (
+					<HeadingBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
 
-		case 'Image':
-			return (
-				<ImageBlock
-					block={block}
-					isCanvas={isCanvas}
-					styles={styles}
-					interactionProps={combinedInteractionProps}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-				/>
-			);
+			case 'Button':
+				return (
+					<ButtonBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
 
-		default:
-			return (
-				<div
-					{...interactionProps}
-					className={cn(
-						interactionProps.className,
-						'border border-red-500 bg-red-50 p-4'
-					)}
-					data-block-type='Unknown'
-					data-block-id={block.id}
-				>
-					<div className='text-red-600 text-sm'>
-						Unknown block type: {block.type}
+			case 'Image':
+				return (
+					<ImageBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
+
+			default:
+				return (
+					<div
+						{...interactionProps}
+						className={cn(
+							interactionProps.className,
+							'border border-red-500 bg-red-50 p-4'
+						)}
+						data-block-type='Unknown'
+						data-block-id={block.id}
+					>
+						<div className='text-red-600 text-sm'>
+							Unknown block type: {block.type}
+						</div>
 					</div>
-				</div>
-			);
+				);
+		}
+	})();
+
+	// Wrap with BlockActions if selected and not Root
+	if (isSelected && block.type !== 'Root' && isCanvas) {
+		const canMoveUp = siblingIndex > 0;
+		const canMoveDown = siblingIndex < siblingCount - 1;
+
+		// For Column blocks, preserve flex layout
+		const wrapperStyle =
+			block.type === 'Column'
+				? { flex: 1, minWidth: 0, position: 'relative' as const }
+				: { position: 'relative' as const };
+
+		return (
+			<div style={wrapperStyle}>
+				{blockContent}
+				<BlockActions
+					blockId={block.id}
+					onMoveUp={() => {
+						onMoveUp?.(block.id);
+					}}
+					onMoveDown={() => {
+						onMoveDown?.(block.id);
+					}}
+					onDelete={() => {
+						onDelete?.(block.id);
+					}}
+					onSelectParent={() => {
+						onSelectParent?.(block.id);
+					}}
+					canMoveUp={canMoveUp}
+					canMoveDown={canMoveDown}
+					hasParent={!!parentId}
+				/>
+			</div>
+		);
 	}
+
+	return blockContent;
 };
 
 // Helper function to convert block props to CSS styles

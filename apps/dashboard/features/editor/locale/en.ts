@@ -63,5 +63,11 @@ export const editorEnLocales = {
 			animationComingSoon: 'Animation coming soon...',
 		},
 		movedBlock: 'Block moved successfully',
+		blockActions: {
+			selectParent: 'Select parent',
+			moveUp: 'Move up',
+			moveDown: 'Move down',
+			delete: 'Delete',
+		},
 	},
 };

@@ -63,5 +63,11 @@ export const editorPlLocales = {
 			animationComingSoon: 'Animacje wkrótce...',
 		},
 		movedBlock: 'Blok przeniesiony pomyślnie',
+		blockActions: {
+			selectParent: 'Wybierz rodzica',
+			moveUp: 'Przesuń w górę',
+			moveDown: 'Przesuń w dół',
+			delete: 'Usuń',
+		},
 	},
 };

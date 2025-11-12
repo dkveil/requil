@@ -10,6 +10,10 @@ export function ColumnBlock({
 	onHover,
 	selectedBlockId,
 	hoveredBlockId,
+	onMoveUp,
+	onMoveDown,
+	onDelete,
+	onSelectParent,
 }: BlockRendererProps & {
 	styles: React.CSSProperties;
 	interactionProps: Record<string, unknown>;
@@ -30,6 +34,10 @@ export function ColumnBlock({
 			onHover={onHover}
 			selectedBlockId={selectedBlockId}
 			hoveredBlockId={hoveredBlockId}
+			onMoveUp={onMoveUp}
+			onMoveDown={onMoveDown}
+			onDelete={onDelete}
+			onSelectParent={onSelectParent}
 		/>
 	);
 }

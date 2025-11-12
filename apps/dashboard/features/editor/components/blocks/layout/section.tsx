@@ -1,7 +1,4 @@
-import {
-	BlockRendererProps,
-	renderChildrenWithDropZones,
-} from '../../block-renderer';
+import { BlockRendererProps } from '../../block-renderer';
 import { ContainerBlock } from './container';
 
 export function SectionBlock({
@@ -13,6 +10,10 @@ export function SectionBlock({
 	onHover,
 	selectedBlockId,
 	hoveredBlockId,
+	onMoveUp,
+	onMoveDown,
+	onDelete,
+	onSelectParent,
 }: BlockRendererProps & {
 	styles: React.CSSProperties;
 	interactionProps: Record<string, unknown>;
@@ -36,6 +37,10 @@ export function SectionBlock({
 			onHover={onHover}
 			selectedBlockId={selectedBlockId}
 			hoveredBlockId={hoveredBlockId}
+			onMoveUp={onMoveUp}
+			onMoveDown={onMoveDown}
+			onDelete={onDelete}
+			onSelectParent={onSelectParent}
 		/>
 	);
 }

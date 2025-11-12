@@ -15,6 +15,10 @@ export function Canvas() {
 		setDocument,
 		selectBlock,
 		hoverBlock,
+		moveBlockUp,
+		moveBlockDown,
+		removeBlock,
+		selectParentBlock,
 	} = useCanvas();
 
 	// Initialize keyboard shortcuts
@@ -64,6 +68,11 @@ export function Canvas() {
 						onHover={hoverBlock}
 						selectedBlockId={selectedBlockId}
 						hoveredBlockId={hoveredBlockId}
+						onMoveUp={moveBlockUp}
+						onMoveDown={moveBlockDown}
+						onDelete={removeBlock}
+						onSelectParent={selectParentBlock}
+						parentId={null}
 					/>
 				</div>
 			</div>

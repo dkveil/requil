@@ -53,7 +53,7 @@ export function DropZone({
 								? 'h-12 my-2 bg-primary/20 border-2 border-dashed border-primary rounded'
 								: isDragging
 									? 'h-8 my-1 opacity-30 bg-primary/10 border border-dashed border-primary/30 rounded'
-									: 'h-2 opacity-0 hover:opacity-50 hover:bg-primary/10',
+									: 'h-0 opacity-0 hover:opacity-50 hover:bg-primary/10',
 							isDraggingCanvasBlock &&
 								isOver &&
 								'bg-blue-500/20 border-blue-500'

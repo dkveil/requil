@@ -70,9 +70,6 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 				const currentUrl = window.location.origin;
 				const callbackUrl = `${currentUrl}${DASHBOARD_ROUTES.AUTH.OAUTH_CALLBACK}`;
 
-				console.log('callbackUrl', callbackUrl);
-				console.log('provider', provider);
-
 				const { url } = await authApi.getOAuthUrl(provider, callbackUrl);
 
 				return url;
