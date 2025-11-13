@@ -29,7 +29,7 @@ const headingFields = [
 
 const headingContentGroup = {
 	id: 'content',
-	label: 'Content',
+	label: 'Heading',
 	fields: ['content', 'level'],
 };
 

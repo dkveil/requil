@@ -7,6 +7,7 @@ import { BlockActions } from './block-actions';
 import { Button as ButtonBlock } from './content/button/button';
 import { Heading as HeadingBlock } from './content/heading/heading';
 import { Image as ImageBlock } from './content/image/image';
+import { SocialIcons as SocialIconsBlock } from './content/social-icons/social-icons';
 import { Text as TextBlock } from './content/text/text';
 import { DropZone } from './drop-zone';
 import { Block } from './layout/block/block';
@@ -365,6 +366,24 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 			case 'Image':
 				return (
 					<ImageBlock
+						block={block}
+						isCanvas={isCanvas}
+						styles={styles}
+						interactionProps={combinedInteractionProps}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onSelectParent={onSelectParent}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+					/>
+				);
+
+			case 'SocialIcons':
+				return (
+					<SocialIconsBlock
 						block={block}
 						isCanvas={isCanvas}
 						styles={styles}
