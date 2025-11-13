@@ -3,14 +3,14 @@ import { cn } from '@/lib/utils';
 import {
 	BlockRendererProps,
 	renderChildrenWithDropZones,
-} from '../block-renderer';
+} from '../../block-renderer';
 
 interface RootBlockProps extends BlockRendererProps {
 	styles: React.CSSProperties;
 	interactionProps: Record<string, unknown>;
 }
 
-export function RootBlock({
+export function Root({
 	block,
 	isCanvas,
 	styles,

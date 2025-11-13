@@ -1,6 +1,6 @@
 import { BlockRendererProps } from '../../block-renderer';
 
-export function ImageBlock({
+export function Image({
 	block,
 	isCanvas,
 	styles,

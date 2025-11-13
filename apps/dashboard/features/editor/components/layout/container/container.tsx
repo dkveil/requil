@@ -1,7 +1,7 @@
 import { BlockRendererProps } from '../../block-renderer';
-import { ContainerBlock } from './container';
+import { ContainerBlock } from './container-block';
 
-export function ColumnBlock({
+export function Container({
 	block,
 	isCanvas,
 	styles,
@@ -24,12 +24,11 @@ export function ColumnBlock({
 			isCanvas={isCanvas}
 			styles={styles}
 			interactionProps={interactionProps}
-			blockType='Column'
+			blockType='Container'
 			additionalStyles={{
-				flex: block.props.width === 'auto' ? 1 : `0 0 ${block.props.width}`,
-				minWidth: 0,
+				maxWidth: block.props.fullWidth ? '100%' : `${block.props.maxWidth}px`,
+				margin: '0 auto',
 			}}
-			emptyMessage='Empty Column'
 			onSelect={onSelect}
 			onHover={onHover}
 			selectedBlockId={selectedBlockId}

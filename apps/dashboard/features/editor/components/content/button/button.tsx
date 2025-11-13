@@ -1,6 +1,6 @@
 import { BlockRendererProps } from '../../block-renderer';
 
-export function ButtonBlock({
+export function Button({
 	block,
 	isCanvas,
 	styles,

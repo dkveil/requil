@@ -1,6 +1,6 @@
 import { BlockRendererProps } from '../../block-renderer';
 
-export function SpacerBlock({
+export function Spacer({
 	block,
 	isCanvas,
 	styles,

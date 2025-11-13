@@ -3,20 +3,18 @@ import type { BlockIR } from '@requil/types';
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { BlockActions } from './block-actions';
-import {
-	Block,
-	ButtonBlock,
-	ColumnBlock,
-	ColumnsBlock,
-	ContainerBlock,
-	DividerBlock,
-	HeadingBlock,
-	ImageBlock,
-	RootBlock,
-	SpacerBlock,
-	TextBlock,
-} from './blocks';
+import { Button as ButtonBlock } from './content/button/button';
+import { Heading as HeadingBlock } from './content/heading/heading';
+import { Image as ImageBlock } from './content/image/image';
+import { Text as TextBlock } from './content/text/text';
 import { DropZone } from './drop-zone';
+import { Block } from './layout/block/block';
+import { Column as ColumnBlock } from './layout/column/column';
+import { Columns as ColumnsBlock } from './layout/columns/columns';
+import { Container as ContainerBlock } from './layout/container/container';
+import { Divider as DividerBlock } from './layout/divider/divider';
+import { Root as RootBlock } from './layout/root/root';
+import { Spacer as SpacerBlock } from './layout/spacer/spacer';
 
 export interface BlockRendererProps {
 	block: BlockIR;
@@ -208,12 +206,6 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 						isCanvas={isCanvas}
 						styles={styles}
 						interactionProps={combinedInteractionProps}
-						blockType='Container'
-						additionalStyles={{
-							maxWidth: (block.props.maxWidth as number | undefined) || 600,
-							width: block.props.fullWidth ? '100%' : 'auto',
-							margin: '0 auto',
-						}}
 						onSelect={onSelect}
 						onHover={onHover}
 						selectedBlockId={selectedBlockId}

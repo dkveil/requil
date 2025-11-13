@@ -2,8 +2,8 @@ import type {
 	ComponentCategory,
 	ComponentDefinition,
 } from '@requil/types/editor';
-import { CONTENT_COMPONENTS } from './content-components';
-import { LAYOUT_COMPONENTS } from './layout-components';
+import { CONTENT_COMPONENTS } from '../components/content';
+import { LAYOUT_COMPONENTS } from '../components/layout';
 
 // import { MEDIA_COMPONENTS } from './media-components'; // Future
 

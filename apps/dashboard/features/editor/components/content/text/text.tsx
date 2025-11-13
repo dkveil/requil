@@ -1,5 +1,6 @@
 import { BlockRendererProps } from '../../block-renderer';
-export function HeadingBlock({
+
+export function Text({
 	block,
 	isCanvas,
 	styles,
@@ -8,33 +9,34 @@ export function HeadingBlock({
 	styles: React.CSSProperties;
 	interactionProps: Record<string, unknown>;
 }) {
-	const content = (block.props.content as string) || 'Your Heading';
-	const level =
-		(block.props.level as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6') || 'h2';
-	const Tag = level;
+	const content = (block.props.content as string) || 'Enter your text here...';
 
 	return (
-		<Tag
+		<div
 			{...interactionProps}
 			style={{
 				...styles,
 				fontSize:
-					typeof block.props.fontSize === 'number' ? block.props.fontSize : 32,
+					typeof block.props.fontSize === 'number' ? block.props.fontSize : 14,
 				fontWeight:
 					typeof block.props.fontWeight === 'string'
 						? block.props.fontWeight
-						: 'bold',
+						: 'normal',
 				color:
 					typeof block.props.color === 'string' ? block.props.color : '#000000',
 				textAlign:
-					(block.props.textAlign as 'left' | 'center' | 'right') || 'left',
+					(block.props.textAlign as 'left' | 'center' | 'right' | 'justify') ||
+					'left',
+				lineHeight:
+					typeof block.props.lineHeight === 'number'
+						? block.props.lineHeight
+						: 1.5,
 				fontFamily: (block.props.fontFamily as string) || 'Arial, sans-serif',
-				margin: 0,
 			}}
-			data-block-type='Heading'
+			data-block-type='Text'
 			data-block-id={block.id}
 		>
 			{content}
-		</Tag>
+		</div>
 	);
 }

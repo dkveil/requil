@@ -1,6 +1,6 @@
 import { BlockRenderer, BlockRendererProps } from '../../block-renderer';
 
-export function ColumnsBlock({
+export function Columns({
 	block,
 	isCanvas,
 	styles,

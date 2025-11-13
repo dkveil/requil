@@ -1,7 +1,7 @@
 import { BlockRendererProps } from '../../block-renderer';
-import { ContainerBlock } from './container';
+import { ContainerBlock } from '../container/container-block';
 
-export function Block({
+export function Column({
 	block,
 	isCanvas,
 	styles,
@@ -24,15 +24,12 @@ export function Block({
 			isCanvas={isCanvas}
 			styles={styles}
 			interactionProps={interactionProps}
-			blockType='Block'
+			blockType='Column'
 			additionalStyles={{
-				width: block.props.fullWidth ? '100%' : 'auto',
-				backgroundImage: block.props.backgroundImage
-					? `url(${block.props.backgroundImage})`
-					: undefined,
-				backgroundSize: block.props.backgroundSize as string,
-				backgroundPosition: block.props.backgroundPosition as string,
+				flex: block.props.width === 'auto' ? 1 : `0 0 ${block.props.width}`,
+				minWidth: 0,
 			}}
+			emptyMessage='Empty Column'
 			onSelect={onSelect}
 			onHover={onHover}
 			selectedBlockId={selectedBlockId}
@@ -41,7 +38,6 @@ export function Block({
 			onMoveDown={onMoveDown}
 			onDelete={onDelete}
 			onSelectParent={onSelectParent}
-			emptyMessage={`Empty ${block.props.htmlTag} block - Drop elements here`}
 		/>
 	);
 }

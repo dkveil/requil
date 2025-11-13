@@ -1,6 +1,6 @@
 import { BlockRendererProps } from '../../block-renderer';
 
-export function DividerBlock({
+export function Divider({
 	block,
 	styles,
 	interactionProps,
