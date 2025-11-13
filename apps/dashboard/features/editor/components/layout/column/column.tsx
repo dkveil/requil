@@ -4,6 +4,8 @@ import { ContainerBlock } from '../container/container-block';
 export function Column({
 	block,
 	isCanvas,
+	viewport = 'desktop',
+	isStacked = false,
 	styles,
 	interactionProps,
 	onSelect,
@@ -22,11 +24,18 @@ export function Column({
 		<ContainerBlock
 			block={block}
 			isCanvas={isCanvas}
+			viewport={viewport}
+			isStacked={isStacked}
 			styles={styles}
 			interactionProps={interactionProps}
 			blockType='Column'
 			additionalStyles={{
-				flex: block.props.width === 'auto' ? 1 : `0 0 ${block.props.width}`,
+				flex: isStacked
+					? '1 1 100%'
+					: block.props.width === 'auto'
+						? 1
+						: `0 0 ${block.props.width}`,
+				width: isStacked ? '100%' : 'auto',
 				minWidth: 0,
 			}}
 			emptyMessage='Empty Column'

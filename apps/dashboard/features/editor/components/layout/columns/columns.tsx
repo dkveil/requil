@@ -3,6 +3,7 @@ import { BlockRenderer, BlockRendererProps } from '../../block-renderer';
 export function Columns({
 	block,
 	isCanvas,
+	viewport = 'desktop',
 	styles,
 	interactionProps,
 	onSelect,
@@ -17,12 +18,16 @@ export function Columns({
 	styles: React.CSSProperties;
 	interactionProps: Record<string, unknown>;
 }) {
+	const isMobile = viewport === 'mobile';
+	const shouldStack = isMobile && block.props.stackOnMobile !== false;
+
 	return (
 		<div
 			{...interactionProps}
 			style={{
 				...styles,
 				display: 'flex',
+				flexDirection: shouldStack ? 'column' : 'row',
 				gap: typeof block.props.gap === 'number' ? block.props.gap : 0,
 				alignItems:
 					block.props.verticalAlign === 'middle'
@@ -39,6 +44,8 @@ export function Columns({
 					key={child.id}
 					block={child}
 					isCanvas={isCanvas}
+					viewport={viewport}
+					isStacked={shouldStack}
 					onSelect={onSelect}
 					onHover={onHover}
 					selectedBlockId={selectedBlockId}

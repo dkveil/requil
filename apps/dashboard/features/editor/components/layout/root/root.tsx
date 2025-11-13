@@ -13,6 +13,7 @@ interface RootBlockProps extends BlockRendererProps {
 export function Root({
 	block,
 	isCanvas,
+	viewport = 'desktop',
 	styles,
 	interactionProps,
 	onSelect,
@@ -41,7 +42,8 @@ export function Root({
 			{...interactionProps}
 			style={{
 				...styles,
-				width: '600px',
+				width: viewport === 'mobile' ? '100%' : '600px',
+				maxWidth: viewport === 'mobile' ? '375px' : '600px',
 				minHeight: !children.length ? '400px' : undefined,
 				margin: '0 auto',
 			}}
@@ -55,6 +57,7 @@ export function Root({
 			{renderChildrenWithDropZones(
 				block,
 				isCanvas,
+				viewport,
 				onSelect,
 				onHover,
 				selectedBlockId,

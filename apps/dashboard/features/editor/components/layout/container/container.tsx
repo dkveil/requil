@@ -4,6 +4,8 @@ import { ContainerBlock } from './container-block';
 export function Container({
 	block,
 	isCanvas,
+	viewport = 'desktop',
+	isStacked = false,
 	styles,
 	interactionProps,
 	onSelect,
@@ -22,6 +24,8 @@ export function Container({
 		<ContainerBlock
 			block={block}
 			isCanvas={isCanvas}
+			viewport={viewport}
+			isStacked={isStacked}
 			styles={styles}
 			interactionProps={interactionProps}
 			blockType='Container'

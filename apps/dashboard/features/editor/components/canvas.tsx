@@ -64,6 +64,7 @@ export function Canvas() {
 					<BlockRenderer
 						block={document.root}
 						isCanvas={true}
+						viewport={viewport}
 						onSelect={selectBlock}
 						onHover={hoverBlock}
 						selectedBlockId={selectedBlockId}

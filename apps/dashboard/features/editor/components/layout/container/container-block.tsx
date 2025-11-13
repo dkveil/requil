@@ -13,11 +13,14 @@ interface ContainerBlockProps extends BlockRendererProps {
 	blockType: 'Container' | 'Block' | 'Column';
 	additionalStyles?: React.CSSProperties;
 	emptyMessage?: string;
+	isStacked?: boolean;
 }
 
 export function ContainerBlock({
 	block,
 	isCanvas,
+	viewport = 'desktop',
+	isStacked = false,
 	styles,
 	interactionProps,
 	blockType,
@@ -104,10 +107,10 @@ export function ContainerBlock({
 					</div>
 				</div>
 			) : (
-				// When not empty, render children with drop zones between them
 				renderChildrenWithDropZones(
 					block,
 					isCanvas,
+					viewport,
 					onSelect,
 					onHover,
 					selectedBlockId,

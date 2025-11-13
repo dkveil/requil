@@ -20,7 +20,9 @@ import { Spacer as SpacerBlock } from './layout/spacer/spacer';
 
 export interface BlockRendererProps {
 	block: BlockIR;
-	isCanvas?: boolean; // true = editor mode, false = preview mode
+	isCanvas?: boolean;
+	viewport?: 'desktop' | 'mobile';
+	isStacked?: boolean;
 	onSelect?: (blockId: string) => void;
 	onHover?: (blockId: string | null) => void;
 	selectedBlockId?: string | null;
@@ -38,6 +40,7 @@ export interface BlockRendererProps {
 export function renderChildrenWithDropZones(
 	block: BlockIR,
 	isCanvas = true,
+	viewport?: 'desktop' | 'mobile',
 	onSelect?: (blockId: string) => void,
 	onHover?: (blockId: string | null) => void,
 	selectedBlockId?: string | null,
@@ -64,6 +67,7 @@ export function renderChildrenWithDropZones(
 					<BlockRenderer
 						block={child}
 						isCanvas={isCanvas}
+						viewport={viewport}
 						onSelect={onSelect}
 						onHover={onHover}
 						selectedBlockId={selectedBlockId}
@@ -92,6 +96,8 @@ export function renderChildrenWithDropZones(
 export const BlockRenderer: React.FC<BlockRendererProps> = ({
 	block,
 	isCanvas = true,
+	viewport = 'desktop',
+	isStacked = false,
 	onSelect,
 	onHover,
 	selectedBlockId,
@@ -181,223 +187,60 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 	// This would require parent's children info, which we'll compute when needed
 	// For now, we'll pass the handlers and let BlockActions determine if enabled
 
+	const commonBlockProps = {
+		block,
+		isCanvas,
+		viewport,
+		isStacked,
+		styles,
+		interactionProps: combinedInteractionProps,
+		onSelect,
+		onHover,
+		selectedBlockId,
+		hoveredBlockId,
+		onSelectParent,
+		onMoveUp,
+		onMoveDown,
+		onDelete,
+	};
+
 	const blockContent = (() => {
 		switch (block.type) {
 			case 'Root':
-				return (
-					<RootBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <RootBlock {...commonBlockProps} />;
 
 			case 'Container':
-				return (
-					<ContainerBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <ContainerBlock {...commonBlockProps} />;
 
 			case 'Block':
-				return (
-					<Block
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <Block {...commonBlockProps} />;
 
 			case 'Columns':
-				return (
-					<ColumnsBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <ColumnsBlock {...commonBlockProps} />;
 
 			case 'Column':
-				return (
-					<ColumnBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <ColumnBlock {...commonBlockProps} />;
 
 			case 'Spacer':
-				return (
-					<SpacerBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <SpacerBlock {...commonBlockProps} />;
 
 			case 'Divider':
-				return (
-					<DividerBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <DividerBlock {...commonBlockProps} />;
 
 			case 'Text':
-				return (
-					<TextBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <TextBlock {...commonBlockProps} />;
 
 			case 'Heading':
-				return (
-					<HeadingBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <HeadingBlock {...commonBlockProps} />;
 
 			case 'Button':
-				return (
-					<ButtonBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <ButtonBlock {...commonBlockProps} />;
 
 			case 'Image':
-				return (
-					<ImageBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <ImageBlock {...commonBlockProps} />;
 
 			case 'SocialIcons':
-				return (
-					<SocialIconsBlock
-						block={block}
-						isCanvas={isCanvas}
-						styles={styles}
-						interactionProps={combinedInteractionProps}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onSelectParent={onSelectParent}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-					/>
-				);
+				return <SocialIconsBlock {...commonBlockProps} />;
 
 			default:
 				return (
@@ -427,6 +270,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 			(typeof block.props.width === 'string' &&
 				block.props.width.includes('%'));
 
+		const isStackedColumn = isStacked && block.type === 'Column';
+
 		let wrapperClassName = 'block-wrapper-other';
 		wrapperClassName = isBlockWithWidth
 			? 'block-wrapper-column-explicit'
@@ -437,9 +282,11 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 				className={wrapperClassName}
 				style={{
 					position: 'relative',
-					width: isBlockWithWidth
-						? (block.props.width as string | number)
-						: 'auto',
+					width: isStackedColumn
+						? '100%'
+						: isBlockWithWidth
+							? (block.props.width as string | number)
+							: 'auto',
 				}}
 			>
 				{blockContent}
