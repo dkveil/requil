@@ -1,22 +1,40 @@
 'use client';
 
+import * as LucideIcons from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PropertyControl } from '../components/inspector/property-control';
 import { Section } from '../components/inspector/section';
 import { SpacingEditor } from '../components/inspector/spacing-editor';
 import { useCanvas } from '../hooks/use-canvas';
+import { getNestedValue, isFieldVisible } from '../lib/field-utils';
 import { componentRegistry } from '../registry/component-registry';
+
+const setNestedValue = (
+	obj: Record<string, any>,
+	path: string,
+	value: any
+): Record<string, any> => {
+	const keys = path.split('.');
+	const lastKey = keys.pop()!;
+	const result = { ...obj };
+	let current = result;
+
+	for (const key of keys) {
+		if (!current[key] || typeof current[key] !== 'object') {
+			current[key] = {};
+		} else {
+			current[key] = { ...current[key] };
+		}
+		current = current[key];
+	}
+
+	current[lastKey] = value;
+	return result;
+};
 
 export function SettingsSidebar() {
 	const t = useTranslations('editor.settingsSidebar');
@@ -53,12 +71,23 @@ export function SettingsSidebar() {
 	const componentDef = componentRegistry.get(blockToEdit.type);
 
 	const handlePropChange = (propName: string, value: unknown) => {
-		updateBlock(blockToEdit.id, {
-			props: {
-				...blockToEdit.props,
-				[propName]: value,
-			},
-		});
+		if (propName.includes('.')) {
+			const updatedProps = setNestedValue(
+				{ ...blockToEdit.props },
+				propName,
+				value
+			);
+			updateBlock(blockToEdit.id, {
+				props: updatedProps,
+			});
+		} else {
+			updateBlock(blockToEdit.id, {
+				props: {
+					...blockToEdit.props,
+					[propName]: value,
+				},
+			});
+		}
 	};
 
 	const handleNameChange = (value: string) => {
@@ -102,8 +131,38 @@ export function SettingsSidebar() {
 							showToggle={false}
 						>
 							<div className='space-y-3'>
-								{/* Block Name */}
+								{/* Block Info Card */}
 								<div className='space-y-2'>
+									<div className='flex items-center gap-2'>
+										{componentDef?.icon &&
+											(() => {
+												const IconComponent = (LucideIcons as any)[
+													componentDef.icon
+												];
+												return IconComponent ? (
+													<IconComponent className='h-4 w-4 text-muted-foreground' />
+												) : null;
+											})()}
+										<div className='flex-1'>
+											<div className='text-xs text-muted-foreground'>
+												{componentDef?.category === 'content'
+													? 'Content'
+													: 'Layout'}
+											</div>
+											<div className='text-sm font-medium'>
+												{componentDef?.name || blockToEdit.type}
+											</div>
+										</div>
+									</div>
+									{componentDef?.description && (
+										<div className='text-xs text-muted-foreground'>
+											{componentDef.description}
+										</div>
+									)}
+								</div>
+
+								{/* Block Name */}
+								<div className='space-y-1.5'>
 									<Label className='text-xs text-muted-foreground'>
 										{t('blockName')}
 									</Label>
@@ -111,41 +170,21 @@ export function SettingsSidebar() {
 										value={blockToEdit.name || ''}
 										onChange={(e) => handleNameChange(e.target.value)}
 										placeholder={componentDef?.name || blockToEdit.type}
-										className='w-full'
+										className='h-8 text-sm bg-accent/50'
 									/>
-								</div>
-
-								{/* Block Type */}
-								<div className='space-y-2'>
-									<Label className='text-xs text-muted-foreground'>
-										{t('blockType')}
-									</Label>
-									<Select
-										value={blockToEdit.type}
-										disabled
-									>
-										<SelectTrigger className='w-full'>
-											<SelectValue />
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem value={blockToEdit.type}>
-												{blockToEdit.type}
-											</SelectItem>
-										</SelectContent>
-									</Select>
 								</div>
 							</div>
 						</Section>
 
-						{/* Render Groups from Inspector Config */}
 						{componentDef?.inspectorConfig?.groups?.map((group) => {
 							const groupFields = componentDef.inspectorConfig?.fields.filter(
-								(field) => group.fields.includes(field.key)
+								(field) =>
+									group.fields.includes(field.key) &&
+									isFieldVisible(field, blockToEdit.props)
 							);
 
 							if (!groupFields || groupFields.length === 0) return null;
 
-							// Special handling for spacing group
 							if (group.id === 'spacing') {
 								const hasSpacing =
 									blockToEdit.props.paddingTop !== undefined ||
@@ -181,7 +220,6 @@ export function SettingsSidebar() {
 								);
 							}
 
-							// Render other groups
 							return (
 								<Section
 									key={group.id}
@@ -191,7 +229,10 @@ export function SettingsSidebar() {
 								>
 									<div className='space-y-3'>
 										{groupFields.map((field) => {
-											const value = blockToEdit.props[field.key];
+											const value = field.key.includes('.')
+												? getNestedValue(blockToEdit.props, field.key)
+												: blockToEdit.props[field.key];
+
 											if (value === undefined) return null;
 
 											return (
@@ -202,6 +243,7 @@ export function SettingsSidebar() {
 													onChange={(newValue) =>
 														handlePropChange(field.key, newValue)
 													}
+													allValues={blockToEdit.props}
 												/>
 											);
 										})}
@@ -210,16 +252,18 @@ export function SettingsSidebar() {
 							);
 						})}
 
-						{/* Fallback: Ungrouped Properties */}
 						{componentDef?.inspectorConfig?.fields
 							.filter(
 								(field) =>
 									!componentDef.inspectorConfig?.groups?.some((g) =>
 										g.fields.includes(field.key)
-									)
+									) && isFieldVisible(field, blockToEdit.props)
 							)
 							.map((field) => {
-								const value = blockToEdit.props[field.key];
+								const value = field.key.includes('.')
+									? getNestedValue(blockToEdit.props, field.key)
+									: blockToEdit.props[field.key];
+
 								if (value === undefined) return null;
 
 								return (
@@ -235,6 +279,7 @@ export function SettingsSidebar() {
 											onChange={(newValue) =>
 												handlePropChange(field.key, newValue)
 											}
+											allValues={blockToEdit.props}
 										/>
 									</Section>
 								);

@@ -1,32 +1,26 @@
 import { ComponentDefinition } from '@requil/types';
-import {
-	backgroundColorField,
-	backgroundColorSchema,
-	textColorField,
-	textColorSchema,
-} from '../../../registry/fields/colors';
-import {
-	buttonContentGroup,
-	buttonFields,
-	buttonSchema,
-} from '../../../registry/fields/content';
-import {
-	alignField,
-	alignSchema,
-	borderRadiusButtonSchema,
-	borderRadiusField,
-	fullWidthField,
-	fullWidthSchema,
-	layoutGroup,
-} from '../../../registry/fields/layout';
-import {
-	spacingButtonFields,
-	spacingButtonSchema,
-} from '../../../registry/fields/spacing';
-import {
-	fontWeightField,
-	fontWeightSchema,
-} from '../../../registry/fields/typography';
+import { stylesGroup, typographyGroup } from '../../../registry/field-groups';
+
+const buttonFields = [
+	{
+		key: 'text',
+		label: 'Text',
+		type: 'text' as const,
+		placeholder: 'Click Me',
+	},
+	{
+		key: 'href',
+		label: 'Link URL',
+		type: 'text' as const,
+		placeholder: '#',
+	},
+];
+
+const buttonContentGroup = {
+	id: 'content',
+	label: 'Content',
+	fields: ['text', 'href'],
+};
 
 export const ButtonDefinition: ComponentDefinition = {
 	type: 'Button',
@@ -35,20 +29,16 @@ export const ButtonDefinition: ComponentDefinition = {
 	description: 'Call-to-action button',
 	icon: 'RectangleHorizontal',
 
-	allowedParents: ['Section', 'Column'],
+	allowedParents: ['Section', 'Column', 'Block'],
 
 	propsSchema: {
 		type: 'object',
 		properties: {
-			...buttonSchema,
-			...backgroundColorSchema,
-			...textColorSchema,
-			fontSize: { type: 'number', minimum: 10, maximum: 32, default: 16 },
-			...fontWeightSchema,
-			...borderRadiusButtonSchema,
-			...spacingButtonSchema,
-			...alignSchema,
-			...fullWidthSchema,
+			text: { type: 'string', default: 'Click Me' },
+			href: { type: 'string', default: '#' },
+			backgroundColor: { type: 'string', default: '#3B82F6' },
+			...typographyGroup.schema,
+			...stylesGroup.schema,
 		},
 	},
 
@@ -56,56 +46,28 @@ export const ButtonDefinition: ComponentDefinition = {
 		text: 'Click Me',
 		href: '#',
 		backgroundColor: '#3B82F6',
-		textColor: '#FFFFFF',
+		...typographyGroup.defaults,
+		...stylesGroup.defaults,
 		fontSize: 16,
 		fontWeight: '600',
-		borderRadius: 4,
-		paddingTop: 12,
-		paddingBottom: 12,
-		paddingLeft: 24,
-		paddingRight: 24,
-		align: 'center',
-		fullWidth: false,
+		padding: 12,
 	},
 
 	inspectorConfig: {
 		groups: [
 			buttonContentGroup,
-			{
-				id: 'style',
-				label: 'Style',
-				fields: [
-					'backgroundColor',
-					'textColor',
-					'fontSize',
-					'fontWeight',
-					'borderRadius',
-				],
-			},
-			layoutGroup,
-			{
-				id: 'spacing',
-				label: 'Spacing',
-				fields: ['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight'],
-			},
+			typographyGroup.inspectorGroup,
+			stylesGroup.inspectorGroup,
 		],
 		fields: [
 			...buttonFields,
-			backgroundColorField,
-			textColorField,
 			{
-				key: 'fontSize',
-				label: 'Font Size',
-				type: 'slider',
-				min: 10,
-				max: 32,
-				step: 1,
+				key: 'backgroundColor',
+				label: 'Background Color',
+				type: 'color' as const,
 			},
-			fontWeightField,
-			borderRadiusField,
-			alignField,
-			fullWidthField,
-			...spacingButtonFields,
+			...typographyGroup.inspectorFields,
+			...stylesGroup.inspectorFields,
 		],
 	},
 

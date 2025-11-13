@@ -19,17 +19,6 @@ export function Heading({
 			{...interactionProps}
 			style={{
 				...styles,
-				fontSize:
-					typeof block.props.fontSize === 'number' ? block.props.fontSize : 32,
-				fontWeight:
-					typeof block.props.fontWeight === 'string'
-						? block.props.fontWeight
-						: 'bold',
-				color:
-					typeof block.props.color === 'string' ? block.props.color : '#000000',
-				textAlign:
-					(block.props.textAlign as 'left' | 'center' | 'right') || 'left',
-				fontFamily: (block.props.fontFamily as string) || 'Arial, sans-serif',
 				margin: 0,
 			}}
 			data-block-type='Heading'

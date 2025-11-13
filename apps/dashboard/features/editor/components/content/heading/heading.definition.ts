@@ -1,25 +1,37 @@
 import { ComponentDefinition } from '@requil/types';
-import { colorField, colorSchema } from '../../../registry/fields/colors';
 import {
-	headingContentFields,
-	headingContentGroup,
-	headingContentSchema,
-} from '../../../registry/fields/content';
-import {
-	styleGroup,
-	textAlignField,
-	textAlignSchema,
-} from '../../../registry/fields/layout';
-import {
-	spacingSimpleFields,
-	spacingSimpleGroup,
-	spacingSimpleSchema,
-} from '../../../registry/fields/spacing';
-import {
-	fontWeightField,
-	fontWeightSchema,
+	layoutGroup,
+	stylesGroup,
 	typographyGroup,
-} from '../../../registry/fields/typography';
+} from '../../../registry/field-groups';
+
+const headingFields = [
+	{
+		key: 'content',
+		label: 'Content',
+		type: 'text' as const,
+		placeholder: 'Your Heading',
+	},
+	{
+		key: 'level',
+		label: 'Level',
+		type: 'select' as const,
+		options: [
+			{ label: 'H1', value: 'h1' },
+			{ label: 'H2', value: 'h2' },
+			{ label: 'H3', value: 'h3' },
+			{ label: 'H4', value: 'h4' },
+			{ label: 'H5', value: 'h5' },
+			{ label: 'H6', value: 'h6' },
+		],
+	},
+];
+
+const headingContentGroup = {
+	id: 'content',
+	label: 'Content',
+	fields: ['content', 'level'],
+};
 
 export const HeadingDefinition: ComponentDefinition = {
 	type: 'Heading',
@@ -28,65 +40,45 @@ export const HeadingDefinition: ComponentDefinition = {
 	description: 'Heading text (H1-H6)',
 	icon: 'Heading',
 
-	allowedParents: ['Section', 'Column'],
+	allowedParents: ['Section', 'Column', 'Block'],
 
 	propsSchema: {
 		type: 'object',
 		properties: {
-			...headingContentSchema,
-			fontSize: { type: 'number', minimum: 12, maximum: 72, default: 32 },
-			...fontWeightSchema,
-			...colorSchema,
-			...textAlignSchema,
-			...spacingSimpleSchema,
+			content: { type: 'string', default: 'Your Heading' },
+			level: {
+				type: 'string',
+				enum: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+				default: 'h2',
+			},
+			...typographyGroup.schema,
+			...layoutGroup.schema,
+			...stylesGroup.schema,
 		},
 	},
 
 	defaultProps: {
 		content: 'Your Heading',
 		level: 'h2',
+		...typographyGroup.defaults,
+		...layoutGroup.defaults,
+		...stylesGroup.defaults,
 		fontSize: 32,
 		fontWeight: '700',
-		color: '#000000',
-		textAlign: 'left',
-		fontFamily: 'Arial, sans-serif',
-		paddingTop: 0,
-		paddingBottom: 10,
 	},
 
 	inspectorConfig: {
 		groups: [
 			headingContentGroup,
-			typographyGroup,
-			styleGroup,
-			spacingSimpleGroup,
+			typographyGroup.inspectorGroup,
+			layoutGroup.inspectorGroup,
+			stylesGroup.inspectorGroup,
 		],
 		fields: [
-			...headingContentFields,
-			{
-				key: 'fontSize',
-				label: 'Font Size',
-				type: 'slider',
-				min: 12,
-				max: 72,
-				step: 1,
-			},
-			fontWeightField,
-			{
-				key: 'fontFamily',
-				label: 'Font Family',
-				type: 'select',
-				options: [
-					{ label: 'Arial', value: 'Arial, sans-serif' },
-					{ label: 'Georgia', value: 'Georgia, serif' },
-					{ label: 'Times New Roman', value: '"Times New Roman", serif' },
-					{ label: 'Verdana', value: 'Verdana, sans-serif' },
-					{ label: 'Helvetica', value: 'Helvetica, sans-serif' },
-				],
-			},
-			colorField,
-			textAlignField,
-			...spacingSimpleFields,
+			...headingFields,
+			...typographyGroup.inspectorFields,
+			...layoutGroup.inspectorFields,
+			...stylesGroup.inspectorFields,
 		],
 	},
 

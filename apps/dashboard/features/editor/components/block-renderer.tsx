@@ -2,6 +2,7 @@ import { useDraggable } from '@dnd-kit/core';
 import type { BlockIR } from '@requil/types';
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { convertPropsToStyles } from '../lib/props-to-styles';
 import { BlockActions } from './block-actions';
 import { Button as ButtonBlock } from './content/button/button';
 import { Heading as HeadingBlock } from './content/heading/heading';
@@ -446,49 +447,3 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 
 	return blockContent;
 };
-
-// Helper function to convert block props to CSS styles
-function convertPropsToStyles(
-	props: Record<string, unknown>
-): React.CSSProperties {
-	const styles: React.CSSProperties = {};
-
-	// Padding
-	if (typeof props.paddingTop === 'number')
-		styles.paddingTop = props.paddingTop;
-	if (typeof props.paddingBottom === 'number')
-		styles.paddingBottom = props.paddingBottom;
-	if (typeof props.paddingLeft === 'number')
-		styles.paddingLeft = props.paddingLeft;
-	if (typeof props.paddingRight === 'number')
-		styles.paddingRight = props.paddingRight;
-
-	// Background
-	if (typeof props.backgroundColor === 'string') {
-		styles.backgroundColor = props.backgroundColor;
-	}
-
-	// Borders
-	if (typeof props.borderWidth === 'number') {
-		styles.borderWidth = props.borderWidth;
-		styles.borderStyle = 'solid';
-	}
-	if (typeof props.borderColor === 'string')
-		styles.borderColor = props.borderColor;
-	if (typeof props.borderRadius === 'number')
-		styles.borderRadius = props.borderRadius;
-
-	// Dimensions
-	if (typeof props.width === 'string' || typeof props.width === 'number') {
-		styles.width = props.width;
-	}
-	if (typeof props.maxWidth === 'number') styles.maxWidth = props.maxWidth;
-	if (
-		typeof props.minHeight === 'string' ||
-		typeof props.minHeight === 'number'
-	) {
-		styles.minHeight = props.minHeight;
-	}
-
-	return styles;
-}

@@ -1,23 +1,30 @@
 import { ComponentDefinition } from '@requil/types';
 import {
-	imageContentGroup,
-	imageFields,
-	imageSchema,
-} from '../../../registry/fields/content';
-import {
-	alignField,
-	alignSchema,
-	borderRadiusField,
-	borderRadiusSchema,
-	imageLayoutGroup,
-	widthField,
-	widthSchema,
-} from '../../../registry/fields/layout';
-import {
-	spacingSimpleFields,
-	spacingSimpleGroup,
-	spacingSimpleSchema,
-} from '../../../registry/fields/spacing';
+	layoutGroup,
+	sizeGroup,
+	stylesGroup,
+} from '../../../registry/field-groups';
+
+const imageFields = [
+	{
+		key: 'src',
+		label: 'Image URL',
+		type: 'text' as const,
+		placeholder: 'https://example.com/image.jpg',
+	},
+	{
+		key: 'alt',
+		label: 'Alt Text',
+		type: 'text' as const,
+		placeholder: 'Image description',
+	},
+];
+
+const imageContentGroup = {
+	id: 'content',
+	label: 'Content',
+	fields: ['src', 'alt'],
+};
 
 export const ImageDefinition: ComponentDefinition = {
 	type: 'Image',
@@ -26,46 +33,39 @@ export const ImageDefinition: ComponentDefinition = {
 	description: 'Image block',
 	icon: 'Image',
 
-	allowedParents: ['Section', 'Column'],
+	allowedParents: ['Section', 'Column', 'Block'],
 
 	propsSchema: {
 		type: 'object',
 		properties: {
-			...imageSchema,
-			...widthSchema,
-			...alignSchema,
-			...borderRadiusSchema,
-			...spacingSimpleSchema,
+			src: { type: 'string', default: 'https://via.placeholder.com/600x300' },
+			alt: { type: 'string', default: 'Image description' },
+			...sizeGroup.schema,
+			...layoutGroup.schema,
+			...stylesGroup.schema,
 		},
 	},
 
 	defaultProps: {
 		src: 'https://via.placeholder.com/600x300',
 		alt: 'Image description',
-		width: '100%',
-		align: 'center',
-		borderRadius: 0,
-		paddingTop: 0,
-		paddingBottom: 0,
+		...sizeGroup.defaults,
+		...layoutGroup.defaults,
+		...stylesGroup.defaults,
 	},
 
 	inspectorConfig: {
 		groups: [
 			imageContentGroup,
-			imageLayoutGroup,
-			{
-				id: 'style',
-				label: 'Style',
-				fields: ['borderRadius'],
-			},
-			spacingSimpleGroup,
+			sizeGroup.inspectorGroup,
+			layoutGroup.inspectorGroup,
+			stylesGroup.inspectorGroup,
 		],
 		fields: [
 			...imageFields,
-			widthField,
-			alignField,
-			borderRadiusField,
-			...spacingSimpleFields,
+			...sizeGroup.inspectorFields,
+			...layoutGroup.inspectorFields,
+			...stylesGroup.inspectorFields,
 		],
 	},
 

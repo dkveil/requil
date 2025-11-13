@@ -1,4 +1,24 @@
-import type { ComponentDefinition } from '@requil/types/editor';
+import type { ComponentDefinition, InspectorField } from '@requil/types/editor';
+import { createFieldGroup } from '@/features/editor/registry/field-groups/config';
+import { fillFields } from '@/features/editor/registry/field-groups/styles';
+
+export const createRootStylesGroup = createFieldGroup({
+	id: 'Styles',
+	label: 'Styles',
+	fields: {
+		fill: {
+			schema: {
+				type: 'object',
+				default: {
+					color: '#F4F4F5',
+				},
+			},
+			field: {
+				...(fillFields.fill?.field as InspectorField),
+			},
+		},
+	},
+});
 
 export const RootDefinition: ComponentDefinition = {
 	type: 'Root',
@@ -14,25 +34,17 @@ export const RootDefinition: ComponentDefinition = {
 	propsSchema: {
 		type: 'object',
 		properties: {
-			backgroundColor: { type: 'string', default: '#F4F4F5' },
+			...createRootStylesGroup.schema,
 		},
 	},
 
 	defaultProps: {
-		backgroundColor: '#F4F4F5',
+		...createRootStylesGroup.defaults,
 	},
 
 	inspectorConfig: {
-		groups: [
-			{
-				id: 'style',
-				label: 'Style',
-				fields: ['backgroundColor'],
-			},
-		],
-		fields: [
-			{ key: 'backgroundColor', label: 'Background Color', type: 'color' },
-		],
+		groups: [createRootStylesGroup.inspectorGroup],
+		fields: [...createRootStylesGroup.inspectorFields],
 	},
 
 	mjmlTag: 'mjml',

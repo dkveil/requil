@@ -1,25 +1,22 @@
 import { ComponentDefinition } from '@requil/types';
-import { colorField, colorSchema } from '../../../registry/fields/colors';
 import {
-	contentField,
-	contentGroup,
-	contentSchema,
-} from '../../../registry/fields/content';
-import {
-	styleGroup,
-	textAlignField,
-	textAlignSchema,
-} from '../../../registry/fields/layout';
-import {
-	paddingFields,
-	paddingSchema,
-	spacingGroup,
-} from '../../../registry/fields/spacing';
-import {
-	typographyFields,
+	layoutGroup,
+	stylesGroup,
 	typographyGroup,
-	typographySchema,
-} from '../../../registry/fields/typography';
+} from '../../../registry/field-groups';
+
+const contentField = {
+	key: 'content',
+	label: 'Content',
+	type: 'textarea' as const,
+	placeholder: 'Enter your text here...',
+};
+
+const contentGroup = {
+	id: 'content',
+	label: 'Content',
+	fields: ['content'],
+};
 
 export const TextDefinition: ComponentDefinition = {
 	type: 'Text',
@@ -28,41 +25,37 @@ export const TextDefinition: ComponentDefinition = {
 	description: 'Basic text block',
 	icon: 'Type',
 
-	allowedParents: ['Section', 'Column'],
+	allowedParents: ['Section', 'Column', 'Block'],
 
 	propsSchema: {
 		type: 'object',
 		properties: {
-			...contentSchema,
-			...typographySchema,
-			...colorSchema,
-			...textAlignSchema,
-			...paddingSchema,
+			content: { type: 'string', default: 'Enter your text here...' },
+			...typographyGroup.schema,
+			...layoutGroup.schema,
+			...stylesGroup.schema,
 		},
 	},
 
 	defaultProps: {
 		content: 'Enter your text here...',
-		fontSize: 14,
-		fontWeight: '400',
-		color: '#000000',
-		textAlign: 'left',
-		lineHeight: 1.5,
-		fontFamily: 'Arial, sans-serif',
-		paddingTop: 0,
-		paddingBottom: 0,
-		paddingLeft: 0,
-		paddingRight: 0,
+		...typographyGroup.defaults,
+		...layoutGroup.defaults,
+		...stylesGroup.defaults,
 	},
 
 	inspectorConfig: {
-		groups: [contentGroup, typographyGroup, styleGroup, spacingGroup],
+		groups: [
+			contentGroup,
+			typographyGroup.inspectorGroup,
+			layoutGroup.inspectorGroup,
+			stylesGroup.inspectorGroup,
+		],
 		fields: [
 			contentField,
-			...typographyFields,
-			colorField,
-			textAlignField,
-			...paddingFields,
+			...typographyGroup.inspectorFields,
+			...layoutGroup.inspectorFields,
+			...stylesGroup.inspectorFields,
 		],
 	},
 

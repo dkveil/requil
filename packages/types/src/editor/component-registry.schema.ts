@@ -18,7 +18,7 @@ export const SlotDefinitionSchema = z.object({
 
 export type SlotDefinition = z.infer<typeof SlotDefinitionSchema>;
 
-export const InspectorFieldSchema = z.object({
+export const BaseInspectorFieldSchema = z.object({
 	key: z.string(),
 	label: z.string(),
 	type: z.enum([
@@ -26,11 +26,16 @@ export const InspectorFieldSchema = z.object({
 		'number',
 		'color',
 		'select',
+		'iconSelect',
 		'toggle',
 		'slider',
 		'spacing',
+		'padding',
+		'radius',
+		'size',
 		'image',
 		'textarea',
+		'group',
 	]),
 	defaultValue: z.unknown().optional(),
 	options: z
@@ -38,6 +43,7 @@ export const InspectorFieldSchema = z.object({
 			z.object({
 				label: z.string(),
 				value: z.unknown(),
+				icon: z.string().optional(),
 			})
 		)
 		.optional(),
@@ -48,6 +54,26 @@ export const InspectorFieldSchema = z.object({
 	description: z.string().optional(),
 	group: z.string().optional(),
 	rows: z.number().optional(),
+
+	condition: z
+		.object({
+			field: z.string(),
+			operator: z.enum(['eq', 'notEq', 'truthy', 'falsy']),
+			value: z.unknown(),
+		})
+		.optional(),
+	isCollapsible: z.boolean().optional(),
+	isExpanded: z.boolean().optional(),
+	isAddable: z.boolean().optional(),
+	emptyLabel: z.string().optional(),
+});
+
+export const InspectorFieldSchema: z.ZodType<
+	z.infer<typeof BaseInspectorFieldSchema> & {
+		children?: z.infer<typeof BaseInspectorFieldSchema>[];
+	}
+> = BaseInspectorFieldSchema.extend({
+	children: z.array(z.lazy(() => InspectorFieldSchema)).optional(),
 });
 
 export const InspectorConfigSchema = z.object({
@@ -65,7 +91,11 @@ export const InspectorConfigSchema = z.object({
 });
 
 export type InspectorField = z.infer<typeof InspectorFieldSchema>;
+export type InspectorFieldWithChildren = InspectorField & {
+	children?: InspectorField[];
+};
 export type InspectorConfig = z.infer<typeof InspectorConfigSchema>;
+export type InspectorGroup = NonNullable<InspectorConfig['groups']>[number];
 
 export const ComponentDefinitionSchema = z.object({
 	type: z.string(),
