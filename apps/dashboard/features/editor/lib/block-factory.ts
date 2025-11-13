@@ -26,10 +26,9 @@ export function createBlock(
 
 		if (type === 'Columns') {
 			const columnCount = (block.props.columnCount as number) || 2;
-			const columnWidth = `${100 / columnCount}%`;
 
 			for (let i = 0; i < columnCount; i++) {
-				const column = createBlock('Column', { width: columnWidth });
+				const column = createBlock('Column');
 				if (column) block.children.push(column);
 			}
 		}

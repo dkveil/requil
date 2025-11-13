@@ -107,7 +107,43 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 				const { document, history } = get();
 				if (!(document && history)) return;
 
-				const newRoot = updateBlockInTree(document.root, blockId, updates);
+				const block = findBlockInTree(document.root, blockId);
+				if (!block) return;
+
+				let newRoot = updateBlockInTree(document.root, blockId, updates);
+
+				// If updating columnCount for a Columns block, sync the children
+				if (
+					block.type === 'Columns' &&
+					updates.props &&
+					'columnCount' in updates.props
+				) {
+					const newColumnCount =
+						typeof updates.props.columnCount === 'number'
+							? updates.props.columnCount
+							: 2;
+					const currentColumnCount = block.children?.length || 0;
+					const diff = newColumnCount - currentColumnCount;
+
+					if (diff > 0) {
+						// Add columns
+						for (let i = 0; i < diff; i++) {
+							const newColumn: BlockIR = {
+								id: `col_${Date.now()}_${i}`,
+								type: 'Column',
+								props: { width: 'auto' },
+							};
+							newRoot = addBlockToTree(newRoot, blockId, newColumn);
+						}
+					} else if (diff < 0 && block.children) {
+						// Remove columns
+						const columnsToRemove = block.children.slice(newColumnCount);
+						for (const col of columnsToRemove) {
+							newRoot = removeBlockFromTree(newRoot, col.id) || newRoot;
+						}
+					}
+				}
+
 				const newDoc = { ...document, root: newRoot };
 
 				set({
@@ -145,13 +181,64 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 				});
 			},
 
-			// Remove a block
 			removeBlock: (blockId) => {
 				const { document, history } = get();
 				if (!(document && history)) return;
 
+				const blockToRemove = findBlockInTree(document.root, blockId);
+				const parent = findParentOfBlock(document.root, blockId);
+
+				if (blockToRemove?.type === 'Column' && parent?.type === 'Columns') {
+					const remainingColumns = (parent.children?.length || 0) - 1;
+
+					if (remainingColumns === 0) {
+						const columnsParent = findParentOfBlock(document.root, parent.id);
+						if (columnsParent) {
+							const newRoot = removeBlockFromTree(document.root, parent.id);
+							if (!newRoot) return;
+
+							const newDoc = { ...document, root: newRoot };
+
+							set({
+								document: newDoc,
+								history: {
+									past: [...history.past, history.present],
+									present: newDoc,
+									future: [],
+								},
+								selectedBlockId: null,
+								isModified: true,
+							});
+							return;
+						}
+					} else {
+						let newRoot = removeBlockFromTree(document.root, blockId);
+						if (!newRoot) return;
+
+						newRoot = updateBlockInTree(newRoot, parent.id, {
+							props: {
+								columnCount: remainingColumns,
+							},
+						});
+
+						const newDoc = { ...document, root: newRoot };
+
+						set({
+							document: newDoc,
+							history: {
+								past: [...history.past, history.present],
+								present: newDoc,
+								future: [],
+							},
+							selectedBlockId: null,
+							isModified: true,
+						});
+						return;
+					}
+				}
+
 				const newRoot = removeBlockFromTree(document.root, blockId);
-				if (!newRoot) return; // Can't remove root
+				if (!newRoot) return;
 
 				const newDoc = { ...document, root: newRoot };
 
@@ -162,7 +249,7 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 						present: newDoc,
 						future: [],
 					},
-					selectedBlockId: null, // Deselect if selected block was removed
+					selectedBlockId: null,
 					isModified: true,
 				});
 			},
@@ -422,7 +509,11 @@ function updateBlockInTree(
 	updates: Partial<BlockIR>
 ): BlockIR {
 	if (block.id === targetId) {
-		return { ...block, ...updates };
+		return {
+			...block,
+			...updates,
+			props: updates.props ? { ...block.props, ...updates.props } : block.props,
+		};
 	}
 
 	if (block.children) {

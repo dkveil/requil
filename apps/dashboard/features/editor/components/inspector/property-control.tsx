@@ -151,7 +151,9 @@ export function PropertyControl({
 				</div>
 			);
 
-		case 'select':
+		case 'select': {
+			const isNumeric = typeof field.options?.[0]?.value === 'number';
+
 			return (
 				<div className='flex items-center justify-between gap-3'>
 					<Label className='text-xs text-muted-foreground flex-shrink-0'>
@@ -159,7 +161,10 @@ export function PropertyControl({
 					</Label>
 					<Select
 						value={String(value)}
-						onValueChange={(val) => onChange(val)}
+						onValueChange={(val) => {
+							const convertedValue = isNumeric ? Number(val) : val;
+							onChange(convertedValue);
+						}}
 					>
 						<SelectTrigger className='h-7 text-xs bg-accent/50 border-accent w-[120px]'>
 							<SelectValue />
@@ -177,6 +182,7 @@ export function PropertyControl({
 					</Select>
 				</div>
 			);
+		}
 
 		case 'iconSelect':
 			return (

@@ -1,5 +1,11 @@
 import type { ComponentDefinition } from '@requil/types/editor';
 
+const columnsContentGroup = {
+	id: 'content',
+	label: 'Columns',
+	fields: ['columnCount', 'gap', 'stackOnMobile', 'verticalAlign'],
+};
+
 export const ColumnsDefinition: ComponentDefinition = {
 	type: 'Columns',
 	category: 'layout',
@@ -30,11 +36,12 @@ export const ColumnsDefinition: ComponentDefinition = {
 	},
 
 	inspectorConfig: {
+		groups: [columnsContentGroup],
 		fields: [
 			{
 				key: 'columnCount',
 				label: 'Columns',
-				type: 'select',
+				type: 'select' as const,
 				options: [
 					{ label: '1 Column', value: 1 },
 					{ label: '2 Columns', value: 2 },
@@ -42,12 +49,16 @@ export const ColumnsDefinition: ComponentDefinition = {
 					{ label: '4 Columns', value: 4 },
 				],
 			},
-			{ key: 'gap', label: 'Gap', type: 'slider', min: 0, max: 50 },
-			{ key: 'stackOnMobile', label: 'Stack on Mobile', type: 'toggle' },
+			{ key: 'gap', label: 'Gap', type: 'slider' as const, min: 0, max: 50 },
+			{
+				key: 'stackOnMobile',
+				label: 'Stack on Mobile',
+				type: 'toggle' as const,
+			},
 			{
 				key: 'verticalAlign',
 				label: 'Vertical Align',
-				type: 'select',
+				type: 'select' as const,
 				options: [
 					{ label: 'Top', value: 'top' },
 					{ label: 'Middle', value: 'middle' },
