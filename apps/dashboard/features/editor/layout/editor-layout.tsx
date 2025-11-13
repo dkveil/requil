@@ -5,6 +5,7 @@ import {
 	DragEndEvent,
 	DragOverlay,
 	DragStartEvent,
+	type Modifier,
 	PointerSensor,
 	useSensor,
 	useSensors,
@@ -20,6 +21,32 @@ import { createBlock } from '../lib/block-factory';
 import EditorHeader from './editor-header';
 import { ElementsSidebar } from './elements-sidebar';
 import { SettingsSidebar } from './settings-sidebar';
+
+// Custom modifier to position overlay at exact cursor position (pointer tip)
+const cursorOffsetModifier: Modifier = ({
+	activatorEvent,
+	draggingNodeRect,
+	transform,
+}) => {
+	if (draggingNodeRect && activatorEvent) {
+		// Check if it's a pointer/mouse event
+		if ('clientX' in activatorEvent && 'clientY' in activatorEvent) {
+			const pointerEvent = activatorEvent as PointerEvent | MouseEvent;
+
+			// Calculate offset from dragging node to cursor position
+			const offsetX = pointerEvent.clientX - draggingNodeRect.left;
+			const offsetY = pointerEvent.clientY - draggingNodeRect.top;
+
+			return {
+				...transform,
+				x: transform.x + offsetX - draggingNodeRect.width / 2,
+				y: transform.y + offsetY - draggingNodeRect.height / 2,
+			};
+		}
+	}
+
+	return transform;
+};
 
 export default function EditorLayout() {
 	const { selectedBlockId, document, addBlock, selectBlock, moveBlock } =
@@ -208,16 +235,25 @@ export default function EditorLayout() {
 					<SettingsSidebar />
 				</div>
 			</div>
-			<DragOverlay>
+			<DragOverlay
+				modifiers={[cursorOffsetModifier]}
+				dropAnimation={{
+					duration: 200,
+					easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+				}}
+			>
 				{activeId ? (
-					<div className='p-3 rounded-md border-2 border-primary bg-background shadow-lg opacity-90'>
+					<div className='p-1.5 rounded border border-primary bg-background shadow-md opacity-80'>
 						{activeId.startsWith('sidebar-') ? (
-							<div className='w-12 h-12 rounded border border-dashed border-primary flex items-center justify-center text-primary'>
-								<ComponentIcon type={activeId.replace('sidebar-', '')} />
+							<div className='w-8 h-8 rounded border border-dashed border-primary/60 flex items-center justify-center text-primary'>
+								<ComponentIcon
+									type={activeId.replace('sidebar-', '')}
+									className='w-4 h-4'
+								/>
 							</div>
 						) : activeId.startsWith('canvas-block-') ? (
-							<div className='px-4 py-2 text-sm font-medium text-primary'>
-								Moving block...
+							<div className='px-2 py-1 text-xs font-medium text-primary'>
+								Move
 							</div>
 						) : null}
 					</div>

@@ -185,8 +185,7 @@
 }
 
 .block-wrapper-column-explicit {
-	& > [data-block-type],
-	a {
+	& > [data-block-type] {
 		width: 100% !important;
 	}
 }
