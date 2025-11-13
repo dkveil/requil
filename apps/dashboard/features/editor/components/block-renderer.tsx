@@ -424,7 +424,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 
 		const isBlockWithWidth =
 			typeof block.props.width === 'number' ||
-			typeof block.props.width === 'string';
+			(typeof block.props.width === 'string' &&
+				block.props.width.includes('%'));
 
 		let wrapperClassName = 'block-wrapper-other';
 		wrapperClassName = isBlockWithWidth

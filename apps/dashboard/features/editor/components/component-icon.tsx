@@ -27,7 +27,7 @@ export function ComponentIcon({ type, title, className }: ComponentIconProps) {
 					/>
 				</svg>
 			);
-		case 'Section':
+		case 'Block':
 			return (
 				<svg
 					className={cn('w-6 h-6', className)}
@@ -220,6 +220,34 @@ export function ComponentIcon({ type, title, className }: ComponentIconProps) {
 						strokeWidth='1.5'
 						strokeLinecap='round'
 						strokeLinejoin='round'
+					/>
+				</svg>
+			);
+		case 'SocialIcons':
+			return (
+				<svg
+					className={cn('w-6 h-6', className)}
+					fill='none'
+					viewBox='0 0 24 24'
+					stroke='currentColor'
+				>
+					<title>{title || 'Social Icons'}</title>
+					<circle
+						cx='7'
+						cy='12'
+						r='3'
+						strokeWidth='1.5'
+					/>
+					<circle
+						cx='17'
+						cy='12'
+						r='3'
+						strokeWidth='1.5'
+					/>
+					<path
+						d='M7 9V6M17 9V6M7 15v3M17 15v3'
+						strokeWidth='1.5'
+						strokeLinecap='round'
 					/>
 				</svg>
 			);

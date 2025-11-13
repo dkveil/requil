@@ -61,20 +61,20 @@ export function SizeControl({
 			<Label className='text-xs text-muted-foreground flex-shrink-0'>
 				{label}
 			</Label>
-			<div className='flex items-center gap-1'>
+			<div className='flex items-center'>
 				<Input
 					type='text'
 					value={unit === 'auto' ? 'auto' : numeric}
 					onChange={(e) => handleNumericChange(e.target.value)}
 					placeholder={placeholder}
 					disabled={unit === 'auto'}
-					className='w-20 h-7 text-xs text-center bg-accent/50 border-accent'
+					className='w-20 h-7 text-xs text-center bg-accent/50 border-accent rounded-r-none border-r-0'
 				/>
 				<Select
 					value={unit}
 					onValueChange={handleUnitChange}
 				>
-					<SelectTrigger className='h-7 text-xs bg-accent/50 border-accent w-[70px]'>
+					<SelectTrigger className='h-7 min-h-7 text-xs bg-accent/50 border-accent w-[60px] rounded-l-none px-2 py-0'>
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent>

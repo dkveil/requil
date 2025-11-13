@@ -1,5 +1,10 @@
 import { ComponentDefinition } from '@requil/types';
-import { stylesGroup, typographyGroup } from '../../../registry/field-groups';
+import {
+	layoutGroup,
+	sizeGroup,
+	stylesGroup,
+	typographyGroup,
+} from '../../../registry/field-groups';
 
 const buttonFields = [
 	{
@@ -9,17 +14,28 @@ const buttonFields = [
 		placeholder: 'Click Me',
 	},
 	{
+		key: 'action',
+		label: 'Action',
+		type: 'select' as const,
+		options: [{ label: 'Link', value: 'link' }],
+	},
+	{
 		key: 'href',
 		label: 'Link URL',
 		type: 'text' as const,
 		placeholder: '#',
+		condition: {
+			field: 'action',
+			operator: 'eq' as const,
+			value: 'link',
+		},
 	},
 ];
 
 const buttonContentGroup = {
 	id: 'content',
 	label: 'Button',
-	fields: ['text', 'href'],
+	fields: ['text', 'href', 'action'],
 };
 
 export const ButtonDefinition: ComponentDefinition = {
@@ -35,8 +51,11 @@ export const ButtonDefinition: ComponentDefinition = {
 		type: 'object',
 		properties: {
 			text: { type: 'string', default: 'Click Me' },
+			action: { type: 'string', default: 'link' },
 			href: { type: 'string', default: '#' },
-			backgroundColor: { type: 'string', default: '#3B82F6' },
+			fullWidth: { type: 'boolean', default: false },
+			...sizeGroup.schema,
+			...layoutGroup.schema,
 			...typographyGroup.schema,
 			...stylesGroup.schema,
 		},
@@ -44,28 +63,36 @@ export const ButtonDefinition: ComponentDefinition = {
 
 	defaultProps: {
 		text: 'Click Me',
+		action: 'link',
 		href: '#',
-		backgroundColor: '#3B82F6',
+		...sizeGroup.defaults,
+		...layoutGroup.defaults,
 		...typographyGroup.defaults,
 		...stylesGroup.defaults,
+		width: 'auto',
+		fill: {
+			color: '#3B82F6',
+		},
+		align: 'center',
+		textAlign: 'center',
 		fontSize: 16,
 		fontWeight: '600',
 		padding: 12,
+		borderRadius: 4,
 	},
 
 	inspectorConfig: {
 		groups: [
 			buttonContentGroup,
+			sizeGroup.inspectorGroup,
+			layoutGroup.inspectorGroup,
 			typographyGroup.inspectorGroup,
 			stylesGroup.inspectorGroup,
 		],
 		fields: [
 			...buttonFields,
-			{
-				key: 'backgroundColor',
-				label: 'Background Color',
-				type: 'color' as const,
-			},
+			...sizeGroup.inspectorFields,
+			...layoutGroup.inspectorFields,
 			...typographyGroup.inspectorFields,
 			...stylesGroup.inspectorFields,
 		],

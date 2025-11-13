@@ -109,70 +109,148 @@ export function BoxControl({
 			</div>
 
 			{showIndividual && (
-				<div className='relative bg-accent/30 rounded-lg p-8 border border-accent'>
-					<div className='absolute top-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5'>
-						<span className='text-[9px] text-muted-foreground font-medium'>
-							{labels.top}
-						</span>
-						<Input
-							type='number'
-							value={boxValue.top}
-							onChange={(e) =>
-								handleIndividualChange('top', Number(e.target.value))
-							}
-							className='w-14 h-6 text-xs text-center bg-accent/50 border-accent'
-							min={min}
-							max={max}
-						/>
-					</div>
+				<div className='relative bg-accent/30 rounded-lg p-10 border border-accent'>
+					{type === 'radius' ? (
+						<>
+							{/* Top-left corner */}
+							<div className='absolute top-2 left-2 flex flex-col items-center gap-1'>
+								<span className='text-[10px] text-muted-foreground font-medium'>
+									{labels.top}
+								</span>
+								<Input
+									type='number'
+									value={boxValue.top}
+									onChange={(e) =>
+										handleIndividualChange('top', Number(e.target.value))
+									}
+									className='w-16 h-7 text-xs text-center bg-accent/50 border-accent'
+									min={min}
+									max={max}
+								/>
+							</div>
 
-					<div className='absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col-reverse items-center gap-0.5'>
-						<span className='text-[9px] text-muted-foreground font-medium'>
-							{labels.bottom}
-						</span>
-						<Input
-							type='number'
-							value={boxValue.bottom}
-							onChange={(e) =>
-								handleIndividualChange('bottom', Number(e.target.value))
-							}
-							className='w-14 h-6 text-xs text-center bg-accent/50 border-accent'
-							min={min}
-							max={max}
-						/>
-					</div>
+							{/* Top-right corner */}
+							<div className='absolute top-2 right-2 flex flex-col items-center gap-1'>
+								<span className='text-[10px] text-muted-foreground font-medium'>
+									{labels.right}
+								</span>
+								<Input
+									type='number'
+									value={boxValue.right}
+									onChange={(e) =>
+										handleIndividualChange('right', Number(e.target.value))
+									}
+									className='w-16 h-7 text-xs text-center bg-accent/50 border-accent'
+									min={min}
+									max={max}
+								/>
+							</div>
 
-					<div className='absolute left-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5'>
-						<span className='text-[9px] text-muted-foreground font-medium'>
-							{labels.left}
-						</span>
-						<Input
-							type='number'
-							value={boxValue.left}
-							onChange={(e) =>
-								handleIndividualChange('left', Number(e.target.value))
-							}
-							className='w-14 h-6 text-xs text-center bg-accent/50 border-accent'
-							min={min}
-							max={max}
-						/>
-					</div>
+							{/* Bottom-left corner */}
+							<div className='absolute bottom-2 left-2 flex flex-col-reverse items-center gap-1'>
+								<span className='text-[10px] text-muted-foreground font-medium'>
+									{labels.left}
+								</span>
+								<Input
+									type='number'
+									value={boxValue.left}
+									onChange={(e) =>
+										handleIndividualChange('left', Number(e.target.value))
+									}
+									className='w-16 h-7 text-xs text-center bg-accent/50 border-accent'
+									min={min}
+									max={max}
+								/>
+							</div>
 
-					<div className='absolute right-2 top-1/2 -translate-y-1/2 flex flex-row-reverse items-center gap-0.5'>
-						<span className='text-[9px] text-muted-foreground font-medium'>
-							{labels.right}
-						</span>
-						<Input
-							type='number'
-							value={boxValue.right}
-							onChange={(e) =>
-								handleIndividualChange('right', Number(e.target.value))
-							}
-							className='w-14 h-6 text-xs text-center bg-accent/50 border-accent'
-							min={min}
-							max={max}
-						/>
-					</div>
+							{/* Bottom-right corner */}
+							<div className='absolute bottom-2 right-2 flex flex-col-reverse items-center gap-1'>
+								<span className='text-[10px] text-muted-foreground font-medium'>
+									{labels.bottom}
+								</span>
+								<Input
+									type='number'
+									value={boxValue.bottom}
+									onChange={(e) =>
+										handleIndividualChange('bottom', Number(e.target.value))
+									}
+									className='w-16 h-7 text-xs text-center bg-accent/50 border-accent'
+									min={min}
+									max={max}
+								/>
+							</div>
+						</>
+					) : (
+						<>
+							{/* Top - padding */}
+							<div className='absolute top-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5'>
+								<span className='text-[9px] text-muted-foreground font-medium'>
+									{labels.top}
+								</span>
+								<Input
+									type='number'
+									value={boxValue.top}
+									onChange={(e) =>
+										handleIndividualChange('top', Number(e.target.value))
+									}
+									className='w-14 h-6 text-xs text-center bg-accent/50 border-accent'
+									min={min}
+									max={max}
+								/>
+							</div>
+
+							{/* Bottom - padding */}
+							<div className='absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col-reverse items-center gap-0.5'>
+								<span className='text-[9px] text-muted-foreground font-medium'>
+									{labels.bottom}
+								</span>
+								<Input
+									type='number'
+									value={boxValue.bottom}
+									onChange={(e) =>
+										handleIndividualChange('bottom', Number(e.target.value))
+									}
+									className='w-14 h-6 text-xs text-center bg-accent/50 border-accent'
+									min={min}
+									max={max}
+								/>
+							</div>
+
+							{/* Left - padding */}
+							<div className='absolute left-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5'>
+								<span className='text-[9px] text-muted-foreground font-medium'>
+									{labels.left}
+								</span>
+								<Input
+									type='number'
+									value={boxValue.left}
+									onChange={(e) =>
+										handleIndividualChange('left', Number(e.target.value))
+									}
+									className='w-14 h-6 text-xs text-center bg-accent/50 border-accent'
+									min={min}
+									max={max}
+								/>
+							</div>
+
+							{/* Right - padding */}
+							<div className='absolute right-2 top-1/2 -translate-y-1/2 flex flex-row-reverse items-center gap-0.5'>
+								<span className='text-[9px] text-muted-foreground font-medium'>
+									{labels.right}
+								</span>
+								<Input
+									type='number'
+									value={boxValue.right}
+									onChange={(e) =>
+										handleIndividualChange('right', Number(e.target.value))
+									}
+									className='w-14 h-6 text-xs text-center bg-accent/50 border-accent'
+									min={min}
+									max={max}
+								/>
+							</div>
+						</>
+					)}
 
 					<div className='bg-background/50 rounded border border-dashed border-border h-16 flex items-center justify-center'>
 						<span className='text-[10px] text-muted-foreground'>Content</span>

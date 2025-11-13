@@ -10,60 +10,45 @@ export function Button({
 	interactionProps: Record<string, unknown>;
 }) {
 	const text = (block.props.text as string) || 'Click Me';
+	const action = (block.props.action as string) || 'link';
 	const href = (block.props.href as string) || '#';
+
+	const Tag = action === 'link' ? 'a' : 'button';
+
+	const {
+		padding,
+		paddingTop,
+		paddingBottom,
+		paddingLeft,
+		paddingRight,
+		width,
+		backgroundColor,
+		...wrapperStyles
+	} = styles;
+
+	const buttonStyles: React.CSSProperties = {
+		...styles,
+		display: 'inline-block',
+		backgroundColor,
+		textDecoration: 'none',
+		cursor: 'pointer',
+		textAlign: 'center',
+	};
 
 	return (
 		<div
 			{...interactionProps}
-			style={{
-				...styles,
-				textAlign:
-					(block.props.align as 'left' | 'center' | 'right') || 'center',
-			}}
-			data-block-type='Button'
+			style={wrapperStyles}
 			data-block-id={block.id}
+			data-block-type='Button'
 		>
-			<a
-				href={isCanvas ? undefined : href}
+			<Tag
+				href={action === 'link' ? (isCanvas ? undefined : href) : undefined}
 				onClick={(e) => isCanvas && e.preventDefault()}
-				style={{
-					display: block.props.fullWidth ? 'block' : 'inline-block',
-					backgroundColor: (block.props.backgroundColor as string) || '#3B82F6',
-					color: (block.props.textColor as string) || '#FFFFFF',
-					fontSize:
-						typeof block.props.fontSize === 'number'
-							? block.props.fontSize
-							: 16,
-					fontWeight:
-						typeof block.props.fontWeight === 'string'
-							? block.props.fontWeight
-							: '600',
-					borderRadius:
-						typeof block.props.borderRadius === 'number'
-							? block.props.borderRadius
-							: 4,
-					paddingTop:
-						typeof block.props.paddingTop === 'number'
-							? block.props.paddingTop
-							: 12,
-					paddingBottom:
-						typeof block.props.paddingBottom === 'number'
-							? block.props.paddingBottom
-							: 12,
-					paddingLeft:
-						typeof block.props.paddingLeft === 'number'
-							? block.props.paddingLeft
-							: 24,
-					paddingRight:
-						typeof block.props.paddingRight === 'number'
-							? block.props.paddingRight
-							: 24,
-					textDecoration: 'none',
-					cursor: 'pointer',
-				}}
+				style={buttonStyles}
 			>
 				{text}
-			</a>
+			</Tag>
 		</div>
 	);
 }
