@@ -10,7 +10,7 @@ import { DropZone } from '../../drop-zone';
 interface ContainerBlockProps extends BlockRendererProps {
 	styles: React.CSSProperties;
 	interactionProps: Record<string, unknown>;
-	blockType: 'Container' | 'Section' | 'Column';
+	blockType: 'Container' | 'Block' | 'Column';
 	additionalStyles?: React.CSSProperties;
 	emptyMessage?: string;
 }
@@ -46,7 +46,8 @@ export function ContainerBlock({
 		disabled: !isCanvas, // Only disable in preview mode
 	});
 
-	const Element = blockType === 'Section' ? 'section' : 'div';
+	const htmlTag = (block.props.htmlTag as string) || 'div';
+	const Element = htmlTag as React.ElementType;
 
 	// Combine refs: dragRef (from useDraggable) + dropRef (from useDroppable)
 	const dragRef = (interactionProps as { ref?: React.Ref<HTMLElement> }).ref;
@@ -60,9 +61,12 @@ export function ContainerBlock({
 		}
 	};
 
+	// aria-label support
+	const ariaLabel = block.props.ariaLabel as string | undefined;
+
 	return (
 		<Element
-			ref={combinedRef}
+			ref={combinedRef as any}
 			{...interactionProps}
 			style={{
 				...styles,
@@ -78,6 +82,7 @@ export function ContainerBlock({
 			)}
 			data-block-type={blockType}
 			data-block-id={block.id}
+			aria-label={ariaLabel || undefined}
 		>
 			{isEmpty && isCanvas ? (
 				// When empty, show drop zone with message - drop zone takes full height

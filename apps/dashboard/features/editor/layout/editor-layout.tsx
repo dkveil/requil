@@ -9,7 +9,7 @@ import {
 	useSensor,
 	useSensors,
 } from '@dnd-kit/core';
-import type { Block } from '@requil/types';
+import type { BlockIR } from '@requil/types';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -37,9 +37,9 @@ export default function EditorLayout() {
 
 	// Helper functions - inside component to access document from state
 	const findBlockById = (
-		block: Block | undefined,
+		block: BlockIR | undefined,
 		blockId: string
-	): Block | null => {
+	): BlockIR | null => {
 		if (!block) return null;
 		if (block.id === blockId) return block;
 		if (block.children) {
@@ -51,10 +51,12 @@ export default function EditorLayout() {
 		return null;
 	};
 
-	const hasDescendant = (block: Block, blockId: string): boolean => {
+	const hasDescendant = (block: BlockIR, blockId: string): boolean => {
 		if (block.id === blockId) return true;
 		if (!block.children) return false;
-		return block.children.some((child) => hasDescendant(child, blockId));
+		return block.children.some((child) =>
+			hasDescendant(child as BlockIR, blockId)
+		);
 	};
 
 	// Check if targetId is a descendant of blockId (or the same block)

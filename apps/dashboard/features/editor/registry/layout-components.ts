@@ -149,11 +149,11 @@ export const LAYOUT_COMPONENTS: Record<string, ComponentDefinition> = {
 		mjmlTag: 'mj-wrapper',
 	},
 
-	Section: {
-		type: 'Section',
+	Block: {
+		type: 'Block',
 		category: 'layout',
-		name: 'Section',
-		description: 'Full-width section for content grouping',
+		name: 'Block',
+		description: 'Full-width block for content grouping',
 		icon: 'Box',
 
 		allowedChildren: [
@@ -170,6 +170,23 @@ export const LAYOUT_COMPONENTS: Record<string, ComponentDefinition> = {
 		propsSchema: {
 			type: 'object',
 			properties: {
+				htmlTag: {
+					enum: [
+						'div',
+						'section',
+						'article',
+						'header',
+						'footer',
+						'main',
+						'nav',
+					],
+					default: 'div',
+				},
+				ariaLabel: {
+					type: 'string',
+					default: '',
+					placeholder: 'Enter aria label',
+				},
 				fullWidth: { type: 'boolean', default: true },
 				backgroundColor: { type: 'string', default: '#FFFFFF' },
 				backgroundImage: { type: 'string' },
@@ -194,6 +211,8 @@ export const LAYOUT_COMPONENTS: Record<string, ComponentDefinition> = {
 		},
 
 		defaultProps: {
+			htmlTag: 'div',
+			ariaLabel: '',
 			fullWidth: true,
 			backgroundColor: '#FFFFFF',
 			paddingTop: 20,
@@ -204,6 +223,11 @@ export const LAYOUT_COMPONENTS: Record<string, ComponentDefinition> = {
 
 		inspectorConfig: {
 			groups: [
+				{
+					id: 'accessibility',
+					label: 'Accessibility',
+					fields: ['htmlTag', 'ariaLabel'],
+				},
 				{
 					id: 'background',
 					label: 'Background',
@@ -231,6 +255,26 @@ export const LAYOUT_COMPONENTS: Record<string, ComponentDefinition> = {
 				},
 			],
 			fields: [
+				{
+					key: 'htmlTag',
+					label: 'Tag',
+					type: 'select',
+					options: [
+						{ label: 'div', value: 'div' },
+						{ label: 'section', value: 'section' },
+						{ label: 'article', value: 'article' },
+						{ label: 'header', value: 'header' },
+						{ label: 'footer', value: 'footer' },
+						{ label: 'main', value: 'main' },
+						{ label: 'nav', value: 'nav' },
+					],
+				},
+				{
+					key: 'ariaLabel',
+					label: 'Aria Label',
+					type: 'text',
+					placeholder: 'Enter aria label',
+				},
 				{ key: 'backgroundColor', label: 'Background Color', type: 'color' },
 				{ key: 'backgroundImage', label: 'Background Image', type: 'image' },
 				{

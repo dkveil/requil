@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@requil/types';
+import type { BlockIR } from '@requil/types';
 import { ChevronDown, ChevronRight, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -41,7 +41,7 @@ export function LayersPanel({ className }: LayersPanelProps) {
 }
 
 interface LayerTreeNodeProps {
-	block: Block;
+	block: BlockIR;
 	level: number;
 }
 
@@ -89,7 +89,6 @@ function LayerTreeNode({ block, level }: LayerTreeNodeProps) {
 
 	return (
 		<div>
-			{/* Node */}
 			<div
 				className={cn(
 					'group flex items-center gap-1 px-2 py-1.5 cursor-pointer hover:bg-muted/50 transition-colors',
@@ -101,7 +100,6 @@ function LayerTreeNode({ block, level }: LayerTreeNodeProps) {
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 			>
-				{/* Expand/Collapse Button */}
 				<button
 					type='button'
 					onClick={handleToggle}
@@ -117,7 +115,6 @@ function LayerTreeNode({ block, level }: LayerTreeNodeProps) {
 					)}
 				</button>
 
-				{/* Icon */}
 				<div className='flex items-center justify-center w-4 h-4 text-muted-foreground'>
 					<ComponentIcon
 						type={block.type}
@@ -125,7 +122,6 @@ function LayerTreeNode({ block, level }: LayerTreeNodeProps) {
 					/>
 				</div>
 
-				{/* Name */}
 				<span
 					className={cn(
 						'flex-1 text-sm truncate',
@@ -135,7 +131,6 @@ function LayerTreeNode({ block, level }: LayerTreeNodeProps) {
 					{block.name || component?.name || block.type}
 				</span>
 
-				{/* Delete Button */}
 				{!isRoot && (
 					<button
 						type='button'
@@ -148,10 +143,9 @@ function LayerTreeNode({ block, level }: LayerTreeNodeProps) {
 				)}
 			</div>
 
-			{/* Children */}
 			{hasChildren && isExpanded && (
 				<div>
-					{block.children!.map((child) => (
+					{block.children!.map((child: BlockIR) => (
 						<LayerTreeNode
 							key={child.id}
 							block={child}

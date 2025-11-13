@@ -1,9 +1,10 @@
 import { useDraggable } from '@dnd-kit/core';
-import type { Block } from '@requil/types';
+import type { BlockIR } from '@requil/types';
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { BlockActions } from './block-actions';
 import {
+	Block,
 	ButtonBlock,
 	ColumnBlock,
 	ColumnsBlock,
@@ -12,14 +13,13 @@ import {
 	HeadingBlock,
 	ImageBlock,
 	RootBlock,
-	SectionBlock,
 	SpacerBlock,
 	TextBlock,
 } from './blocks';
 import { DropZone } from './drop-zone';
 
 export interface BlockRendererProps {
-	block: Block;
+	block: BlockIR;
 	isCanvas?: boolean; // true = editor mode, false = preview mode
 	onSelect?: (blockId: string) => void;
 	onHover?: (blockId: string | null) => void;
@@ -36,7 +36,7 @@ export interface BlockRendererProps {
 
 // Helper function to render children with drop zones
 export function renderChildrenWithDropZones(
-	block: Block,
+	block: BlockIR,
 	isCanvas = true,
 	onSelect?: (blockId: string) => void,
 	onHover?: (blockId: string | null) => void,
@@ -225,9 +225,9 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					/>
 				);
 
-			case 'Section':
+			case 'Block':
 				return (
-					<SectionBlock
+					<Block
 						block={block}
 						isCanvas={isCanvas}
 						styles={styles}

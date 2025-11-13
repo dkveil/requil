@@ -1,15 +1,15 @@
 import { z } from 'zod';
 
-export type Block = {
+export type BlockIR = {
 	id: string;
 	type: string;
 	name?: string;
 	props: Record<string, unknown>;
-	children?: Block[];
-	slots?: Record<string, Block[]>;
+	children?: BlockIR[];
+	slots?: Record<string, BlockIR[]>;
 };
 
-export const BlockSchema: z.ZodType<Block> = z.lazy(() =>
+export const BlockSchema: z.ZodType<BlockIR> = z.lazy(() =>
 	z.object({
 		id: z.uuid(),
 		type: z.string(),

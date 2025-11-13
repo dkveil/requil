@@ -1,6 +1,6 @@
 'use client';
 
-import type { Block } from '@requil/types';
+import type { BlockIR } from '@requil/types';
 import { useState } from 'react';
 import { BlockRenderer } from '@/features/editor/components/block-renderer';
 import {
@@ -244,7 +244,7 @@ export default function TestBlocksPage() {
 
 										container.children = [section1, section2, columns].filter(
 											Boolean
-										) as Block[];
+										) as BlockIR[];
 									}
 									return container;
 								})()}
@@ -279,7 +279,7 @@ export default function TestBlocksPage() {
 								if (sec) {
 									sec.children = [spacer1, divider, spacer2].filter(
 										Boolean
-									) as Block[];
+									) as BlockIR[];
 								}
 
 								return sec ? (

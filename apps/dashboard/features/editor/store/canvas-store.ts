@@ -1,4 +1,4 @@
-import type { Block, Document } from '@requil/types';
+import type { BlockIR, Document } from '@requil/types';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
@@ -20,7 +20,7 @@ interface CanvasState {
 	hoveredBlockId: string | null;
 
 	// Drag & Drop
-	draggedBlock: Block | null;
+	draggedBlock: BlockIR | null;
 	dropTargetId: string | null;
 	dropPosition: 'before' | 'after' | 'inside' | null;
 
@@ -34,8 +34,8 @@ interface CanvasState {
 interface CanvasActions {
 	// Document actions
 	setDocument: (doc: Document) => void;
-	updateBlock: (blockId: string, updates: Partial<Block>) => void;
-	addBlock: (parentId: string, block: Block, position?: number) => void;
+	updateBlock: (blockId: string, updates: Partial<BlockIR>) => void;
+	addBlock: (parentId: string, block: BlockIR, position?: number) => void;
 	removeBlock: (blockId: string) => void;
 	moveBlock: (blockId: string, newParentId: string, position: number) => void;
 	moveBlockUp: (blockId: string) => void;
@@ -52,10 +52,10 @@ interface CanvasActions {
 	// Selection actions
 	selectBlock: (blockId: string | null) => void;
 	hoverBlock: (blockId: string | null) => void;
-	getSelectedBlock: () => Block | null;
+	getSelectedBlock: () => BlockIR | null;
 
 	// Drag & Drop actions
-	startDrag: (block: Block) => void;
+	startDrag: (block: BlockIR) => void;
 	endDrag: () => void;
 	setDropTarget: (
 		targetId: string | null,
@@ -417,10 +417,10 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 
 // Update a block in the tree
 function updateBlockInTree(
-	block: Block,
+	block: BlockIR,
 	targetId: string,
-	updates: Partial<Block>
-): Block {
+	updates: Partial<BlockIR>
+): BlockIR {
 	if (block.id === targetId) {
 		return { ...block, ...updates };
 	}
@@ -439,11 +439,11 @@ function updateBlockInTree(
 
 // Add a block to the tree
 function addBlockToTree(
-	block: Block,
+	block: BlockIR,
 	parentId: string,
-	newBlock: Block,
+	newBlock: BlockIR,
 	position?: number
-): Block {
+): BlockIR {
 	if (block.id === parentId) {
 		const children = block.children || [];
 		const insertPosition = position !== undefined ? position : children.length;
@@ -468,7 +468,7 @@ function addBlockToTree(
 }
 
 // Remove a block from the tree
-function removeBlockFromTree(block: Block, targetId: string): Block | null {
+function removeBlockFromTree(block: BlockIR, targetId: string): BlockIR | null {
 	// Can't remove root
 	if (block.id === targetId) {
 		return null;
@@ -478,7 +478,7 @@ function removeBlockFromTree(block: Block, targetId: string): Block | null {
 		const newChildren = block.children
 			.filter((child) => child.id !== targetId)
 			.map((child) => removeBlockFromTree(child, targetId))
-			.filter((child): child is Block => child !== null);
+			.filter((child): child is BlockIR => child !== null);
 
 		return { ...block, children: newChildren };
 	}
@@ -487,7 +487,7 @@ function removeBlockFromTree(block: Block, targetId: string): Block | null {
 }
 
 // Find a block in the tree
-function findBlockInTree(block: Block, targetId: string): Block | null {
+function findBlockInTree(block: BlockIR, targetId: string): BlockIR | null {
 	if (block.id === targetId) {
 		return block;
 	}
@@ -503,7 +503,7 @@ function findBlockInTree(block: Block, targetId: string): Block | null {
 }
 
 // Find parent of a block
-function findParentOfBlock(block: Block, targetId: string): Block | null {
+function findParentOfBlock(block: BlockIR, targetId: string): BlockIR | null {
 	if (block.children) {
 		for (const child of block.children) {
 			if (child.id === targetId) {
@@ -518,7 +518,7 @@ function findParentOfBlock(block: Block, targetId: string): Block | null {
 }
 
 // Clone a block with new IDs (for duplication)
-function cloneBlockWithNewIds(block: Block): Block {
+function cloneBlockWithNewIds(block: BlockIR): BlockIR {
 	const newId = crypto.randomUUID();
 
 	return {

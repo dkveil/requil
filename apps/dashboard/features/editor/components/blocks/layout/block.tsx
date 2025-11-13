@@ -1,7 +1,7 @@
 import { BlockRendererProps } from '../../block-renderer';
 import { ContainerBlock } from './container';
 
-export function SectionBlock({
+export function Block({
 	block,
 	isCanvas,
 	styles,
@@ -24,7 +24,7 @@ export function SectionBlock({
 			isCanvas={isCanvas}
 			styles={styles}
 			interactionProps={interactionProps}
-			blockType='Section'
+			blockType='Block'
 			additionalStyles={{
 				width: block.props.fullWidth ? '100%' : 'auto',
 				backgroundImage: block.props.backgroundImage
@@ -41,6 +41,7 @@ export function SectionBlock({
 			onMoveDown={onMoveDown}
 			onDelete={onDelete}
 			onSelectParent={onSelectParent}
+			emptyMessage={`Empty ${block.props.htmlTag} block - Drop elements here`}
 		/>
 	);
 }
