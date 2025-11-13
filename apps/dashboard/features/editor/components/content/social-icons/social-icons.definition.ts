@@ -7,6 +7,45 @@ import {
 
 const socialIconsContentFields = [
 	{
+		key: 'icons',
+		label: 'Items',
+		type: 'array' as const,
+		itemTitle: 'Social',
+		itemTitleKey: 'network',
+		children: [
+			{
+				key: 'network',
+				label: 'Network',
+				type: 'select' as const,
+				options: [
+					{ label: 'Facebook', value: 'facebook' },
+					{ label: 'Twitter', value: 'twitter' },
+					{ label: 'Instagram', value: 'instagram' },
+					{ label: 'LinkedIn', value: 'linkedin' },
+					{ label: 'YouTube', value: 'youtube' },
+					{ label: 'GitHub', value: 'github' },
+					{ label: 'Pinterest', value: 'pinterest' },
+					{ label: 'Snapchat', value: 'snapchat' },
+					{ label: 'TikTok', value: 'tiktok' },
+					{ label: 'Dribbble', value: 'dribbble' },
+					{ label: 'Website', value: 'web' },
+				],
+			},
+			{
+				key: 'href',
+				label: 'URL',
+				type: 'text' as const,
+				placeholder: 'https://...',
+			},
+			{
+				key: 'alt',
+				label: 'Alt Text',
+				type: 'text' as const,
+				placeholder: 'Optional',
+			},
+		],
+	},
+	{
 		key: 'mode',
 		label: 'Mode',
 		type: 'select' as const,
@@ -51,7 +90,14 @@ const socialIconsContentFields = [
 const socialIconsContentGroup = {
 	id: 'content',
 	label: 'Social icons',
-	fields: ['mode', 'iconSize', 'iconColor', 'textMode', 'textPosition'],
+	fields: [
+		'icons',
+		'mode',
+		'iconSize',
+		'iconColor',
+		'textMode',
+		'textPosition',
+	],
 };
 
 // Create conditional typography group
@@ -99,16 +145,19 @@ export const socialIconsDefinition: ComponentDefinition = {
 						id: '1',
 						network: 'facebook',
 						href: 'https://facebook.com',
+						alt: 'Facebook',
 					},
 					{
 						id: '2',
 						network: 'twitter',
 						href: 'https://twitter.com',
+						alt: 'Twitter',
 					},
 					{
 						id: '3',
 						network: 'instagram',
 						href: 'https://instagram.com',
+						alt: 'Instagram',
 					},
 				],
 			},
@@ -129,16 +178,19 @@ export const socialIconsDefinition: ComponentDefinition = {
 				id: '1',
 				network: 'facebook',
 				href: 'https://facebook.com',
+				alt: 'Facebook',
 			},
 			{
 				id: '2',
 				network: 'twitter',
 				href: 'https://twitter.com',
+				alt: 'Twitter',
 			},
 			{
 				id: '3',
 				network: 'instagram',
 				href: 'https://instagram.com',
+				alt: 'Instagram',
 			},
 		],
 		mode: 'horizontal',

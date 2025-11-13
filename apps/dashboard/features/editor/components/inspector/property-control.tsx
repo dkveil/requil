@@ -12,10 +12,11 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { isFieldVisible } from '../../lib/field-utils';
-import { IconSelect } from './icon-select';
-import { PaddingControl } from './padding-control';
-import { RadiusControl } from './radius-control';
-import { SizeControl } from './size-control';
+import { ArrayControl } from './controls/array-control';
+import { IconSelect } from './controls/icon-select';
+import { PaddingControl } from './controls/padding-control';
+import { RadiusControl } from './controls/radius-control';
+import { SizeControl } from './controls/size-control';
 
 interface PropertyControlProps {
 	field: {
@@ -374,6 +375,29 @@ export function PropertyControl({
 				</div>
 			);
 		}
+
+		case 'array':
+			return (
+				<ArrayControl
+					field={field}
+					value={value}
+					onChange={onChange}
+					renderField={(
+						childField,
+						childValue,
+						childOnChange,
+						childAllValues
+					) => (
+						<PropertyControl
+							key={childField.key}
+							field={childField}
+							value={childValue}
+							onChange={childOnChange}
+							allValues={childAllValues}
+						/>
+					)}
+				/>
+			);
 
 		default:
 			return null;

@@ -18,7 +18,7 @@ const buttonFields = [
 
 const buttonContentGroup = {
 	id: 'content',
-	label: 'Content',
+	label: 'Button',
 	fields: ['text', 'href'],
 };
 

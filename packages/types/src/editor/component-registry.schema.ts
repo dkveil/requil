@@ -36,6 +36,7 @@ export const BaseInspectorFieldSchema = z.object({
 		'image',
 		'textarea',
 		'group',
+		'array',
 	]),
 	defaultValue: z.unknown().optional(),
 	options: z

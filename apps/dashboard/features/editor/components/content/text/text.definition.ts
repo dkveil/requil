@@ -14,7 +14,7 @@ const contentField = {
 
 const contentGroup = {
 	id: 'content',
-	label: 'Content',
+	label: 'Text',
 	fields: ['content'],
 };
 

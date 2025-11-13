@@ -97,7 +97,7 @@ export function SettingsSidebar() {
 	};
 
 	return (
-		<div className='w-80 border-l h-full bg-card flex flex-col overflow-auto'>
+		<div className='w-80 border-l h-[calc(100%-49px)] bg-card flex flex-col overflow-auto pb-5'>
 			{/* Tabs */}
 			<Tabs
 				defaultValue='layout'
