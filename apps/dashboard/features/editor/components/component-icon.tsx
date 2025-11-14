@@ -223,6 +223,59 @@ export function ComponentIcon({ type, title, className }: ComponentIconProps) {
 					/>
 				</svg>
 			);
+		case 'List':
+			return (
+				<svg
+					className={cn('w-6 h-6', className)}
+					fill='none'
+					viewBox='0 0 24 24'
+					stroke='currentColor'
+				>
+					<title>{title || 'List icon'}</title>
+					<circle
+						cx='6'
+						cy='7'
+						r='1'
+						fill='currentColor'
+					/>
+					<circle
+						cx='6'
+						cy='12'
+						r='1'
+						fill='currentColor'
+					/>
+					<circle
+						cx='6'
+						cy='17'
+						r='1'
+						fill='currentColor'
+					/>
+					<line
+						x1='10'
+						y1='7'
+						x2='20'
+						y2='7'
+						strokeWidth='1.5'
+						strokeLinecap='round'
+					/>
+					<line
+						x1='10'
+						y1='12'
+						x2='20'
+						y2='12'
+						strokeWidth='1.5'
+						strokeLinecap='round'
+					/>
+					<line
+						x1='10'
+						y1='17'
+						x2='20'
+						y2='17'
+						strokeWidth='1.5'
+						strokeLinecap='round'
+					/>
+				</svg>
+			);
 		case 'SocialIcons':
 			return (
 				<svg
