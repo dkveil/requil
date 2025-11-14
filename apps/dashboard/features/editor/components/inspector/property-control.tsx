@@ -34,6 +34,7 @@ interface PropertyControlProps {
 		isExpanded?: boolean;
 		isAddable?: boolean;
 		emptyLabel?: string;
+		defaultExpanded?: boolean;
 		condition?: {
 			field: string;
 			operator: string;
@@ -239,6 +240,7 @@ export function PropertyControl({
 					<PaddingControl
 						value={value as any}
 						onChange={onChange}
+						defaultExpanded={field.defaultExpanded}
 					/>
 				</div>
 			);

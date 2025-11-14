@@ -15,6 +15,7 @@ interface BoxControlProps {
 	min?: number;
 	max?: number;
 	type?: 'padding' | 'radius';
+	defaultExpanded?: boolean;
 }
 
 export function BoxControl({
@@ -23,9 +24,10 @@ export function BoxControl({
 	min = 0,
 	max,
 	type = 'padding',
+	defaultExpanded = false,
 }: BoxControlProps) {
 	const isLinked = typeof value === 'number';
-	const [showIndividual, setShowIndividual] = useState(false);
+	const [showIndividual, setShowIndividual] = useState(defaultExpanded);
 
 	const boxValue: BoxValue =
 		typeof value === 'number'

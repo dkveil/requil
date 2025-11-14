@@ -17,6 +17,7 @@ export type FieldConfig = {
 	> & {
 		isAddable?: boolean;
 		emptyLabel?: string;
+		defaultExpanded?: boolean;
 	};
 };
 

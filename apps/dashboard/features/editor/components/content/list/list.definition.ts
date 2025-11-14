@@ -27,23 +27,63 @@ const listFields = [
 		options: [
 			{ label: 'Bullet List', value: 'bullet' },
 			{ label: 'Numbered List', value: 'numbered' },
+			{ label: 'Custom Markers', value: 'custom' },
 		],
 	},
 	{
-		key: 'indent',
-		label: 'Indent',
-		type: 'slider' as const,
-		min: 0,
-		max: 40,
-		step: 4,
-		unit: 'px',
+		key: 'showMarkers',
+		label: 'Show Markers',
+		type: 'toggle' as const,
+		condition: {
+			field: 'listType',
+			operator: 'notEq' as const,
+			value: 'custom',
+		},
+	},
+	{
+		key: 'markerColor',
+		label: 'Marker Color',
+		type: 'color' as const,
+		condition: {
+			field: 'showMarkers',
+			operator: 'truthy' as const,
+			value: true,
+		},
+	},
+	{
+		key: 'customMarker',
+		label: 'Custom Marker',
+		type: 'text' as const,
+		placeholder: '→',
+		condition: {
+			field: 'listType',
+			operator: 'eq' as const,
+			value: 'custom',
+		},
+	},
+	{
+		key: 'customMarkerColor',
+		label: 'Marker Color',
+		type: 'color' as const,
+		condition: {
+			field: 'listType',
+			operator: 'eq' as const,
+			value: 'custom',
+		},
 	},
 ];
 
 const listContentGroup = {
 	id: 'content',
 	label: 'List',
-	fields: ['items', 'listType', 'indent'],
+	fields: [
+		'items',
+		'listType',
+		'showMarkers',
+		'markerColor',
+		'customMarker',
+		'customMarkerColor',
+	],
 };
 
 export const ListDefinition: ComponentDefinition = {
@@ -75,10 +115,13 @@ export const ListDefinition: ComponentDefinition = {
 			},
 			listType: {
 				type: 'string',
-				enum: ['bullet', 'numbered'],
+				enum: ['bullet', 'numbered', 'custom'],
 				default: 'bullet',
 			},
-			indent: { type: 'number', default: 0 },
+			showMarkers: { type: 'boolean', default: true },
+			markerColor: { type: 'string', default: 'inherit' },
+			customMarker: { type: 'string', default: '→' },
+			customMarkerColor: { type: 'string', default: '#000000' },
 			...typographyGroup.schema,
 			...layoutGroup.schema,
 			...stylesGroup.schema,
@@ -92,10 +135,20 @@ export const ListDefinition: ComponentDefinition = {
 			{ id: '3', text: 'List item 3' },
 		],
 		listType: 'bullet',
-		indent: 0,
+		showMarkers: true,
+		markerColor: 'inherit',
+		customMarker: '→',
+		customMarkerColor: '#000000',
 		...typographyGroup.defaults,
 		...layoutGroup.defaults,
 		...stylesGroup.defaults,
+		gap: 0,
+		padding: {
+			top: 12,
+			right: 0,
+			bottom: 12,
+			left: 0,
+		},
 	},
 
 	inspectorConfig: {

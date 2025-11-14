@@ -10,14 +10,20 @@ interface PaddingValue {
 interface PaddingControlProps {
 	value: PaddingValue | number;
 	onChange: (value: PaddingValue | number) => void;
+	defaultExpanded?: boolean;
 }
 
-export function PaddingControl({ value, onChange }: PaddingControlProps) {
+export function PaddingControl({
+	value,
+	onChange,
+	defaultExpanded,
+}: PaddingControlProps) {
 	return (
 		<BoxControl
 			value={value}
 			onChange={onChange}
 			type='padding'
+			defaultExpanded={defaultExpanded}
 		/>
 	);
 }

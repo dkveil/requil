@@ -1,4 +1,10 @@
-import { GripVertical, Plus, Trash2 } from 'lucide-react';
+import {
+	ChevronDown,
+	ChevronRight,
+	GripVertical,
+	Plus,
+	Trash2,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { isFieldVisible } from '../../../lib/field-utils';
@@ -30,6 +36,7 @@ export function ArrayControl({
 	const arrayValue = (value as any[]) || [];
 	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 	const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+	const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
 
 	const createDefaultItem = () => {
 		const defaultItem: Record<string, any> = {
@@ -49,14 +56,44 @@ export function ArrayControl({
 		return defaultItem;
 	};
 
+	const toggleItemExpanded = (index: number) => {
+		setExpandedItems((prev) => {
+			const newSet = new Set(prev);
+			if (newSet.has(index)) {
+				newSet.delete(index);
+			} else {
+				newSet.add(index);
+			}
+			return newSet;
+		});
+	};
+
 	const handleAddItem = () => {
+		const newIndex = arrayValue.length;
 		onChange([...arrayValue, createDefaultItem()]);
+		// Auto-expand newly added item
+		setExpandedItems((prev) => new Set(prev).add(newIndex));
 	};
 
 	const handleRemoveItem = (index: number) => {
 		const newArray = [...arrayValue];
 		newArray.splice(index, 1);
 		onChange(newArray);
+		// Remove from expanded set
+		setExpandedItems((prev) => {
+			const newSet = new Set(prev);
+			newSet.delete(index);
+			// Adjust indices for items after the removed one
+			const adjustedSet = new Set<number>();
+			newSet.forEach((i) => {
+				if (i < index) {
+					adjustedSet.add(i);
+				} else if (i > index) {
+					adjustedSet.add(i - 1);
+				}
+			});
+			return adjustedSet;
+		});
 	};
 
 	const handleItemChange = (index: number, newItemValue: any) => {
@@ -134,64 +171,87 @@ export function ArrayControl({
 				</div>
 			) : (
 				<div className='space-y-2'>
-					{arrayValue.map((item, index) => (
-						<div
-							key={item.id || index}
-							draggable
-							onDragStart={(e) => handleDragStart(e, index)}
-							onDragEnd={handleDragEnd}
-							onDragOver={(e) => handleDragOver(e, index)}
-							onDragLeave={handleDragLeave}
-							onDrop={(e) => handleDrop(e, index)}
-							className={`border border-accent rounded p-3 space-y-3 bg-accent/20 transition-all cursor-move ${
-								draggedIndex === index ? 'opacity-50' : ''
-							} ${
-								dragOverIndex === index
-									? 'border-primary border-2 bg-accent/40'
-									: ''
-							}`}
-						>
-							<div className='flex items-center justify-between gap-2 mb-2'>
-								<div className='flex items-center gap-2'>
-									<div className='p-0.5 text-muted-foreground cursor-grab active:cursor-grabbing'>
-										<GripVertical className='h-3 w-3' />
-									</div>
-									<span className='text-xs font-medium text-muted-foreground'>
-										{field.itemTitle || `#${index + 1}`}
-										{field.itemTitleKey && item[field.itemTitleKey] && (
-											<span className='ml-1 text-foreground'>
-												{item[field.itemTitleKey]}
-											</span>
-										)}
-									</span>
-								</div>
-								<button
-									type='button'
-									onClick={() => handleRemoveItem(index)}
-									className='p-0.5 text-muted-foreground hover:text-destructive transition-colors'
-									aria-label='Remove item'
+					{arrayValue.map((item, index) => {
+						const isExpanded = expandedItems.has(index);
+						return (
+							<div
+								key={item.id || index}
+								className={`border border-accent rounded bg-accent/20 transition-all ${
+									draggedIndex === index ? 'opacity-50' : ''
+								} ${
+									dragOverIndex === index
+										? 'border-primary border-2 bg-accent/40'
+										: ''
+								}`}
+							>
+								<div
+									draggable
+									onDragStart={(e) => handleDragStart(e, index)}
+									onDragEnd={handleDragEnd}
+									onDragOver={(e) => handleDragOver(e, index)}
+									onDragLeave={handleDragLeave}
+									onDrop={(e) => handleDrop(e, index)}
+									className='flex items-center justify-between gap-2 p-3 cursor-move'
 								>
-									<Trash2 className='h-3 w-3' />
-								</button>
-							</div>
+									<div className='flex items-center gap-2 flex-1'>
+										<div className='p-0.5 text-muted-foreground cursor-grab active:cursor-grabbing'>
+											<GripVertical className='h-3 w-3' />
+										</div>
+										<button
+											type='button'
+											onClick={() => toggleItemExpanded(index)}
+											className='p-0.5 text-muted-foreground hover:text-foreground transition-colors'
+											aria-label={isExpanded ? 'Collapse item' : 'Expand item'}
+										>
+											{isExpanded ? (
+												<ChevronDown className='h-3 w-3' />
+											) : (
+												<ChevronRight className='h-3 w-3' />
+											)}
+										</button>
+										<span className='text-xs font-medium text-muted-foreground'>
+											{field.itemTitle || `#${index + 1}`}
+											{field.itemTitleKey && item[field.itemTitleKey] && (
+												<span className='ml-1 text-foreground'>
+													{item[field.itemTitleKey]}
+												</span>
+											)}
+										</span>
+									</div>
+									<button
+										type='button'
+										onClick={() => handleRemoveItem(index)}
+										className='p-0.5 text-muted-foreground hover:text-destructive transition-colors'
+										aria-label='Remove item'
+									>
+										<Trash2 className='h-3 w-3' />
+									</button>
+								</div>
 
-							{field.children
-								?.filter((childField: any) => isFieldVisible(childField, item))
-								.map((childField: any) =>
-									renderField(
-										childField,
-										item[childField.key],
-										(newValue) => {
-											handleItemChange(index, {
-												...item,
-												[childField.key]: newValue,
-											});
-										},
-										item
-									)
+								{isExpanded && (
+									<div className='px-3 pb-3 space-y-3 border-t border-accent/50 pt-3'>
+										{field.children
+											?.filter((childField: any) =>
+												isFieldVisible(childField, item)
+											)
+											.map((childField: any) =>
+												renderField(
+													childField,
+													item[childField.key],
+													(newValue) => {
+														handleItemChange(index, {
+															...item,
+															[childField.key]: newValue,
+														});
+													},
+													item
+												)
+											)}
+									</div>
 								)}
-						</div>
-					))}
+							</div>
+						);
+					})}
 				</div>
 			)}
 		</div>

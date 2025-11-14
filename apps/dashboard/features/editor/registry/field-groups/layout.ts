@@ -53,6 +53,7 @@ export const layoutGroup = createFieldGroup({
 				key: 'padding',
 				label: 'Padding',
 				type: 'padding',
+				defaultExpanded: true,
 			},
 		},
 	},
