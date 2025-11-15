@@ -6,6 +6,8 @@ import { makeDependencies } from '@/modules';
 import { formatName } from '@/server/di/util';
 
 export async function di(fastify: FastifyInstance) {
+	const config = await import('@/config');
+
 	diContainer
 		.register({
 			...makeDependencies({
@@ -13,6 +15,8 @@ export async function di(fastify: FastifyInstance) {
 				commandBus: fastify.commandBus,
 				eventBus: fastify.eventBus,
 				queryBus: fastify.queryBus,
+				config: { env: config.env as any },
+				supabase: fastify.supabase,
 			}),
 		})
 		.loadModules(

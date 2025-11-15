@@ -1,6 +1,8 @@
 import { db } from '@requil/db';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { asValue } from 'awilix';
 import type { FastifyBaseLogger } from 'fastify';
+import type { Env } from '@/config/env';
 import type { CommandBus, EventBus } from '@/shared/cqrs/bus.types';
 import type { DBType, RepositoryBaseProps } from '@/shared/db/repository.base';
 import { RepositoryBase } from '@/shared/db/repository.base';
@@ -13,6 +15,8 @@ declare global {
 		commandBus: CommandBus;
 		eventBus: EventBus;
 		db: DBType;
+		config: { env: Env };
+		supabase: SupabaseClient;
 		repositoryBase: <Entity, PersistenceModel>(
 			props: Omit<
 				RepositoryBaseProps<Entity, PersistenceModel>,
@@ -27,11 +31,15 @@ export function makeDependencies({
 	queryBus,
 	commandBus,
 	eventBus,
+	config,
+	supabase,
 }: {
 	logger: FastifyBaseLogger;
 	commandBus: CommandBus;
 	eventBus: EventBus;
 	queryBus: CommandBus;
+	config: { env: Env };
+	supabase: SupabaseClient;
 }) {
 	const repositoryBaseFn = <
 		Entity,
@@ -48,6 +56,8 @@ export function makeDependencies({
 	return {
 		logger: asValue(logger),
 		db: asValue(db),
+		config: asValue(config),
+		supabase: asValue(supabase),
 		repositoryBase: asValue(repositoryBaseFn),
 		commandBus: asValue(commandBus),
 		queryBus: asValue(queryBus),

@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { isFieldVisible } from '../../lib/field-utils';
 import { ArrayControl } from './controls/array-control';
 import { IconSelect } from './controls/icon-select';
+import { ImagePickerControl } from './controls/image-picker-control';
 import { PaddingControl } from './controls/padding-control';
 import { RadiusControl } from './controls/radius-control';
 import { SizeControl } from './controls/size-control';
@@ -44,6 +45,7 @@ interface PropertyControlProps {
 	value: unknown;
 	onChange: (value: unknown) => void;
 	allValues?: Record<string, any>;
+	workspaceId?: string;
 }
 
 export function PropertyControl({
@@ -51,6 +53,7 @@ export function PropertyControl({
 	value,
 	onChange,
 	allValues,
+	workspaceId,
 }: PropertyControlProps) {
 	const [isExpanded, setIsExpanded] = useState(field.isExpanded ?? true);
 
@@ -248,8 +251,6 @@ export function PropertyControl({
 			);
 
 		case 'text':
-		// TODO: Add image control
-		case 'image':
 			return (
 				<div className='flex items-center justify-between gap-3'>
 					<Label className='text-xs text-muted-foreground flex-shrink-0'>
@@ -263,6 +264,32 @@ export function PropertyControl({
 						className='h-7 text-xs flex-1 bg-accent/50 border-accent'
 					/>
 				</div>
+			);
+
+		case 'image':
+			if (!workspaceId) {
+				return (
+					<div className='flex items-center justify-between gap-3'>
+						<Label className='text-xs text-muted-foreground flex-shrink-0'>
+							{field.label}
+						</Label>
+						<Input
+							type='text'
+							value={String(value)}
+							onChange={(e) => onChange(e.target.value)}
+							placeholder={field.placeholder}
+							className='h-7 text-xs flex-1 bg-accent/50 border-accent'
+						/>
+					</div>
+				);
+			}
+			return (
+				<ImagePickerControl
+					label={field.label}
+					value={String(value || '')}
+					onChange={onChange}
+					workspaceId={workspaceId}
+				/>
 			);
 
 		case 'textarea':
@@ -423,6 +450,7 @@ export function PropertyControl({
 												});
 											}}
 											allValues={allValues}
+											workspaceId={workspaceId}
 										/>
 									);
 								})}
@@ -450,6 +478,7 @@ export function PropertyControl({
 							value={childValue}
 							onChange={childOnChange}
 							allValues={childAllValues}
+							workspaceId={workspaceId}
 						/>
 					)}
 				/>

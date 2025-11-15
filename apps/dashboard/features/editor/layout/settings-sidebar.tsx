@@ -36,7 +36,11 @@ const setNestedValue = (
 	return result;
 };
 
-export function SettingsSidebar() {
+interface SettingsSidebarProps {
+	workspaceId?: string;
+}
+
+export function SettingsSidebar({ workspaceId }: SettingsSidebarProps = {}) {
 	const t = useTranslations('editor.settingsSidebar');
 	const { selectedBlock, document, updateBlock } = useCanvas();
 	const [expandedSections, setExpandedSections] = useState<Set<string>>(
@@ -244,6 +248,7 @@ export function SettingsSidebar() {
 														handlePropChange(field.key, newValue)
 													}
 													allValues={blockToEdit.props}
+													workspaceId={workspaceId}
 												/>
 											);
 										})}
@@ -280,6 +285,7 @@ export function SettingsSidebar() {
 												handlePropChange(field.key, newValue)
 											}
 											allValues={blockToEdit.props}
+											workspaceId={workspaceId}
 										/>
 									</Section>
 								);

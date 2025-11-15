@@ -52,6 +52,7 @@ export const editorEnLocales = {
 		elementsSidebar: {
 			addElements: 'Add elements',
 			layers: 'Layers',
+			assets: 'Assets',
 			search: 'Search',
 			category: 'Category',
 			component: 'Component',

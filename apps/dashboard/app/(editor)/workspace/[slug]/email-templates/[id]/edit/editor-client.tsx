@@ -27,11 +27,11 @@ export function EditorClient({ workspaceSlug, templateId }: Props) {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: not needed
 	useEffect(() => {
 		if (accessChecked && templateId) {
-			loadTemplateById(templateId);
-			setProjectName(currentTemplate?.name || 'Untitled Project');
+			loadTemplateById(templateId, () => {
+				setProjectName(currentTemplate?.name || 'Untitled Project');
+			});
 		}
 	}, [accessChecked, templateId, loadTemplateById]);
-
 	// biome-ignore lint/correctness/useExhaustiveDependencies: not needed
 	useEffect(() => {
 		if (user?.email) {
@@ -64,5 +64,17 @@ export function EditorClient({ workspaceSlug, templateId }: Props) {
 		);
 	}
 
-	return <EditorLayout />;
+	if (!currentWorkspace?.id) {
+		return (
+			<div className='flex h-screen items-center justify-center'>
+				<div className='text-center'>
+					<h2 className='text-2xl font-bold text-foreground'>
+						Workspace not found
+					</h2>
+				</div>
+			</div>
+		);
+	}
+
+	return <EditorLayout workspaceId={currentWorkspace.id} />;
 }

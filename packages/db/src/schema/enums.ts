@@ -12,6 +12,12 @@ export const apiScope = pgEnum('api_scope', [
 	'webhooks:manage',
 ]);
 
+export const assetStatus = pgEnum('asset_status', [
+	'uploading',
+	'ready',
+	'error',
+]);
+export const assetType = pgEnum('asset_type', ['image', 'font']);
 export const eventType = pgEnum('event_type', ['sent', 'delivered', 'bounced']);
 export const plan = pgEnum('plan', ['free']);
 export const recipientStatus = pgEnum('recipient_status', [

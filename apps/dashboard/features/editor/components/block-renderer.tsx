@@ -284,9 +284,10 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 		const isStackedColumn = isStacked && block.type === 'Column';
 
 		let wrapperClassName = 'block-wrapper-other';
-		wrapperClassName = isBlockWithWidth
-			? 'block-wrapper-column-explicit'
-			: 'block-wrapper-column-flex';
+		wrapperClassName =
+			isBlockWithWidth && block.type !== 'Image'
+				? 'block-wrapper-column-explicit'
+				: 'block-wrapper-column-flex';
 
 		return (
 			<div
@@ -295,7 +296,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 					position: 'relative',
 					width: isStackedColumn
 						? '100%'
-						: isBlockWithWidth
+						: isBlockWithWidth && block.type !== 'Image'
 							? (block.props.width as string | number)
 							: 'auto',
 				}}

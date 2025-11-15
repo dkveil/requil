@@ -18,17 +18,29 @@ export function Image({
 		| undefined;
 	const hasLink = linkTo?.href && !isCanvas;
 
+	const {
+		padding,
+		paddingTop,
+		paddingBottom,
+		paddingLeft,
+		paddingRight,
+		width,
+		...wrapperStyles
+	} = styles;
+
+	const imageStyles: React.CSSProperties = {
+		...styles,
+		width: hasLink ? '100%' : width,
+		display: 'block',
+	};
+
 	const imageElement = (
 		<img
 			src={src}
 			alt={alt}
+			data-block-type='Image'
 			style={{
-				width: (block.props.width as string) || '100%',
-				height: 'auto',
-				borderRadius:
-					typeof block.props.borderRadius === 'number'
-						? block.props.borderRadius
-						: 0,
+				...imageStyles,
 				display: 'block',
 			}}
 		/>
@@ -38,18 +50,24 @@ export function Image({
 		<div
 			{...interactionProps}
 			style={{
-				...styles,
-				textAlign:
-					(block.props.align as 'left' | 'center' | 'right') || 'center',
+				...wrapperStyles,
+				width: '100%',
+				display: 'flex',
+				flexDirection: 'column',
 			}}
 			data-block-type='Image'
 			data-block-id={block.id}
 		>
 			{hasLink ? (
 				<a
+					style={{
+						...imageStyles,
+						display: 'block',
+					}}
 					href={linkTo.href}
 					target={linkTo.target ? '_blank' : undefined}
 					rel={linkTo.target ? 'noopener noreferrer' : undefined}
+					data-block-type='Image'
 				>
 					{imageElement}
 				</a>

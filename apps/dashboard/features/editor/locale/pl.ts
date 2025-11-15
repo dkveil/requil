@@ -52,6 +52,7 @@ export const editorPlLocales = {
 		elementsSidebar: {
 			addElements: 'Dodaj elementy',
 			layers: 'Warstwy',
+			assets: 'Zasoby',
 			search: 'Szukaj',
 			category: 'Kategoria',
 			component: 'Element',

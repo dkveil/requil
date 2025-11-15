@@ -48,7 +48,11 @@ const cursorOffsetModifier: Modifier = ({
 	return transform;
 };
 
-export default function EditorLayout() {
+interface EditorLayoutProps {
+	workspaceId: string;
+}
+
+export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
 	const { selectedBlockId, document, addBlock, selectBlock, moveBlock } =
 		useCanvas();
 	const t = useTranslations('editor');
@@ -109,7 +113,54 @@ export default function EditorLayout() {
 			type: string;
 			blockId?: string;
 			blockType?: string;
+			assetId?: string;
+			assetType?: string;
+			publicUrl?: string;
+			alt?: string;
 		};
+
+		// Handle dragging an asset from assets panel
+		if (typeof active.id === 'string' && active.id.startsWith('asset-')) {
+			if (activeData?.type === 'asset' && activeData.assetType === 'image') {
+				const newBlock = createBlock('Image');
+				if (!newBlock) {
+					toast.error(t('failedToCreateBlock'));
+					return;
+				}
+
+				newBlock.props = {
+					...newBlock.props,
+					src: activeData.publicUrl || '',
+					alt: activeData.alt || 'Image',
+				};
+
+				const targetId = over.id as string;
+
+				if (targetId.startsWith('dropzone-')) {
+					const overData = over.data.current as {
+						type: string;
+						parentId: string;
+						position: number;
+					};
+
+					if (overData?.type === 'drop-zone') {
+						addBlock(overData.parentId, newBlock, overData.position);
+						toast.success(t('addedBlockToCanvas', { blockType: 'Image' }));
+						selectBlock(newBlock.id);
+						return;
+					}
+				}
+
+				if (targetId.startsWith('block-')) {
+					const blockId = targetId.replace('block-', '');
+					addBlock(blockId, newBlock);
+					toast.success(t('addedBlockToSelectedBlock', { blockType: 'Image' }));
+					selectBlock(newBlock.id);
+					return;
+				}
+			}
+			return;
+		}
 
 		// Check if dragging a component type from sidebar
 		if (typeof active.id === 'string' && active.id.startsWith('sidebar-')) {
@@ -228,11 +279,14 @@ export default function EditorLayout() {
 			<div className='h-screen w-full overflow-hidden bg-background'>
 				<EditorHeader />
 				<div className='flex h-full'>
-					<ElementsSidebar onAddBlock={handleAddBlock} />
+					<ElementsSidebar
+						onAddBlock={handleAddBlock}
+						workspaceId={workspaceId}
+					/>
 					<div className='flex-1'>
 						<Canvas />
 					</div>
-					<SettingsSidebar />
+					<SettingsSidebar workspaceId={workspaceId} />
 				</div>
 			</div>
 			<DragOverlay

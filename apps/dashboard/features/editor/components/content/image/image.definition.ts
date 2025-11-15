@@ -9,8 +9,8 @@ import {
 const imageFields = [
 	{
 		key: 'src',
-		label: 'Image URL',
-		type: 'text' as const,
+		label: 'Image',
+		type: 'image' as const,
 		placeholder: 'https://example.com/image.jpg',
 	},
 	{

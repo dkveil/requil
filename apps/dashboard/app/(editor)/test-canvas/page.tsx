@@ -158,6 +158,7 @@ export default function TestCanvasPage() {
 			<div className='flex flex-1 overflow-hidden'>
 				{/* Elements Sidebar */}
 				<ElementsSidebar
+					workspaceId='test-workspace-id'
 					onAddBlock={(blockType) => {
 						const newBlock = createBlock(blockType);
 						if (!newBlock) {

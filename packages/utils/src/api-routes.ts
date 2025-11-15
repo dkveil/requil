@@ -25,4 +25,9 @@ export const API_ROUTES = {
 		UPDATE: '/template/:id',
 		DELETE: '/template/:id',
 	},
+	ASSET: {
+		UPLOAD: '/workspace/:workspaceId/asset',
+		FIND: '/workspace/:workspaceId/asset',
+		DELETE: '/workspace/:workspaceId/asset/:id',
+	},
 } as const;

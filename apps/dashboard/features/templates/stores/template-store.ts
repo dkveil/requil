@@ -12,7 +12,7 @@ type TemplateState = {
 
 type TemplateActions = {
 	loadTemplates: (workspaceId: string) => Promise<void>;
-	loadTemplateById: (id: string) => Promise<void>;
+	loadTemplateById: (id: string, callback?: () => void) => Promise<void>;
 	createTemplate: (data: {
 		workspaceId: string;
 		stableId: string;
@@ -61,7 +61,7 @@ export const useTemplateStore = create<TemplateState & TemplateActions>()(
 				}
 			},
 
-			loadTemplateById: async (id: string) => {
+			loadTemplateById: async (id: string, callback?: () => void) => {
 				set({ loading: true, error: null }, false, 'loadTemplateById/start');
 
 				try {
@@ -76,6 +76,8 @@ export const useTemplateStore = create<TemplateState & TemplateActions>()(
 						false,
 						'loadTemplateById/success'
 					);
+
+					callback?.();
 				} catch (error) {
 					console.error('Failed to load template', error);
 					set(

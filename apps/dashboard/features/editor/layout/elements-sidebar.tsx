@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { AssetsPanel } from '../components/assets-panel';
 import { ComponentIcon } from '../components/component-icon';
 import { componentRegistry } from '../registry/component-registry';
 import { LayersPanel } from './layers-panel';
@@ -21,9 +22,13 @@ const CATEGORY_ORDER: ComponentCategory[] = [
 
 interface ElementsSidebarProps {
 	onAddBlock?: (blockType: string) => void;
+	workspaceId: string;
 }
 
-export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
+export function ElementsSidebar({
+	onAddBlock,
+	workspaceId,
+}: ElementsSidebarProps) {
 	const t = useTranslations('editor.elementsSidebar');
 	const [searchQuery, setSearchQuery] = useState('');
 	const [activeTab, setActiveTab] = useState('elements');
@@ -84,7 +89,7 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 	};
 
 	return (
-		<div className='h-full border-r flex'>
+		<div className='h-[calc(100%-49px)] border-r flex'>
 			{/* Left Icon Menu */}
 			<div className='w-12 border-r flex flex-col bg-muted/30'>
 				<button
@@ -162,6 +167,44 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 						<path d='m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65' />
 					</svg>
 				</button>
+				<button
+					type='button'
+					onClick={() => setActiveTab('assets')}
+					className={cn(
+						'h-12 flex items-center justify-center border-b transition-colors',
+						activeTab === 'assets'
+							? 'bg-background text-primary border-r-2 border-r-primary'
+							: 'hover:bg-muted/50 text-muted-foreground'
+					)}
+					title={t('assets')}
+				>
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						viewBox='0 0 24 24'
+						fill='none'
+						stroke='currentColor'
+						strokeWidth='2'
+						strokeLinecap='round'
+						strokeLinejoin='round'
+						className='w-5 h-5'
+					>
+						<title>{t('assets')}</title>
+						<rect
+							width='18'
+							height='18'
+							x='3'
+							y='3'
+							rx='2'
+							ry='2'
+						/>
+						<circle
+							cx='9'
+							cy='9'
+							r='2'
+						/>
+						<path d='m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21' />
+					</svg>
+				</button>
 			</div>
 
 			{/* Right Panel Content */}
@@ -237,7 +280,7 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 							)}
 						</div>
 					</>
-				) : (
+				) : activeTab === 'layers' ? (
 					<>
 						{/* Header */}
 						<div className='p-4 border-b'>
@@ -248,6 +291,21 @@ export function ElementsSidebar({ onAddBlock }: ElementsSidebarProps) {
 
 						{/* Layers Panel */}
 						<LayersPanel className='flex-1' />
+					</>
+				) : (
+					<>
+						{/* Header */}
+						<div className='p-4 border-b'>
+							<h2 className='text-sm font-semibold text-foreground'>
+								{t('assets')}
+							</h2>
+						</div>
+
+						{/* Assets Panel */}
+						<AssetsPanel
+							workspaceId={workspaceId}
+							filterType='image'
+						/>
 					</>
 				)}
 			</div>

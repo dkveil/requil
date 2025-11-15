@@ -185,7 +185,8 @@
 }
 
 .block-wrapper-column-explicit {
-	& > [data-block-type] {
+	& > [data-block-type],
+	& [data-block-type="Image"] {
 		width: 100% !important;
 	}
 }
