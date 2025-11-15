@@ -18,6 +18,7 @@ interface CanvasState {
 	// Selection
 	selectedBlockId: string | null;
 	hoveredBlockId: string | null;
+	editingBlockId: string | null;
 
 	// Drag & Drop
 	draggedBlock: BlockIR | null;
@@ -27,7 +28,7 @@ interface CanvasState {
 	// UI State
 	viewport: 'desktop' | 'mobile';
 	zoom: number;
-	isModified: boolean; // Track if document has unsaved changes
+	isModified: boolean;
 }
 
 // Canvas actions
@@ -53,6 +54,8 @@ interface CanvasActions {
 	selectBlock: (blockId: string | null) => void;
 	hoverBlock: (blockId: string | null) => void;
 	getSelectedBlock: () => BlockIR | null;
+	startEditing: (blockId: string) => void;
+	stopEditing: () => void;
 
 	// Drag & Drop actions
 	startDrag: (block: BlockIR) => void;
@@ -77,6 +80,7 @@ const initialState: CanvasState = {
 	history: null,
 	selectedBlockId: null,
 	hoveredBlockId: null,
+	editingBlockId: null,
 	draggedBlock: null,
 	dropTargetId: null,
 	dropPosition: null,
@@ -458,7 +462,8 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 			},
 
 			// Select block
-			selectBlock: (blockId) => set({ selectedBlockId: blockId }),
+			selectBlock: (blockId) =>
+				set({ selectedBlockId: blockId, editingBlockId: null }),
 
 			// Hover block
 			hoverBlock: (blockId) => set({ hoveredBlockId: blockId }),
@@ -469,6 +474,13 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 				if (!(document && selectedBlockId)) return null;
 				return findBlockInTree(document.root, selectedBlockId);
 			},
+
+			// Start editing
+			startEditing: (blockId) =>
+				set({ editingBlockId: blockId, selectedBlockId: blockId }),
+
+			// Stop editing
+			stopEditing: () => set({ editingBlockId: null }),
 
 			// Start drag
 			startDrag: (block) => set({ draggedBlock: block }),

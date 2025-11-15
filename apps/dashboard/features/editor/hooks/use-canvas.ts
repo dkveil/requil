@@ -13,6 +13,7 @@ export function useCanvas() {
 	const document = useCanvasStore((state) => state.document);
 	const selectedBlockId = useCanvasStore((state) => state.selectedBlockId);
 	const hoveredBlockId = useCanvasStore((state) => state.hoveredBlockId);
+	const editingBlockId = useCanvasStore((state) => state.editingBlockId);
 	const viewport = useCanvasStore((state) => state.viewport);
 	const zoom = useCanvasStore((state) => state.zoom);
 	const isModified = useCanvasStore((state) => state.isModified);
@@ -36,6 +37,8 @@ export function useCanvas() {
 	const selectBlock = useCanvasStore((state) => state.selectBlock);
 	const hoverBlock = useCanvasStore((state) => state.hoverBlock);
 	const getSelectedBlock = useCanvasStore((state) => state.getSelectedBlock);
+	const startEditing = useCanvasStore((state) => state.startEditing);
+	const stopEditing = useCanvasStore((state) => state.stopEditing);
 
 	const startDrag = useCanvasStore((state) => state.startDrag);
 	const endDrag = useCanvasStore((state) => state.endDrag);
@@ -57,6 +60,7 @@ export function useCanvas() {
 		selectedBlockId,
 		selectedBlock,
 		hoveredBlockId,
+		editingBlockId,
 		viewport,
 		zoom,
 		isModified,
@@ -81,6 +85,8 @@ export function useCanvas() {
 		// Selection
 		selectBlock,
 		hoverBlock,
+		startEditing,
+		stopEditing,
 
 		// Drag & Drop
 		startDrag,
@@ -114,9 +120,10 @@ export function useCanvasKeyboardShortcuts() {
 	const removeBlock = useCanvasStore((state) => state.removeBlock);
 	const duplicateBlock = useCanvasStore((state) => state.duplicateBlock);
 	const selectedBlockId = useCanvasStore((state) => state.selectedBlockId);
+	const editingBlockId = useCanvasStore((state) => state.editingBlockId);
 	const selectBlock = useCanvasStore((state) => state.selectBlock);
+	const stopEditing = useCanvasStore((state) => state.stopEditing);
 
-	// Set up keyboard shortcuts
 	React.useEffect(() => {
 		const handleKeyDown = createKeyboardHandler({
 			undo,
@@ -126,7 +133,9 @@ export function useCanvasKeyboardShortcuts() {
 			removeBlock,
 			duplicateBlock,
 			selectedBlockId,
+			editingBlockId,
 			selectBlock,
+			stopEditing,
 		});
 
 		window.addEventListener('keydown', handleKeyDown);
@@ -138,8 +147,10 @@ export function useCanvasKeyboardShortcuts() {
 		canRedo,
 		removeBlock,
 		selectedBlockId,
+		editingBlockId,
 		duplicateBlock,
 		selectBlock,
+		stopEditing,
 	]);
 }
 
@@ -152,21 +163,30 @@ function createKeyboardHandler(handlers: {
 	removeBlock: (id: string) => void;
 	duplicateBlock: (id: string) => void;
 	selectedBlockId: string | null;
+	editingBlockId: string | null;
 	selectBlock: (id: string | null) => void;
+	stopEditing: () => void;
 }) {
 	return (e: KeyboardEvent) => {
 		const isModKey = e.ctrlKey || e.metaKey;
 		const target = e.target as HTMLElement;
 		const isInputField = ['INPUT', 'TEXTAREA'].includes(target.tagName);
+		const isEditing = handlers.editingBlockId !== null;
 
-		// Undo: Ctrl/Cmd + Z
+		if (isEditing) {
+			if (e.key === 'Escape') {
+				e.preventDefault();
+				handlers.stopEditing();
+			}
+			return;
+		}
+
 		if (isModKey && e.key === 'z' && !e.shiftKey && handlers.canUndo()) {
 			e.preventDefault();
 			handlers.undo();
 			return;
 		}
 
-		// Redo: Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y
 		if (
 			isModKey &&
 			((e.key === 'z' && e.shiftKey) || e.key === 'y') &&
@@ -177,26 +197,24 @@ function createKeyboardHandler(handlers: {
 			return;
 		}
 
-		// Delete: Delete or Backspace (only if not in input)
 		if (
 			(e.key === 'Delete' || e.key === 'Backspace') &&
 			handlers.selectedBlockId &&
-			!isInputField
+			!isInputField &&
+			!isEditing
 		) {
 			e.preventDefault();
 			handlers.removeBlock(handlers.selectedBlockId);
 			return;
 		}
 
-		// Duplicate: Ctrl/Cmd + D
-		if (isModKey && e.key === 'd' && handlers.selectedBlockId) {
+		if (isModKey && e.key === 'd' && handlers.selectedBlockId && !isEditing) {
 			e.preventDefault();
 			handlers.duplicateBlock(handlers.selectedBlockId);
 			return;
 		}
 
-		// Deselect: Escape
-		if (e.key === 'Escape' && handlers.selectedBlockId) {
+		if (e.key === 'Escape' && handlers.selectedBlockId && !isEditing) {
 			e.preventDefault();
 			handlers.selectBlock(null);
 		}
