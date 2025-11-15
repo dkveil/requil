@@ -27,6 +27,12 @@ export const DocumentSchema = z.object({
 		.object({
 			title: z.string().optional(),
 			description: z.string().optional(),
+			subject: z.string().optional(),
+			preheader: z.string().optional(),
+			senderName: z.string().optional(),
+			senderEmail: z.string().optional(),
+			replyToEmail: z.string().optional(),
+			useReplyTo: z.boolean().optional(),
 			createdAt: z.iso.datetime().optional(),
 			updatedAt: z.iso.datetime().optional(),
 		})

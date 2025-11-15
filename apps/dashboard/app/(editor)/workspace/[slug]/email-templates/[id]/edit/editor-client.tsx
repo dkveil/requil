@@ -3,9 +3,11 @@
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { LoadingScreen } from '@/components/loading-screen';
+import { useAuthStore } from '@/features/auth';
 import EditorLayout from '@/features/editor/layout/editor-layout';
 import { useEditorStore } from '@/features/editor/store/editor-store';
 import { useTemplateStore } from '@/features/templates';
+import { useWorkspace } from '@/features/workspace';
 import { useWorkspaceAccess } from '@/features/workspace/hooks/use-workspace-access';
 
 type Props = {
@@ -15,9 +17,11 @@ type Props = {
 
 export function EditorClient({ workspaceSlug, templateId }: Props) {
 	const { accessChecked } = useWorkspaceAccess(workspaceSlug);
+	const { currentWorkspace } = useWorkspace();
+	const user = useAuthStore((state) => state.user);
 	const { currentTemplate, loading, error, loadTemplateById } =
 		useTemplateStore();
-	const { setProjectName } = useEditorStore();
+	const { setProjectName, setDefaultSender } = useEditorStore();
 	const t = useTranslations('editor');
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: not needed
@@ -27,6 +31,19 @@ export function EditorClient({ workspaceSlug, templateId }: Props) {
 			setProjectName(currentTemplate?.name || 'Untitled Project');
 		}
 	}, [accessChecked, templateId, loadTemplateById]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: not needed
+	useEffect(() => {
+		if (user?.email) {
+			const email = user.email;
+			const name =
+				email
+					.split('@')[0]
+					?.replace(/[._-]/g, ' ')
+					.replace(/\b\w/g, (c: string) => c.toUpperCase()) ?? '';
+			setDefaultSender(email, name);
+		}
+	}, [user]);
 
 	if (!accessChecked || loading) {
 		return <LoadingScreen text={t('loading')} />;

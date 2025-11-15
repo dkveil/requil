@@ -36,6 +36,7 @@ interface CanvasActions {
 	// Document actions
 	setDocument: (doc: Document) => void;
 	updateBlock: (blockId: string, updates: Partial<BlockIR>) => void;
+	updateMetadata: (metadata: Partial<Document['metadata']>) => void;
 	addBlock: (parentId: string, block: BlockIR, position?: number) => void;
 	removeBlock: (blockId: string) => void;
 	moveBlock: (blockId: string, newParentId: string, position: number) => void;
@@ -105,6 +106,30 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 					},
 					isModified: false,
 				}),
+
+			// Update document metadata
+			updateMetadata: (metadata) => {
+				const { document, history } = get();
+				if (!(document && history)) return;
+
+				const newDoc = {
+					...document,
+					metadata: {
+						...document.metadata,
+						...metadata,
+					},
+				};
+
+				set({
+					document: newDoc,
+					history: {
+						past: [...history.past, history.present],
+						present: newDoc,
+						future: [],
+					},
+					isModified: true,
+				});
+			},
 
 			// Update a block's properties
 			updateBlock: (blockId, updates) => {

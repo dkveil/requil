@@ -1,12 +1,22 @@
 'use client';
 
 import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
-import { Minus, Monitor, Plus, Redo2, Smartphone, Undo2 } from 'lucide-react';
+import {
+	Minus,
+	Monitor,
+	Plus,
+	Redo2,
+	Settings,
+	Smartphone,
+	Undo2,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 import LogoSmall from '@/components/logo-small';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { EmailSettingsModal } from '../components/email-settings-modal';
 import { useCanvas } from '../hooks/use-canvas';
 import { useEditor } from '../hooks/use-editor';
 
@@ -15,6 +25,7 @@ export default function EditorHeader() {
 	const { projectName } = useEditor();
 	const { viewport, setViewport, zoom, setZoom, undo, redo, canUndo, canRedo } =
 		useCanvas();
+	const [emailSettingsModalOpen, setEmailSettingsModalOpen] = useState(false);
 
 	return (
 		<header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-1'>
@@ -56,6 +67,19 @@ export default function EditorHeader() {
 							<Redo2 className='h-4 w-4' />
 						</Button>
 					</div>
+					<Separator
+						orientation='vertical'
+						className=' h-[24px]!'
+					/>
+					<Button
+						variant='ghost'
+						size='sm'
+						onClick={() => setEmailSettingsModalOpen(true)}
+						title={t('emailSettings')}
+					>
+						<Settings className='h-4 w-4 mr-1' />
+						{t('emailSettings')}
+					</Button>
 				</div>
 
 				<div>
@@ -132,6 +156,10 @@ export default function EditorHeader() {
 					<Button variant='default'>{t('publish')}</Button>
 				</div>
 			</div>
+			<EmailSettingsModal
+				open={emailSettingsModalOpen}
+				onOpenChange={setEmailSettingsModalOpen}
+			/>
 		</header>
 	);
 }

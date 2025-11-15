@@ -21,6 +21,7 @@ export function useCanvas() {
 	// Actions
 	const setDocument = useCanvasStore((state) => state.setDocument);
 	const updateBlock = useCanvasStore((state) => state.updateBlock);
+	const updateMetadata = useCanvasStore((state) => state.updateMetadata);
 	const addBlock = useCanvasStore((state) => state.addBlock);
 	const removeBlock = useCanvasStore((state) => state.removeBlock);
 	const moveBlock = useCanvasStore((state) => state.moveBlock);
@@ -68,6 +69,7 @@ export function useCanvas() {
 		// Document actions
 		setDocument,
 		updateBlock,
+		updateMetadata,
 		addBlock,
 		removeBlock,
 		moveBlock,
