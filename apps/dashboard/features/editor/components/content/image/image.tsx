@@ -12,7 +12,11 @@ export function Image({
 	const src =
 		(block.props.src as string) || 'https://via.placeholder.com/600x300';
 	const alt = (block.props.alt as string) || 'Image description';
-	const href = block.props.href as string | undefined;
+	const linkTo = block.props.linkTo as
+		| { href?: string; target?: boolean }
+		| null
+		| undefined;
+	const hasLink = linkTo?.href && !isCanvas;
 
 	const imageElement = (
 		<img
@@ -41,7 +45,17 @@ export function Image({
 			data-block-type='Image'
 			data-block-id={block.id}
 		>
-			{href && !isCanvas ? <a href={href}>{imageElement}</a> : imageElement}
+			{hasLink ? (
+				<a
+					href={linkTo.href}
+					target={linkTo.target ? '_blank' : undefined}
+					rel={linkTo.target ? 'noopener noreferrer' : undefined}
+				>
+					{imageElement}
+				</a>
+			) : (
+				imageElement
+			)}
 		</div>
 	);
 }

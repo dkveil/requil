@@ -50,7 +50,13 @@ export function ContainerBlock({
 	});
 
 	const htmlTag = (block.props.htmlTag as string) || 'div';
-	const Element = htmlTag as React.ElementType;
+	const linkTo = block.props.linkTo as
+		| { href?: string; target?: boolean }
+		| null
+		| undefined;
+	const hasLink = Boolean(linkTo?.href && !isCanvas);
+
+	const Element = hasLink ? 'a' : (htmlTag as React.ElementType);
 
 	// Combine refs: dragRef (from useDraggable) + dropRef (from useDroppable)
 	const dragRef = (interactionProps as { ref?: React.Ref<HTMLElement> }).ref;
@@ -64,29 +70,38 @@ export function ContainerBlock({
 		}
 	};
 
-	// aria-label support
 	const ariaLabel = block.props.ariaLabel as string | undefined;
 
+	const elementProps = {
+		ref: combinedRef as any,
+		...interactionProps,
+		style: {
+			...styles,
+			...additionalStyles,
+			...(isEmpty && isCanvas ? { minHeight: '100px' } : {}),
+			...(hasLink ? { textDecoration: 'none', color: 'inherit' } : {}),
+		},
+		className: cn(
+			(interactionProps as { className?: string }).className,
+			isEmpty &&
+				isOver &&
+				isCanvas &&
+				'bg-primary/20 border-2 border-dashed border-primary rounded ring-inset'
+		),
+		'data-block-type': blockType,
+		'data-block-id': block.id,
+		'aria-label': ariaLabel || undefined,
+		...(hasLink && linkTo
+			? {
+					href: linkTo.href,
+					target: linkTo.target ? '_blank' : undefined,
+					rel: linkTo.target ? 'noopener noreferrer' : undefined,
+				}
+			: {}),
+	};
+
 	return (
-		<Element
-			ref={combinedRef as any}
-			{...interactionProps}
-			style={{
-				...styles,
-				...additionalStyles,
-				...(isEmpty && isCanvas ? { minHeight: '100px' } : {}),
-			}}
-			className={cn(
-				(interactionProps as { className?: string }).className,
-				isEmpty &&
-					isOver &&
-					isCanvas &&
-					'bg-primary/20 border-2 border-dashed border-primary rounded ring-inset'
-			)}
-			data-block-type={blockType}
-			data-block-id={block.id}
-			aria-label={ariaLabel || undefined}
-		>
+		<Element {...elementProps}>
 			{isEmpty && isCanvas ? (
 				// When empty, show drop zone with message - drop zone takes full height
 				<div className='relative h-full min-h-[100px]'>
@@ -118,7 +133,8 @@ export function ContainerBlock({
 					onMoveUp,
 					onMoveDown,
 					onDelete,
-					onSelectParent
+					onSelectParent,
+					hasLink
 				)
 			)}
 		</Element>

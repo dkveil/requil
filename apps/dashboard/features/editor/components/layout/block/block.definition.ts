@@ -2,6 +2,7 @@ import type { ComponentDefinition } from '@requil/types/editor';
 import {
 	accessibilityGroup,
 	layoutGroup,
+	linkGroup,
 	sizeGroup,
 	stylesGroup,
 } from '../../../registry/field-groups';
@@ -27,6 +28,7 @@ export const BlockDefinition: ComponentDefinition = {
 	propsSchema: {
 		type: 'object',
 		properties: {
+			...linkGroup.schema,
 			...sizeGroup.schema,
 			...layoutGroup.schema,
 			...accessibilityGroup.schema,
@@ -35,6 +37,7 @@ export const BlockDefinition: ComponentDefinition = {
 	},
 
 	defaultProps: {
+		...linkGroup.defaults,
 		...sizeGroup.defaults,
 		...layoutGroup.defaults,
 		...accessibilityGroup.defaults,
@@ -43,12 +46,14 @@ export const BlockDefinition: ComponentDefinition = {
 
 	inspectorConfig: {
 		groups: [
+			linkGroup.inspectorGroup,
 			sizeGroup.inspectorGroup,
 			layoutGroup.inspectorGroup,
 			stylesGroup.inspectorGroup,
 			accessibilityGroup.inspectorGroup,
 		],
 		fields: [
+			...linkGroup.inspectorFields,
 			...sizeGroup.inspectorFields,
 			...layoutGroup.inspectorFields,
 			...stylesGroup.inspectorFields,

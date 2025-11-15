@@ -12,7 +12,7 @@ export const accessibilityGroup = createFieldGroup({
 			field: {
 				key: 'htmlTag',
 				label: 'HTML Tag',
-				type: 'select',
+				type: 'htmlTag',
 				options: [
 					{ label: 'div', value: 'div' },
 					{ label: 'section', value: 'section' },

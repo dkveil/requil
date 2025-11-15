@@ -185,6 +185,52 @@ export function PropertyControl({
 			);
 		}
 
+		case 'htmlTag': {
+			const hasLink = allValues?.linkTo !== null;
+
+			const displayValue = hasLink ? 'a' : String(value);
+			const optionsWithLink = hasLink
+				? [
+						{
+							label: 'a',
+							value: 'a',
+							disabled: true as boolean | undefined,
+						},
+						...(field.options || []),
+					]
+				: field.options;
+
+			return (
+				<div className='flex items-center justify-between gap-3'>
+					<Label className='text-xs text-muted-foreground flex-shrink-0'>
+						{field.label}
+					</Label>
+					<Select
+						value={displayValue}
+						onValueChange={(val) => {
+							onChange(val);
+						}}
+						disabled={hasLink}
+					>
+						<SelectTrigger className='h-7 text-xs bg-accent/50 border-accent w-[120px]'>
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent>
+							{optionsWithLink?.map((option) => (
+								<SelectItem
+									key={String(option.value)}
+									value={String(option.value)}
+									disabled={'disabled' in option ? option.disabled : undefined}
+								>
+									{option.label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+				</div>
+			);
+		}
+
 		case 'iconSelect':
 			return (
 				<IconSelect
@@ -298,6 +344,8 @@ export function PropertyControl({
 										defaultValue[child.key] = child.min || 0;
 									} else if (child.type === 'select' && child.options?.[0]) {
 										defaultValue[child.key] = child.options[0].value;
+									} else if (child.type === 'toggle') {
+										defaultValue[child.key] = child.defaultValue ?? false;
 									} else {
 										defaultValue[child.key] = '';
 									}

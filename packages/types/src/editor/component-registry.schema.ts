@@ -26,6 +26,7 @@ export const BaseInspectorFieldSchema = z.object({
 		'number',
 		'color',
 		'select',
+		'htmlTag',
 		'iconSelect',
 		'toggle',
 		'slider',
@@ -45,6 +46,7 @@ export const BaseInspectorFieldSchema = z.object({
 				label: z.string(),
 				value: z.unknown(),
 				icon: z.string().optional(),
+				disabled: z.boolean().optional(),
 			})
 		)
 		.optional(),

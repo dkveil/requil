@@ -1,6 +1,7 @@
 import type { ComponentDefinition } from '@requil/types/editor';
 import {
 	layoutGroup,
+	linkGroup,
 	sizeGroup,
 	stylesGroup,
 } from '../../../registry/field-groups';
@@ -18,6 +19,7 @@ export const ContainerDefinition: ComponentDefinition = {
 	propsSchema: {
 		type: 'object',
 		properties: {
+			...linkGroup.schema,
 			...sizeGroup.schema,
 			...layoutGroup.schema,
 			...stylesGroup.schema,
@@ -25,6 +27,7 @@ export const ContainerDefinition: ComponentDefinition = {
 	},
 
 	defaultProps: {
+		...linkGroup.defaults,
 		...sizeGroup.defaults,
 		...layoutGroup.defaults,
 		...stylesGroup.defaults,
@@ -34,11 +37,13 @@ export const ContainerDefinition: ComponentDefinition = {
 
 	inspectorConfig: {
 		groups: [
+			linkGroup.inspectorGroup,
 			sizeGroup.inspectorGroup,
 			layoutGroup.inspectorGroup,
 			stylesGroup.inspectorGroup,
 		],
 		fields: [
+			...linkGroup.inspectorFields,
 			...sizeGroup.inspectorFields,
 			...layoutGroup.inspectorFields,
 			...stylesGroup.inspectorFields,

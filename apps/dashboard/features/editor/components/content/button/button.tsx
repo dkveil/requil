@@ -5,6 +5,7 @@ export function Button({
 	isCanvas,
 	styles,
 	interactionProps,
+	parentHasLink,
 }: BlockRendererProps & {
 	styles: React.CSSProperties;
 	interactionProps: Record<string, unknown>;
@@ -13,7 +14,8 @@ export function Button({
 	const action = (block.props.action as string) || 'link';
 	const href = (block.props.href as string) || '#';
 
-	const Tag = action === 'link' ? 'a' : 'button';
+	const shouldRenderAsLink = action === 'link' && !parentHasLink;
+	const Tag = shouldRenderAsLink ? 'a' : 'span';
 
 	const {
 		padding,
@@ -43,8 +45,12 @@ export function Button({
 			data-block-type='Button'
 		>
 			<Tag
-				href={action === 'link' ? (isCanvas ? undefined : href) : undefined}
-				onClick={(e) => isCanvas && e.preventDefault()}
+				{...(shouldRenderAsLink
+					? {
+							href: isCanvas ? undefined : href,
+							onClick: (e: React.MouseEvent) => isCanvas && e.preventDefault(),
+						}
+					: {})}
 				style={buttonStyles}
 			>
 				{text}

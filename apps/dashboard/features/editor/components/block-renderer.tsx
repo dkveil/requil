@@ -35,6 +35,7 @@ export interface BlockRendererProps {
 	parentId?: string | null;
 	siblingIndex?: number;
 	siblingCount?: number;
+	parentHasLink?: boolean;
 }
 
 // Helper function to render children with drop zones
@@ -49,7 +50,8 @@ export function renderChildrenWithDropZones(
 	onMoveUp?: (blockId: string) => void,
 	onMoveDown?: (blockId: string) => void,
 	onDelete?: (blockId: string) => void,
-	onSelectParent?: (blockId: string) => void
+	onSelectParent?: (blockId: string) => void,
+	parentHasLink?: boolean
 ) {
 	const children = block.children || [];
 
@@ -80,6 +82,7 @@ export function renderChildrenWithDropZones(
 						parentId={block.id}
 						siblingIndex={index}
 						siblingCount={children.length}
+						parentHasLink={parentHasLink}
 					/>
 					{isCanvas && (
 						<DropZone

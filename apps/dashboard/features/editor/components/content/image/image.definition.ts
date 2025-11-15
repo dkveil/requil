@@ -1,6 +1,7 @@
 import { ComponentDefinition } from '@requil/types';
 import {
 	layoutGroup,
+	linkGroup,
 	sizeGroup,
 	stylesGroup,
 } from '../../../registry/field-groups';
@@ -40,6 +41,7 @@ export const ImageDefinition: ComponentDefinition = {
 		properties: {
 			src: { type: 'string', default: 'https://via.placeholder.com/600x300' },
 			alt: { type: 'string', default: 'Image description' },
+			...linkGroup.schema,
 			...sizeGroup.schema,
 			...layoutGroup.schema,
 			...stylesGroup.schema,
@@ -49,6 +51,7 @@ export const ImageDefinition: ComponentDefinition = {
 	defaultProps: {
 		src: 'https://via.placeholder.com/600x300',
 		alt: 'Image description',
+		...linkGroup.defaults,
 		...sizeGroup.defaults,
 		...layoutGroup.defaults,
 		...stylesGroup.defaults,
@@ -57,12 +60,14 @@ export const ImageDefinition: ComponentDefinition = {
 	inspectorConfig: {
 		groups: [
 			imageContentGroup,
+			linkGroup.inspectorGroup,
 			sizeGroup.inspectorGroup,
 			layoutGroup.inspectorGroup,
 			stylesGroup.inspectorGroup,
 		],
 		fields: [
 			...imageFields,
+			...linkGroup.inspectorFields,
 			...sizeGroup.inspectorFields,
 			...layoutGroup.inspectorFields,
 			...stylesGroup.inspectorFields,
