@@ -1,5 +1,9 @@
 ---
-alwaysApply: true
+alwaysApply: false
+globs:
+  - "turbo.json"
+  - "pnpm-workspace.yaml"
+  - "**/package.json"
 ---
 
 # Turborepo Configuration & Best Practices

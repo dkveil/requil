@@ -8,8 +8,7 @@ This directory contains AI coding assistant rules organized by technology and do
 
 These rules are automatically applied in every conversation:
 
-- **`project.mdc`** - Project overview and core description of Requil
-- **`shared.mdc`** - Version control (Git, Conventional Commits), monorepo practices, code readability
+- **`core.mdc`** - Project overview, stack, structure, coding standards (70 lines, optimized for cost)
 
 ### Context-Specific Rules
 

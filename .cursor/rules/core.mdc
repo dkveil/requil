@@ -1,0 +1,69 @@
+---
+alwaysApply: true
+---
+
+# Requil - Email API Engine
+
+API-first engine dla email: generowanie (AI), walidacja MJML+Liquid, rendering, wysyłka (Resend/SMTP).
+MVP: prosty editor z guardrails + thin newsletter demo layer.
+
+## Stack
+
+**Backend**: Fastify monolith (Node 22+, TypeScript) - API + email rendering + worker endpoints
+**Frontend**: Next.js App Router (Dashboard) + Astro/Next.js SSG (Website)
+**Data**: Supabase (Postgres/Auth/Storage + RLS), Drizzle ORM
+**Cache/Queue**: Upstash Redis (rate-limit, idempotency, cache) + QStash (retries, scheduling)
+**Guardrails**: AJV validation, Cheerio HTML analysis, WCAG contrast, HTTPS enforcement
+
+## Struktura (Turborepo)
+
+```
+apps/
+  dashboard/  - Next.js App Router (admin)
+  website/    - Astro (marketing/SEO)
+  api/        - Fastify (HTTP API + worker endpoints)
+packages/
+  email-engine/  - MJML + Liquid, plaintext, guardrails
+  transports/    - Resend SDK, Nodemailer/SMTP
+  validation/    - AJV + quality rules
+  webhooks/      - HMAC sign/verify
+  ratelimit/     - Upstash helpers
+  db/            - Drizzle ORM + migrations
+  types/         - OpenAPI → TS
+  ui/            - shadcn/ui shared
+  utils/         - pino logger, traceId
+  config/        - tsconfig, turbo, biome
+```
+
+## Kluczowe zasady
+
+### Kod bez komentarzy
+Kod musi być self-documenting przez clear naming, small functions, explicit types.
+README/docs dla design decisions, nie inline comments.
+
+### Git & Commits
+Conventional Commits: `type(scope): description`
+Types: feat, fix, docs, style, refactor, test, chore
+BREAKING CHANGE footer dla incompatibilities
+
+### Naming Conventions
+**kebab-case**: pliki, foldery, routes (`user-profile.tsx`)
+**PascalCase**: komponenty, typy (`UserProfile`, `ApiResponse`)
+**camelCase**: zmienne, funkcje, hooks (`userId`, `sendEmail`, `useAuth`)
+**SCREAMING_SNAKE_CASE**: constants, env (`MAX_HTML_SIZE`, `DATABASE_URL`)
+**Prefix booleans**: `is/has/should` (`isValid`, `hasAccess`)
+
+### Package Management
+pnpm + `workspace:*` protocol dla internal deps
+Turborepo dla builds/cache
+
+### Error Handling
+Custom error classes (ValidationError, TransportError)
+Include errorCode, traceId, context
+Never expose internal errors - log internally, return sanitized
+
+### Testing
+**Unit**: Vitest - pure functions, validators
+**Integration**: Vitest + Testcontainers - API routes, DB ops
+**E2E**: Playwright - critical flows (post-MVP)
+Target: >80% coverage business logic

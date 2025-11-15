@@ -1,6 +1,8 @@
 ---
-alwaysApply: true
+alwaysApply: false
 ---
+
+# DEPRECATED: Merged into core.mdc
 
 # AI Rules for Requil
 

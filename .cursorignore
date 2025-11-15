@@ -1,0 +1,46 @@
+# Build outputs
+dist/
+build/
+out/
+.next/
+.turbo/
+
+# Source maps and type declarations
+*.js.map
+*.d.ts.map
+
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Test coverage
+coverage/
+
+# Lock files (large, rarely needed by AI)
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel/
+
+# Misc
+.DS_Store
+*.pem
+
