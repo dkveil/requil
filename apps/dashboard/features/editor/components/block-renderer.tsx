@@ -8,6 +8,7 @@ import { Button as ButtonBlock } from './content/button/button';
 import { Heading as HeadingBlock } from './content/heading/heading';
 import { Image as ImageBlock } from './content/image/image';
 import { List as ListBlock } from './content/list/list';
+import { Quote as QuoteBlock } from './content/quote/quote';
 import { SocialIcons as SocialIconsBlock } from './content/social-icons/social-icons';
 import { Text as TextBlock } from './content/text/text';
 import { DropZone } from './drop-zone';
@@ -245,6 +246,9 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 
 			case 'List':
 				return <ListBlock {...commonBlockProps} />;
+
+			case 'Quote':
+				return <QuoteBlock {...commonBlockProps} />;
 
 			case 'SocialIcons':
 				return <SocialIconsBlock {...commonBlockProps} />;

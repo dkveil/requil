@@ -276,6 +276,43 @@ export function ComponentIcon({ type, title, className }: ComponentIconProps) {
 					/>
 				</svg>
 			);
+		case 'Quote':
+			return (
+				<svg
+					className={cn('w-6 h-6', className)}
+					fill='none'
+					viewBox='0 0 24 24'
+					stroke='currentColor'
+				>
+					<title>{title || 'Quote icon'}</title>
+					<path
+						d='M6 10c0-2 1-3 3-3v2c-1 0-1 .5-1 1h1v4H6v-4z'
+						fill='currentColor'
+					/>
+					<path
+						d='M12 10c0-2 1-3 3-3v2c-1 0-1 .5-1 1h1v4h-3v-4z'
+						fill='currentColor'
+					/>
+					<line
+						x1='5'
+						y1='15'
+						x2='19'
+						y2='15'
+						strokeWidth='1.5'
+						strokeLinecap='round'
+						opacity='0.3'
+					/>
+					<line
+						x1='7'
+						y1='18'
+						x2='17'
+						y2='18'
+						strokeWidth='1.5'
+						strokeLinecap='round'
+						opacity='0.3'
+					/>
+				</svg>
+			);
 		case 'SocialIcons':
 			return (
 				<svg
