@@ -2,7 +2,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 const ACCESS_COOKIE_NAME = 'requil_beta_access';
-const PUBLIC_ROUTES = ['/access', '/api/access/verify'];
+const PUBLIC_ROUTES = ['/access'];
 
 export function accessMiddleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;

@@ -7,8 +7,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-
-const BETA_ACCESS_CODE = 'REQUIL_BETA_2025_XK9P7M';
+import { verifyAccessCode } from '@/features/access';
 
 export function AccessForm() {
 	const t = useTranslations('access');
@@ -20,19 +19,11 @@ export function AccessForm() {
 		setIsLoading(true);
 
 		try {
-			if (code.trim().toUpperCase() === BETA_ACCESS_CODE) {
-				const response = await fetch('/api/access/verify', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ code: code.trim().toUpperCase() }),
-				});
+			const result = await verifyAccessCode(code);
 
-				if (response.ok) {
-					toast.success(t('success'));
-					window.location.href = '/';
-				} else {
-					toast.error(t('invalidCode'));
-				}
+			if (result.success) {
+				toast.success(t('success'));
+				window.location.href = '/auth/login';
 			} else {
 				toast.error(t('invalidCode'));
 			}
