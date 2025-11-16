@@ -81,6 +81,12 @@ function parseCookies(
 }
 
 export async function authMiddleware(request: NextRequest) {
+	const isAccessRoute = request.nextUrl.pathname.startsWith('/access');
+
+	if (isAccessRoute) {
+		return NextResponse.next();
+	}
+
 	const accessToken = request.cookies.get('requil_access_token')?.value;
 	const refreshToken = request.cookies.get('requil_refresh_token')?.value;
 	const isAuthRoute = request.nextUrl.pathname.startsWith('/auth');
