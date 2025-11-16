@@ -31,6 +31,7 @@ export default {
 				'auth',
 				'workspace',
 				'billing',
+				'templates',
 				'editor',
 				// Packages
 				'email-engine',

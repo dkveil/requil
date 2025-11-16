@@ -1,18 +1,12 @@
 'use client';
 
 import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
-import { FileText, Plus } from 'lucide-react';
+import { ArrowRight, FileText, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { DataRenderer } from '@/components/data-renderer';
 import { Button } from '@/components/ui/button';
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { useWorkspace } from '@/features/workspace';
 import { useTemplateStore } from '../stores/template-store';
 
@@ -31,7 +25,7 @@ type Props = {
 
 export function TemplatesList({ workspaceSlug, translations: t }: Props) {
 	const { currentWorkspace } = useWorkspace();
-	const { templates, loading, error, loadTemplates } = useTemplateStore();
+	const { templates, error, loadTemplates } = useTemplateStore();
 
 	useEffect(() => {
 		if (currentWorkspace?.id) {
@@ -73,51 +67,76 @@ export function TemplatesList({ workspaceSlug, translations: t }: Props) {
 					},
 				}}
 				render={(data) => (
-					<div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
-						{Array.isArray(data) &&
-							data.map((template) => (
-								<Link
-									key={template.id}
-									href={DASHBOARD_ROUTES.WORKSPACE.EMAIL_TEMPLATE_EDITOR(
-										workspaceSlug,
-										template.id
-									)}
-									className='group'
-								>
-									<Card className='h-full transition-all hover:shadow-md hover:border-primary/50'>
-										<CardHeader>
-											<div className='flex items-start justify-between'>
-												<div className='flex items-center gap-3'>
-													<div className='flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary'>
-														<FileText className='size-5' />
-													</div>
-													<div>
-														<CardTitle className='text-lg group-hover:text-primary transition-colors'>
+					<Card className='overflow-hidden'>
+						<div className='divide-y divide-border'>
+							{Array.isArray(data) &&
+								data.map((template) => (
+									<Link
+										key={template.id}
+										href={DASHBOARD_ROUTES.WORKSPACE.EMAIL_TEMPLATE_EDITOR(
+											workspaceSlug,
+											template.id
+										)}
+										className='group block'
+									>
+										<div className='flex items-center gap-4 p-4 transition-colors hover:bg-muted/50'>
+											<div className='flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors'>
+												<FileText className='size-5' />
+											</div>
+
+											<div className='flex-1 min-w-0'>
+												<div className='flex items-start justify-between gap-4'>
+													<div className='flex-1 min-w-0'>
+														<h3 className='font-semibold text-foreground group-hover:text-primary transition-colors truncate'>
 															{template.name}
-														</CardTitle>
-														<CardDescription className='text-xs mt-1'>
-															{t.updated}{' '}
-															{new Date(template.updatedAt).toLocaleDateString(
-																'en-US',
-																{
+														</h3>
+														<p className='text-sm text-muted-foreground line-clamp-1 mt-0.5'>
+															{template.description || 'No description'}
+														</p>
+													</div>
+
+													<div className='flex items-center gap-3 shrink-0'>
+														<div className='text-right hidden sm:block'>
+															<p className='text-xs text-muted-foreground'>
+																{t.updated}
+															</p>
+															<p className='text-sm font-medium text-foreground mt-0.5'>
+																{new Date(
+																	template.updatedAt
+																).toLocaleDateString('en-US', {
 																	month: 'short',
 																	day: 'numeric',
-																}
-															)}
-														</CardDescription>
+																	year: 'numeric',
+																	hour: '2-digit',
+																	minute: '2-digit',
+																})}
+															</p>
+														</div>
+
+														<ArrowRight className='size-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all' />
 													</div>
 												</div>
+
+												<div className='flex items-center gap-2 mt-2 text-xs text-muted-foreground sm:hidden'>
+													<span>
+														{new Date(template.updatedAt).toLocaleDateString(
+															'en-US',
+															{
+																month: 'short',
+																day: 'numeric',
+																year: 'numeric',
+																hour: '2-digit',
+																minute: '2-digit',
+															}
+														)}
+													</span>
+												</div>
 											</div>
-										</CardHeader>
-										<CardContent>
-											<p className='text-sm text-muted-foreground line-clamp-2'>
-												{template.description || 'No description'}
-											</p>
-										</CardContent>
-									</Card>
-								</Link>
-							))}
-					</div>
+										</div>
+									</Link>
+								))}
+						</div>
+					</Card>
 				)}
 			/>
 		</div>
