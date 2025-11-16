@@ -1,5 +1,8 @@
 export const navigationPlLocales = {
 	navigation: {
+		featureNotAvailable: 'Funkcja niedostępna',
+		featureNotAvailableDescription:
+			'Ta funkcja jest obecnie w fazie rozwoju i będzie dostępna wkrótce.',
 		general: {
 			title: 'Ogólne',
 			items: {

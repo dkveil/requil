@@ -1,5 +1,8 @@
 export const navigationEnLocales = {
 	navigation: {
+		featureNotAvailable: 'Feature not available',
+		featureNotAvailableDescription:
+			'This feature is currently under development and will be available soon.',
 		general: {
 			title: 'General',
 			items: {

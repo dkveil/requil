@@ -17,6 +17,8 @@ type Props = {
 	href: string;
 	description?: string;
 	isCollapsed?: boolean;
+	disabled?: boolean;
+	onClick?: () => void;
 };
 
 export function NavItem({
@@ -25,11 +27,38 @@ export function NavItem({
 	href,
 	description,
 	isCollapsed = false,
+	disabled = false,
+	onClick,
 }: Props) {
 	const pathname = usePathname();
 	const isActive = pathname === href;
 
-	const linkContent = (
+	const handleClick = (e: React.MouseEvent) => {
+		if (disabled && onClick) {
+			e.preventDefault();
+			onClick();
+		}
+	};
+
+	const linkContent = disabled ? (
+		<button
+			type='button'
+			onClick={handleClick}
+			className={cn(
+				'group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer',
+				'text-sidebar-foreground/40 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground/60',
+				isCollapsed && 'justify-center p-2'
+			)}
+		>
+			<Icon
+				className={cn(
+					'h-5 w-5 transition-colors',
+					'text-sidebar-foreground/30 group-hover:text-sidebar-foreground/50'
+				)}
+			/>
+			{!isCollapsed && <span>{label}</span>}
+		</button>
+	) : (
 		<Link
 			href={href}
 			className={cn(

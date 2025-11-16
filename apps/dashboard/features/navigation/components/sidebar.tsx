@@ -7,11 +7,9 @@ import {
 	FileText,
 	Headphones,
 } from 'lucide-react';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
-import { LanguageToggle } from '@/components/layout/language-toggle';
-import { ModeToggle } from '@/components/layout/theme-toggle';
+import { toast } from 'sonner';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -31,10 +29,18 @@ import { MENU_SECTIONS } from '../constants/menu-structure';
 import { useSidebar } from '../hooks/use-sidebar';
 import { NavItem } from './nav-item';
 
+const AVAILABLE_FEATURES = ['dashboard', 'email-templates'];
+
 export function Sidebar() {
 	const { currentWorkspace } = useWorkspace();
 	const { isCollapsed, toggle, setCollapsed } = useSidebar();
 	const t = useTranslations('navigation');
+
+	const handleFeatureNotAvailable = () => {
+		toast.info(t('featureNotAvailable'), {
+			description: t('featureNotAvailableDescription'),
+		});
+	};
 
 	useEffect(() => {
 		const storedValue = localStorage.getItem('sidebar-storage');
@@ -84,18 +90,25 @@ export function Sidebar() {
 									</h3>
 								)}
 
-								{section.items.map((item) => (
-									<NavItem
-										key={item.id}
-										icon={item.icon}
-										label={t(`${section.title}.items.${item.id}.title`)}
-										href={item.route(currentWorkspace.slug)}
-										description={t(
-											`${section.title}.items.${item.id}.description`
-										)}
-										isCollapsed={isCollapsed}
-									/>
-								))}
+								{section.items.map((item) => {
+									const isAvailable = AVAILABLE_FEATURES.includes(item.id);
+									return (
+										<NavItem
+											key={item.id}
+											icon={item.icon}
+											label={t(`${section.title}.items.${item.id}.title`)}
+											href={item.route(currentWorkspace.slug)}
+											description={t(
+												`${section.title}.items.${item.id}.description`
+											)}
+											isCollapsed={isCollapsed}
+											disabled={!isAvailable}
+											onClick={
+												!isAvailable ? handleFeatureNotAvailable : undefined
+											}
+										/>
+									);
+								})}
 							</div>
 						))}
 					</div>
@@ -142,23 +155,25 @@ export function Sidebar() {
 									align='start'
 									className='w-56'
 								>
-									<DropdownMenuItem asChild>
-										<Link
-											href='/changelog'
-											className='flex items-center gap-2 cursor-pointer'
-										>
-											<FileText className='h-4 w-4' />
-											<span>Changelog</span>
-										</Link>
+									<DropdownMenuItem
+										onClick={(e) => {
+											e.preventDefault();
+											handleFeatureNotAvailable();
+										}}
+										className='cursor-pointer'
+									>
+										<FileText className='h-4 w-4' />
+										<span>Changelog</span>
 									</DropdownMenuItem>
-									<DropdownMenuItem asChild>
-										<Link
-											href='/support'
-											className='flex items-center gap-2 cursor-pointer'
-										>
-											<Headphones className='h-4 w-4' />
-											<span>Contact support</span>
-										</Link>
+									<DropdownMenuItem
+										onClick={(e) => {
+											e.preventDefault();
+											handleFeatureNotAvailable();
+										}}
+										className='cursor-pointer'
+									>
+										<Headphones className='h-4 w-4' />
+										<span>Contact support</span>
 									</DropdownMenuItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
