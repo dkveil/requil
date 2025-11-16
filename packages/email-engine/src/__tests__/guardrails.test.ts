@@ -13,8 +13,8 @@ describe('analyzeAndFixHtml', () => {
       </body></html>
     `;
 		const res = analyzeAndFixHtml(html);
-		expect(res.errors.join(' ')).toMatch(ALT_REGEX);
-		expect(res.errors.join(' ')).toMatch(HTTP_REGEX);
+		expect(res.warnings.join(' ')).toMatch(ALT_REGEX);
+		expect(res.warnings.join(' ')).toMatch(HTTP_REGEX);
 		expect(res.html).toContain('rel="noopener"');
 	});
 });

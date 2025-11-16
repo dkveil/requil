@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
 			fullUrl: true,
 		},
 	},
-	serverExternalPackages: ['pino', 'pino-pretty'],
+	serverExternalPackages: ['pino', 'pino-pretty', 'mjml', 'html-to-text'],
 };
 
 export default withNextIntl(nextConfig);

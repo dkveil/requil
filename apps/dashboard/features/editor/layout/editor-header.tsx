@@ -2,6 +2,7 @@
 
 import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import {
+	Code,
 	Minus,
 	Monitor,
 	Plus,
@@ -17,15 +18,28 @@ import LogoSmall from '@/components/logo-small';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { EmailSettingsModal } from '../components/email-settings-modal';
+import { HtmlPreviewModal } from '../components/html-preview-modal';
 import { useCanvas } from '../hooks/use-canvas';
 import { useEditor } from '../hooks/use-editor';
+
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 export default function EditorHeader() {
 	const t = useTranslations('editor.header');
 	const { projectName } = useEditor();
-	const { viewport, setViewport, zoom, setZoom, undo, redo, canUndo, canRedo } =
-		useCanvas();
+	const {
+		viewport,
+		setViewport,
+		zoom,
+		setZoom,
+		undo,
+		redo,
+		canUndo,
+		canRedo,
+		document,
+	} = useCanvas();
 	const [emailSettingsModalOpen, setEmailSettingsModalOpen] = useState(false);
+	const [htmlPreviewModalOpen, setHtmlPreviewModalOpen] = useState(false);
 
 	return (
 		<header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-1'>
@@ -80,6 +94,23 @@ export default function EditorHeader() {
 						<Settings className='h-4 w-4 mr-1' />
 						{t('emailSettings')}
 					</Button>
+					{isDevelopment && (
+						<>
+							<Separator
+								orientation='vertical'
+								className=' h-[24px]!'
+							/>
+							<Button
+								variant='ghost'
+								size='sm'
+								onClick={() => setHtmlPreviewModalOpen(true)}
+								title='HTML Preview (Dev Only)'
+							>
+								<Code className='h-4 w-4 mr-1' />
+								HTML Preview
+							</Button>
+						</>
+					)}
 				</div>
 
 				<div>
@@ -159,6 +190,11 @@ export default function EditorHeader() {
 			<EmailSettingsModal
 				open={emailSettingsModalOpen}
 				onOpenChange={setEmailSettingsModalOpen}
+			/>
+			<HtmlPreviewModal
+				open={htmlPreviewModalOpen}
+				onOpenChange={setHtmlPreviewModalOpen}
+				document={document}
 			/>
 		</header>
 	);
