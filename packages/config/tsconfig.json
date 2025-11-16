@@ -3,7 +3,11 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"outDir": "dist",
-		"sourceMap": true
+		"rootDir": ".",
+		"sourceMap": true,
+		"declaration": true,
+		"declarationMap": true
 	},
-	"include": ["**/*.ts"]
+	"include": ["env/**/*.ts"],
+	"exclude": ["node_modules", "dist", "vitest", "typescript"]
 }

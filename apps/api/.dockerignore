@@ -1,0 +1,17 @@
+node_modules
+dist
+.turbo
+*.log
+.env*
+test-results
+coverage
+.git
+.github
+*.md
+README.md
+*.spec.ts
+*.test.ts
+__tests__
+.vscode
+.idea
+

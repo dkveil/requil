@@ -2,26 +2,30 @@
 	"name": "@requil/config",
 	"version": "0.0.0",
 	"private": true,
+	"type": "module",
 	"exports": {
 		"./typescript/base.json": "./typescript/base.json",
 		"./typescript/nextjs.json": "./typescript/nextjs.json",
 		"./typescript/react-library.json": "./typescript/react-library.json",
 		"./typescript/node.json": "./typescript/node.json",
 		"./vitest": "./vitest/base.ts",
-		"./env": "./env/index.ts"
+		"./env": "./dist/env/index.js",
+		"./env/*": "./dist/env/*.js"
 	},
 	"files": [
 		"typescript",
 		"vitest",
-		"env"
+		"env",
+		"dist"
 	],
 	"scripts": {
-		"build": "echo 'Config package - no build needed' && exit 0",
+		"build": "tsc",
 		"type-check": "tsc --noEmit",
 		"test": "echo 'Config package - no tests' && exit 0"
 	},
 	"devDependencies": {
-		"@tsconfig/node22": "^22.0.2"
+		"@tsconfig/node22": "^22.0.2",
+		"typescript": "^5.9.3"
 	},
 	"dependencies": {
 		"zod": "^4.1.12"

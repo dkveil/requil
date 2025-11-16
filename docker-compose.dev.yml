@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  api-dev:
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "corepack enable && corepack prepare pnpm@10.6.5 --activate && cd apps/api && pnpm install && pnpm dev"
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      HOST: 0.0.0.0
+      LOG_LEVEL: debug
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET}
+      UPSTASH_REDIS_REST_URL: ${UPSTASH_REDIS_REST_URL}
+      UPSTASH_REDIS_REST_TOKEN: ${UPSTASH_REDIS_REST_TOKEN}
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/apps/api/node_modules
+      - /app/packages/*/node_modules
+    restart: unless-stopped
+    networks:
+      - requil-network
+
+networks:
+  requil-network:
+    driver: bridge
+
