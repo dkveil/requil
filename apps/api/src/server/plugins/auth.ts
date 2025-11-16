@@ -3,9 +3,11 @@ import { ERROR_CODES } from '@requil/types';
 import { and, eq } from 'drizzle-orm';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
-import { verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { env } from '@/config';
 import { sendError } from '@/shared/app/response-wrapper';
+
+const { verify } = jwt;
 
 export type AuthOptions = {
 	requireWorkspace?: boolean;

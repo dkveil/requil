@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import AutoLoad from '@fastify/autoload';
 import UnderPressure from '@fastify/under-pressure';
 import { FastifyInstance } from 'fastify';
@@ -8,6 +9,9 @@ import {
 } from 'fastify-type-provider-zod';
 import { env } from '@/config';
 import { di } from '@/server/di';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PRODUCTION_REGEX = /.(route|resolver).js$/;
 const DEVELOPMENT_REGEX = /.(route|resolver).(ts|js)$/;

@@ -1,6 +1,13 @@
 {
 	"permissions": {
-		"allow": ["Bash(pnpm test:*)", "Bash(npx turbo run test)", "Bash(find:*)"],
+		"allow": [
+			"Bash(pnpm test:*)",
+			"Bash(npx turbo run test)",
+			"Bash(find:*)",
+			"Bash(pnpm build:*)",
+			"Bash(node dist/index.js:*)",
+			"Bash(docker run:*)"
+		],
 		"deny": [],
 		"ask": []
 	}

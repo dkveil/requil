@@ -1,9 +1,13 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { diContainer, fastifyAwilixPlugin } from '@fastify/awilix';
 import { asFunction, Lifetime } from 'awilix';
 import { FastifyInstance } from 'fastify';
 import { makeDependencies } from '@/modules';
 import { formatName } from '@/server/di/util';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export async function di(fastify: FastifyInstance) {
 	const config = await import('@/config');
