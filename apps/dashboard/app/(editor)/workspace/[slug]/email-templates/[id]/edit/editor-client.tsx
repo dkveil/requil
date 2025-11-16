@@ -1,9 +1,11 @@
 'use client';
 
+import type { Document } from '@requil/types';
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { LoadingScreen } from '@/components/loading-screen';
 import { useAuthStore } from '@/features/auth';
+import { useCanvas } from '@/features/editor/hooks/use-canvas';
 import EditorLayout from '@/features/editor/layout/editor-layout';
 import { useEditorStore } from '@/features/editor/store/editor-store';
 import { useTemplateStore } from '@/features/templates';
@@ -22,17 +24,34 @@ export function EditorClient({ workspaceSlug, templateId }: Props) {
 	const { currentTemplate, loading, error, loadTemplateById } =
 		useTemplateStore();
 	const { setProjectName, setDefaultSender } = useEditorStore();
+	const { setDocument } = useCanvas();
+	const [templateLoaded, setTemplateLoaded] = useState(false);
 	const t = useTranslations('editor');
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: not needed
 	useEffect(() => {
-		if (accessChecked && templateId) {
-			loadTemplateById(templateId, () => {
-				setProjectName(currentTemplate?.name || 'Untitled Project');
-			});
+		if (accessChecked && templateId && !templateLoaded) {
+			loadTemplateById(templateId)
+				.then(() => {
+					setTemplateLoaded(true);
+				})
+				.catch((err) => {
+					console.error('Failed to load template:', err);
+				});
 		}
-	}, [accessChecked, templateId, loadTemplateById]);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: not needed
+	}, [accessChecked, templateId, templateLoaded, loadTemplateById]);
+
+	useEffect(() => {
+		if (currentTemplate && templateLoaded) {
+			setProjectName(currentTemplate.name || 'Untitled Project');
+
+			if (currentTemplate.builderStructure) {
+				const document =
+					currentTemplate.builderStructure as unknown as Document;
+				setDocument(document);
+			}
+		}
+	}, [currentTemplate, templateLoaded, setProjectName, setDocument]);
+
 	useEffect(() => {
 		if (user?.email) {
 			const email = user.email;
@@ -43,7 +62,7 @@ export function EditorClient({ workspaceSlug, templateId }: Props) {
 					.replace(/\b\w/g, (c: string) => c.toUpperCase()) ?? '';
 			setDefaultSender(email, name);
 		}
-	}, [user]);
+	}, [user, setDefaultSender]);
 
 	if (!accessChecked || loading) {
 		return <LoadingScreen text={t('loading')} />;

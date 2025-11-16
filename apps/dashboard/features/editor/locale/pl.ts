@@ -10,6 +10,10 @@ export const editorPlLocales = {
 			undo: 'Cofnij',
 			redo: 'Ponów',
 			emailSettings: 'Ustawienia Email',
+			save: 'Zapisz',
+			saving: 'Zapisywanie...',
+			saved: 'Ustawienia emaila zapisane pomyślnie',
+			failedToSave: 'Nie udało się zapisać ustawień emaila',
 		},
 		emailSettings: {
 			title: 'Ustawienia Emaila',

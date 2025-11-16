@@ -10,6 +10,10 @@ export const editorEnLocales = {
 			undo: 'Undo',
 			redo: 'Redo',
 			emailSettings: 'Email Settings',
+			save: 'Save',
+			saving: 'Saving...',
+			saved: 'Email settings saved successfully',
+			failedToSave: 'Failed to save email settings',
 		},
 		emailSettings: {
 			title: 'Email Settings',

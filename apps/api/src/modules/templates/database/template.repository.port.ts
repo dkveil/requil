@@ -17,4 +17,17 @@ export interface ITemplateRepository
 		id: TemplateId,
 		workspaceId: WorkspaceId
 	): Promise<TemplateEntity | undefined>;
+	updateTemplate(
+		id: TemplateId,
+		workspaceId: WorkspaceId,
+		data: Partial<{
+			name: string;
+			description: string | null;
+			builderStructure: Record<string, unknown> | null;
+			mjml: string | null;
+			variablesSchema: Record<string, unknown> | null;
+			subjectLines: string[] | null;
+			preheader: string | null;
+		}>
+	): Promise<TemplateEntity | undefined>;
 }

@@ -71,6 +71,9 @@ importers:
       '@requil/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@requil/email-engine':
+        specifier: workspace:*
+        version: link:../../packages/email-engine
       '@requil/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -222,6 +225,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@requil/email-engine':
+        specifier: workspace:*
+        version: link:../../packages/email-engine
       '@requil/types':
         specifier: workspace:*
         version: link:../../packages/types

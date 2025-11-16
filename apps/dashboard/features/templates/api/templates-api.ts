@@ -3,6 +3,8 @@ import type {
 	CreateTemplateResponse,
 	FindWorkspaceTemplatesResponse,
 	TemplateResponse,
+	UpdateTemplateInput,
+	UpdateTemplateResponse,
 } from '@requil/types/templates';
 import { API_ROUTES } from '@requil/utils/api-routes';
 import { fetchAPI } from '@/lib/api/client';
@@ -36,6 +38,20 @@ export const templatesApi = {
 			`${API_ROUTES.TEMPLATE.GET.replace(':id', id)}?id=${id}`,
 			{
 				method: 'GET',
+			}
+		);
+		return response.data;
+	},
+
+	async update(
+		id: string,
+		data: UpdateTemplateInput
+	): Promise<UpdateTemplateResponse> {
+		const response = await fetchAPI<UpdateTemplateResponse>(
+			API_ROUTES.TEMPLATE.UPDATE.replace(':id', id),
+			{
+				method: 'PATCH',
+				body: JSON.stringify(data),
 			}
 		);
 		return response.data;

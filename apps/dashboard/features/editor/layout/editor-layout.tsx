@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { Canvas } from '../components/canvas';
 import { ComponentIcon } from '../components/component-icon';
+import { DevInfoBanner } from '../components/dev-info-banner';
 import { useCanvas } from '../hooks/use-canvas';
 import { createBlock } from '../lib/block-factory';
 import EditorHeader from './editor-header';
@@ -278,15 +279,18 @@ export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
 		>
 			<div className='h-screen w-full overflow-hidden bg-background'>
 				<EditorHeader />
-				<div className='flex h-full'>
-					<ElementsSidebar
-						onAddBlock={handleAddBlock}
-						workspaceId={workspaceId}
-					/>
-					<div className='flex-1'>
-						<Canvas />
+				<div className='flex h-full flex-col'>
+					<div className='flex flex-1'>
+						<ElementsSidebar
+							onAddBlock={handleAddBlock}
+							workspaceId={workspaceId}
+						/>
+						<div className='flex-1 relative'>
+							<Canvas />
+							<DevInfoBanner />
+						</div>
+						<SettingsSidebar workspaceId={workspaceId} />
 					</div>
-					<SettingsSidebar workspaceId={workspaceId} />
 				</div>
 			</div>
 			<DragOverlay

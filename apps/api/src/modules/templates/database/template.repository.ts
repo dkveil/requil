@@ -82,11 +82,39 @@ export default function templateRepository({
 		return result[0] ? TemplateEntity.fromPersistence(result[0]) : undefined;
 	};
 
+	const updateTemplate = async (
+		id: TemplateId,
+		workspaceId: WorkspaceId,
+		data: Partial<{
+			name: string;
+			description: string | null;
+			builderStructure: Record<string, unknown> | null;
+			mjml: string | null;
+			variablesSchema: Record<string, unknown> | null;
+			subjectLines: string[] | null;
+			preheader: string | null;
+		}>
+	): Promise<TemplateEntity | undefined> => {
+		const result = await db
+			.update(templates)
+			.set({
+				...data,
+				updatedAt: sql`NOW()`,
+			})
+			.where(and(eq(templates.id, id), eq(templates.workspaceId, workspaceId)))
+			.returning();
+
+		if (result.length === 0) return undefined;
+
+		return result[0] ? TemplateEntity.fromPersistence(result[0]) : undefined;
+	};
+
 	return {
 		...baseRepository,
 		findByWorkspaceId,
 		existsByStableId,
 		findByStableId,
 		findByIdWithWorkspaceCheck,
+		updateTemplate,
 	};
 }

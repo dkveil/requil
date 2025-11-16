@@ -3,6 +3,7 @@ import { editorEnLocales } from '@/features/editor/locale/en';
 import { navigationEnLocales } from '@/features/navigation/locale/en';
 import { templatesEnLocales } from '@/features/templates/locale';
 import { welcomeEnLocales } from '@/features/welcome/locales';
+import { workspaceEnLocales } from '@/features/workspace/locale';
 
 export default {
 	common: {
@@ -43,4 +44,5 @@ export default {
 	...navigationEnLocales,
 	...templatesEnLocales,
 	...editorEnLocales,
+	...workspaceEnLocales,
 };

@@ -1,22 +1,28 @@
 'use client';
 
+import type { UpdateTemplateInput } from '@requil/types/templates';
 import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import {
 	Code,
+	Loader2,
 	Minus,
 	Monitor,
 	Plus,
 	Redo2,
+	Save,
 	Settings,
 	Smartphone,
 	Undo2,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import LogoSmall from '@/components/logo-small';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { templatesApi } from '@/features/templates/api/templates-api';
 import { EmailSettingsModal } from '../components/email-settings-modal';
 import { HtmlPreviewModal } from '../components/html-preview-modal';
 import { useCanvas } from '../hooks/use-canvas';
@@ -26,6 +32,8 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 export default function EditorHeader() {
 	const t = useTranslations('editor.header');
+	const params = useParams();
+	const templateId = params.id as string;
 	const { projectName } = useEditor();
 	const {
 		viewport,
@@ -37,12 +45,50 @@ export default function EditorHeader() {
 		canUndo,
 		canRedo,
 		document,
+		isModified,
+		markAsSaved,
 	} = useCanvas();
 	const [emailSettingsModalOpen, setEmailSettingsModalOpen] = useState(false);
 	const [htmlPreviewModalOpen, setHtmlPreviewModalOpen] = useState(false);
+	const [isSaving, setIsSaving] = useState(false);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: dependencies are correct
+	const handleSave = useCallback(async () => {
+		if (!document || templateId === 'new' || !isModified) return;
+
+		setIsSaving(true);
+		try {
+			const updateData: UpdateTemplateInput = {
+				builderStructure: document as unknown as Record<string, unknown>,
+			};
+
+			await templatesApi.update(templateId, updateData);
+
+			markAsSaved();
+			toast.success(t('saved'));
+		} catch (error) {
+			toast.error(t('failedToSave'));
+			// biome-ignore lint/suspicious/noConsole: error logging for debugging
+			console.error('Save error:', error);
+		} finally {
+			setIsSaving(false);
+		}
+	}, [document, templateId, isModified, markAsSaved]);
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+				e.preventDefault();
+				handleSave();
+			}
+		};
+
+		window.addEventListener('keydown', handleKeyDown);
+		return () => window.removeEventListener('keydown', handleKeyDown);
+	}, [handleSave]);
 
 	return (
-		<header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-1'>
+		<header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 py-1'>
 			<div className='flex h-10 items-center justify-between gap-4 px-4'>
 				<div className='flex items-center flex-1 gap-4'>
 					<Link href={DASHBOARD_ROUTES.HOME}>
@@ -184,7 +230,18 @@ export default function EditorHeader() {
 					<Link href={DASHBOARD_ROUTES.HOME}>
 						<Button variant='outline'>{t('exit')}</Button>
 					</Link>
-					<Button variant='default'>{t('publish')}</Button>
+					<Button
+						variant='default'
+						disabled={!isModified || templateId === 'new' || isSaving}
+						onClick={handleSave}
+					>
+						{isSaving ? (
+							<Loader2 className='h-4 w-4 mr-2 animate-spin' />
+						) : (
+							<Save className='h-4 w-4 mr-2' />
+						)}
+						{isSaving ? t('saving') : t('save')}
+					</Button>
 				</div>
 			</div>
 			<EmailSettingsModal
