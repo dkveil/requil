@@ -18,7 +18,7 @@
 		"clean:all": "turbo run clean --all",
 		"clean:install": "pnpm run clean:modules && pnpm install",
 		"clean:modules": "rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules && rm -rf .turbo",
-		"prepare": "lefthook install",
+		"prepare": "[ -d .git ] && lefthook install || echo 'Skipping lefthook (not a git repo)'",
 		"test:projects": "vitest run",
 		"test:projects:watch": "vitest --watch",
 		"e2e": "turbo run e2e",
