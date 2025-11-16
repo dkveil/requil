@@ -28,6 +28,7 @@ export default {
 				'dashboard',
 				'website',
 				// Modules
+				'access',
 				'auth',
 				'workspace',
 				'billing',

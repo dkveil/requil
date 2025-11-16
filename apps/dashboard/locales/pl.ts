@@ -1,3 +1,4 @@
+import { accessPlLocales } from '@/features/access/locale';
 import { authPlLocales } from '@/features/auth/locales/pl';
 import { editorPlLocales } from '@/features/editor/locale/pl';
 import { navigationPlLocales } from '@/features/navigation/locale/pl';
@@ -39,6 +40,7 @@ export default {
 		accountSettings: 'Ustawienia konta',
 		guest: 'Gość',
 	},
+	...accessPlLocales,
 	...authPlLocales,
 	...welcomePlLocales,
 	...navigationPlLocales,

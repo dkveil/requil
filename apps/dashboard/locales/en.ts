@@ -1,3 +1,4 @@
+import { accessEnLocales } from '@/features/access/locale';
 import { authEnLocales } from '@/features/auth/locales/en';
 import { editorEnLocales } from '@/features/editor/locale/en';
 import { navigationEnLocales } from '@/features/navigation/locale/en';
@@ -39,6 +40,7 @@ export default {
 		accountSettings: 'Account Settings',
 		guest: 'Guest',
 	},
+	...accessEnLocales,
 	...authEnLocales,
 	...welcomeEnLocales,
 	...navigationEnLocales,

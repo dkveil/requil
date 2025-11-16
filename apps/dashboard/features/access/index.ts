@@ -1,0 +1,1 @@
+export { accessMiddleware } from './middleware';
