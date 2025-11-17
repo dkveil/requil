@@ -4,6 +4,7 @@ import { loginResponseSchema, loginSchema } from '@requil/types/auth';
 import { API_ROUTES } from '@requil/utils/api-routes';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { env } from '@/config';
 import { sendSuccess } from '@/shared/app/response-wrapper';
 import { loginHandler } from './login.handler';
 
@@ -27,17 +28,19 @@ const loginRoute: FastifyPluginAsync = async (fastify) => {
 			reply
 				.setCookie('requil_access_token', result.accessToken, {
 					httpOnly: true,
-					secure: process.env.NODE_ENV === 'production',
-					sameSite: 'lax',
+					secure: env.isProduction,
+					sameSite: env.isProduction ? 'none' : 'lax',
 					path: '/',
 					maxAge: result.expiresIn,
+					domain: env.isProduction ? '.requil.app' : undefined,
 				})
 				.setCookie('requil_refresh_token', result.refreshToken, {
 					httpOnly: true,
-					secure: process.env.NODE_ENV === 'production',
-					sameSite: 'lax',
+					secure: env.isProduction,
+					sameSite: env.isProduction ? 'none' : 'lax',
 					path: '/',
 					maxAge: 60 * 60 * 24 * 7,
+					domain: env.isProduction ? '.requil.app' : undefined,
 				});
 
 			return sendSuccess(reply, result);

@@ -13,7 +13,7 @@ const apiEnvSchema = z.object({
 	...baseEnvSchema.shape,
 	...redisEnvSchema.shape,
 	...supabaseEnvSchema.shape,
-	FRONTEND_URL: z.string().url().default('http://localhost:5137'),
+	FRONTEND_URL: z.url().default('http://localhost:5137'),
 	PORT: z.coerce.number().int().positive().default(3000),
 	HOST: z.string().default('0.0.0.0'),
 	CORS_ORIGINS: z

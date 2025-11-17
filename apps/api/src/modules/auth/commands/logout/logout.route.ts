@@ -3,6 +3,7 @@ import { logoutResponseSchema } from '@requil/types/auth';
 import { API_ROUTES } from '@requil/utils/api-routes';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { env } from '@/config';
 import { sendSuccess } from '@/shared/app/response-wrapper';
 import { logoutHandler } from './logout.handler';
 
@@ -23,8 +24,18 @@ const logoutRoute: FastifyPluginAsync = async (fastify) => {
 			const result = await logoutHandler(token, fastify.supabase);
 
 			reply
-				.clearCookie('requil_access_token', { path: '/' })
-				.clearCookie('requil_refresh_token', { path: '/' });
+				.clearCookie('requil_access_token', {
+					path: '/',
+					domain: env.isProduction ? '.requil.app' : undefined,
+					secure: env.isProduction,
+					sameSite: env.isProduction ? 'none' : 'lax',
+				})
+				.clearCookie('requil_refresh_token', {
+					path: '/',
+					domain: env.isProduction ? '.requil.app' : undefined,
+					secure: env.isProduction,
+					sameSite: env.isProduction ? 'none' : 'lax',
+				});
 
 			return sendSuccess(reply, result);
 		},
