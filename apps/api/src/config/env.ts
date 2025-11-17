@@ -39,7 +39,8 @@ const config = {
 	isDevelopment: env.NODE_ENV === 'development',
 	isProduction: env.NODE_ENV === 'production',
 	version: process.env.npm_package_version ?? '0.0.0',
-	cors: process.env.CORS_ORIGINS?.split(',').map((origin) => origin.trim()) ?? [],
+	cors:
+		process.env.CORS_ORIGINS?.split(',').map((origin) => origin.trim()) ?? [],
 	log: {
 		level: env.LOG_LEVEL,
 	},
