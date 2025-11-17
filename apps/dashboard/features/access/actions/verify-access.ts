@@ -8,7 +8,7 @@ const ACCESS_COOKIE_NAME = 'requil_beta_access';
 export async function verifyAccessCode(code: string) {
 	if (code?.trim().toUpperCase() === BETA_ACCESS_CODE) {
 		const cookieStore = await cookies();
-		
+
 		cookieStore.set(ACCESS_COOKIE_NAME, 'granted', {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'production',
@@ -22,4 +22,3 @@ export async function verifyAccessCode(code: string) {
 
 	return { success: false };
 }
-

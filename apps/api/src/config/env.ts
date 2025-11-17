@@ -15,6 +15,9 @@ const apiEnvSchema = z.object({
 	...supabaseEnvSchema.shape,
 	PORT: z.coerce.number().int().positive().default(3000),
 	HOST: z.string().default('0.0.0.0'),
+	CORS_ORIGINS: z
+		.string()
+		.default('http://localhost:5137,http://localhost:3000'),
 });
 
 type ApiEnv = z.infer<typeof apiEnvSchema>;
@@ -36,6 +39,7 @@ const config = {
 	isDevelopment: env.NODE_ENV === 'development',
 	isProduction: env.NODE_ENV === 'production',
 	version: process.env.npm_package_version ?? '0.0.0',
+	cors: process.env.CORS_ORIGINS?.split(',').map((origin) => origin.trim()) ?? [],
 	log: {
 		level: env.LOG_LEVEL,
 	},
