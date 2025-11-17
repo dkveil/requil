@@ -1,5 +1,6 @@
 import type { RegisterInput, RegisterResponse } from '@requil/types/auth';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { env } from '@/config';
 import { mapSupabaseAuthError } from '@/modules/auth/domain/auth.error';
 
 export async function registerHandler(
@@ -13,7 +14,7 @@ export async function registerHandler(
 		email,
 		password,
 		options: {
-			emailRedirectTo: 'http://localhost:3000/auth/callback',
+			emailRedirectTo: `${env.frontendUrl}/auth/callback`,
 		},
 	});
 

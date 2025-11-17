@@ -13,6 +13,7 @@ const apiEnvSchema = z.object({
 	...baseEnvSchema.shape,
 	...redisEnvSchema.shape,
 	...supabaseEnvSchema.shape,
+	FRONTEND_URL: z.string().url().default('http://localhost:5137'),
 	PORT: z.coerce.number().int().positive().default(3000),
 	HOST: z.string().default('0.0.0.0'),
 	CORS_ORIGINS: z
@@ -35,6 +36,7 @@ if (!parsedData.success) {
 const env = parsedData.data;
 
 const config = {
+	frontendUrl: env.FRONTEND_URL,
 	nodeEnv: env.NODE_ENV,
 	isDevelopment: env.NODE_ENV === 'development',
 	isProduction: env.NODE_ENV === 'production',
