@@ -10,6 +10,7 @@ async function verifySession(
 ): Promise<{ valid: boolean; shouldRefresh: boolean }> {
 	try {
 		const response = await fetch(`${API_URL}${API_ROUTES.AUTH.SESSION}`, {
+			credentials: 'include',
 			headers: {
 				Cookie: cookies,
 			},
@@ -36,6 +37,7 @@ async function refreshTokens(cookies: string): Promise<{
 	try {
 		const response = await fetch(`${API_URL}${API_ROUTES.AUTH.REFRESH}`, {
 			method: 'POST',
+			credentials: 'include',
 			headers: {
 				Cookie: cookies,
 			},
@@ -137,7 +139,7 @@ export async function authMiddleware(request: NextRequest) {
 				response.cookies.set(name, cookie.value, {
 					httpOnly: true,
 					secure: process.env.NODE_ENV === 'production',
-					sameSite: 'lax',
+					sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
 					path: '/',
 				});
 			});
