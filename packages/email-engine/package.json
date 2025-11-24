@@ -34,7 +34,7 @@
 		"@requil/config": "workspace:*",
 		"@types/html-to-text": "^9.0.4",
 		"@types/mjml": "^4.7.4",
-		"@types/node": "^24.9.1",
+		"@types/node": "^24.10.1",
 		"@vitest/coverage-v8": "^3.0.0",
 		"resolve-tspaths": "^0.8.23",
 		"typescript": "^5.9.3",
