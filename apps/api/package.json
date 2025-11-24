@@ -51,7 +51,7 @@
 		"resolve-tspaths": "^0.8.23"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.3.1",
+		"@biomejs/biome": "^2.3.7",
 		"@requil/config": "workspace:*",
 		"@tsconfig/node22": "^22.0.2",
 		"@types/jsonwebtoken": "^9.0.10",
