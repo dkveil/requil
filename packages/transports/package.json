@@ -36,7 +36,7 @@
 		"@requil/config": "workspace:*",
 		"@types/node": "^24.9.1",
 		"@types/nodemailer": "^7.0.2",
-		"@vitest/coverage-v8": "^3.0.0",
+		"@vitest/coverage-v8": "^4.0.9",
 		"typescript": "^5.9.3",
 		"vitest": "^3.2.4"
 	}
