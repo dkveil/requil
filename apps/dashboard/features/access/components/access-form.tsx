@@ -1,5 +1,6 @@
 'use client';
 
+import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import { KeyRound, Mail, Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -23,7 +24,7 @@ export function AccessForm() {
 
 			if (result.success) {
 				toast.success(t('success'));
-				window.location.href = '/auth/login';
+				window.location.href = DASHBOARD_ROUTES.AUTH.LOGIN;
 			} else {
 				toast.error(t('invalidCode'));
 			}
