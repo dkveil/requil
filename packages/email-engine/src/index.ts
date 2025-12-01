@@ -1,3 +1,3 @@
-export * from './block-ir-to-mjml';
+export * from './block-ir-to-html';
 export * from './guardrails';
 export * from './plaintext';

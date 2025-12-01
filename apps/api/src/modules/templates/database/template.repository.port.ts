@@ -24,7 +24,7 @@ export interface ITemplateRepository
 			name: string;
 			description: string | null;
 			builderStructure: Record<string, unknown> | null;
-			mjml: string | null;
+			html: string | null;
 			variablesSchema: Record<string, unknown> | null;
 			subjectLines: string[] | null;
 			preheader: string | null;

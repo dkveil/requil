@@ -6,7 +6,6 @@ import type { Document } from '@requil/types/editor';
 export type HtmlPreviewResult = {
 	success: boolean;
 	html?: string;
-	mjml?: string;
 	warnings?: string[];
 	errors?: string[];
 };
@@ -27,7 +26,6 @@ export async function generateHtmlPreview(
 		return {
 			success: result.errors.length === 0,
 			html: result.html,
-			mjml: result.mjml,
 			warnings: result.warnings,
 			errors: result.errors,
 		};

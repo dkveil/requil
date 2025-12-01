@@ -1,4 +1,4 @@
-import { convertDocumentToMjml } from '@requil/email-engine';
+import { convertDocumentToHtml } from '@requil/email-engine';
 import type { Document } from '@requil/types';
 import {
 	UpdateTemplateInput,
@@ -47,19 +47,20 @@ export default function updateTemplateHandler({
 			throw new TemplateNotFoundError('Access denied', { id });
 		}
 
-		let mjml: string | undefined;
+		let html: string | undefined;
+
 		if (updateData.builderStructure) {
 			const document = updateData.builderStructure as unknown as Document;
-			const mjmlResult = convertDocumentToMjml(document);
+			const htmlResult = convertDocumentToHtml(document);
 
-			if (mjmlResult.errors.length > 0) {
+			if (htmlResult.errors.length > 0) {
 				logger.warn(
-					{ errors: mjmlResult.errors, templateId: id },
-					'MJML conversion had errors'
+					{ errors: htmlResult.errors, templateId: id },
+					'HTML conversion had errors'
 				);
 			}
 
-			mjml = mjmlResult.mjml;
+			html = htmlResult.html;
 		}
 
 		const result = await templateRepository.updateTemplate(
@@ -67,7 +68,7 @@ export default function updateTemplateHandler({
 			existing.workspaceId,
 			{
 				...updateData,
-				mjml,
+				html,
 			}
 		);
 

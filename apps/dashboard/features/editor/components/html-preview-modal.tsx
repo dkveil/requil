@@ -37,12 +37,10 @@ export function HtmlPreviewModal({
 	const [isLoading, setIsLoading] = useState(false);
 	const [renderResult, setRenderResult] = useState<{
 		html: string;
-		mjml: string;
 		warnings: string[];
 		errors: string[];
 	}>({
 		html: '',
-		mjml: '',
 		warnings: [],
 		errors: [],
 	});
@@ -63,7 +61,6 @@ export function HtmlPreviewModal({
 				if (!isCancelled) {
 					setRenderResult({
 						html: result.html || '',
-						mjml: result.mjml || '',
 						warnings: result.warnings || [],
 						errors: result.errors || [],
 					});
@@ -72,7 +69,6 @@ export function HtmlPreviewModal({
 				if (!isCancelled) {
 					setRenderResult({
 						html: '',
-						mjml: '',
 						warnings: [],
 						errors: [
 							`Failed to generate preview: ${error instanceof Error ? error.message : String(error)}`,
@@ -106,7 +102,7 @@ export function HtmlPreviewModal({
 				<DialogHeader>
 					<DialogTitle>HTML Preview</DialogTitle>
 					<DialogDescription>
-						Preview your email template and inspect the generated MJML/HTML
+						Preview your email template and inspect the generated HTML
 					</DialogDescription>
 				</DialogHeader>
 
@@ -143,13 +139,6 @@ export function HtmlPreviewModal({
 						>
 							<FileJson className='h-4 w-4' />
 							Document
-						</TabsTrigger>
-						<TabsTrigger
-							value='mjml'
-							className='gap-2'
-						>
-							<Code className='h-4 w-4' />
-							MJML
 						</TabsTrigger>
 						<TabsTrigger
 							value='html'
@@ -287,28 +276,6 @@ export function HtmlPreviewModal({
 							</Button>
 							<pre className='text-xs font-mono whitespace-pre-wrap'>
 								{JSON.stringify(document, null, 2)}
-							</pre>
-						</div>
-					</TabsContent>
-
-					<TabsContent
-						value='mjml'
-						className='flex-1 overflow-auto mt-4'
-					>
-						<div className='bg-muted/30 rounded-md p-4 h-full overflow-auto relative'>
-							<Button
-								variant='outline'
-								size='sm'
-								className='absolute top-2 right-2 z-10'
-								onClick={() => {
-									navigator.clipboard.writeText(renderResult.mjml);
-									toast.success('MJML copied to clipboard');
-								}}
-							>
-								Copy
-							</Button>
-							<pre className='text-xs font-mono whitespace-pre-wrap'>
-								{renderResult.mjml}
 							</pre>
 						</div>
 					</TabsContent>
