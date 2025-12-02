@@ -1,12 +1,13 @@
 import { successResponseSchema } from '@requil/types';
 import { errorResponseSchema } from '@requil/types/api';
+import type { LoginResponse } from '@requil/types/auth';
 import { loginResponseSchema, loginSchema } from '@requil/types/auth';
 import { API_ROUTES } from '@requil/utils/api-routes';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { env } from '@/config';
 import { sendSuccess } from '@/shared/app/response-wrapper';
-import { loginHandler } from './login.handler';
+import { loginAction } from './login.handler';
 
 const loginRoute: FastifyPluginAsync = async (fastify) => {
 	fastify.withTypeProvider<ZodTypeProvider>().route({
@@ -23,7 +24,9 @@ const loginRoute: FastifyPluginAsync = async (fastify) => {
 			tags: ['auth'],
 		},
 		handler: async (request, reply) => {
-			const result = await loginHandler(request.body, fastify.supabase);
+			const result = await fastify.commandBus.execute<LoginResponse>(
+				loginAction(request.body)
+			);
 
 			reply
 				.setCookie('requil_access_token', result.accessToken, {

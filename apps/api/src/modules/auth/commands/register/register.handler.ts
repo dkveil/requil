@@ -1,52 +1,71 @@
 import type { RegisterInput, RegisterResponse } from '@requil/types/auth';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { env } from '@/config';
 import { mapSupabaseAuthError } from '@/modules/auth/domain/auth.error';
+import type { Action } from '@/shared/cqrs/bus.types';
+import { authActionCreator } from '../..';
 
-export async function registerHandler(
-	input: RegisterInput,
-	supabase: SupabaseClient,
-	deps: Dependencies
-): Promise<RegisterResponse> {
-	const { email, password } = input;
+export const registerAction = authActionCreator<RegisterInput>('REGISTER');
 
-	const { data: authData, error: authError } = await supabase.auth.signUp({
-		email,
-		password,
-		options: {
-			emailRedirectTo: `${env.frontendUrl}/auth/callback`,
-		},
-	});
+export default function registerHandler({
+	commandBus,
+	supabase,
+	accountRepository,
+	logger,
+}: Dependencies) {
+	const handler = async (
+		action: Action<RegisterInput>
+	): Promise<RegisterResponse> => {
+		logger.info({ email: action.payload.email }, 'User registering');
 
-	if (authError) {
-		throw mapSupabaseAuthError(authError, { email });
-	}
+		const { email, password } = action.payload;
 
-	if (!authData.user) {
-		throw new Error('User creation failed');
-	}
+		const { data: authData, error: authError } = await supabase.auth.signUp({
+			email,
+			password,
+			options: {
+				emailRedirectTo: `${env.frontendUrl}/auth/callback`,
+			},
+		});
 
-	try {
-		await deps.accountRepository.create(authData.user.id, 'free');
-		deps.logger.info(
-			{ userId: authData.user.id },
-			'Account created with FREE plan'
-		);
-	} catch (error) {
-		deps.logger.error(
-			{ userId: authData.user.id, error },
-			'Failed to create account during registration'
-		);
+		if (authError) {
+			throw mapSupabaseAuthError(authError, { email });
+		}
 
-		await supabase.auth.admin.deleteUser(authData.user.id);
-		throw new Error('Registration failed. Please try again.');
-	}
+		if (!authData.user) {
+			throw new Error('User creation failed');
+		}
+
+		try {
+			await accountRepository.create(authData.user.id, 'free');
+			logger.info(
+				{ userId: authData.user.id },
+				'Account created with FREE plan'
+			);
+		} catch (error) {
+			logger.error(
+				{ userId: authData.user.id, error },
+				'Failed to create account during registration'
+			);
+
+			await supabase.auth.admin.deleteUser(authData.user.id);
+			throw new Error('Registration failed. Please try again.');
+		}
+
+		return {
+			user: {
+				id: authData.user.id,
+				email: authData.user.email || '',
+			},
+			message: 'Registration successful. Please check your email to confirm.',
+		};
+	};
+
+	const init = async () => {
+		commandBus.register(registerAction.type, handler);
+	};
 
 	return {
-		user: {
-			id: authData.user.id,
-			email: authData.user.email || '',
-		},
-		message: 'Registration successful. Please check your email to confirm.',
+		handler,
+		init,
 	};
 }

@@ -1,6 +1,7 @@
 import { successResponseSchema } from '@requil/types';
 import { errorResponseSchema } from '@requil/types/api';
 import {
+	type RegisterResponse,
 	registerInputSchema,
 	registerResponseSchema,
 } from '@requil/types/auth';
@@ -8,7 +9,7 @@ import { API_ROUTES } from '@requil/utils/api-routes';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { sendSuccess } from '@/shared/app/response-wrapper';
-import { registerHandler } from './register.handler';
+import { registerAction } from './register.handler';
 
 const registerRoute: FastifyPluginAsync = async (fastify) => {
 	fastify.withTypeProvider<ZodTypeProvider>().route({
@@ -25,10 +26,8 @@ const registerRoute: FastifyPluginAsync = async (fastify) => {
 			tags: ['auth'],
 		},
 		handler: async (request, reply) => {
-			const result = await registerHandler(
-				request.body,
-				fastify.supabase,
-				request.diScope.cradle as Dependencies
+			const result = await fastify.commandBus.execute<RegisterResponse>(
+				registerAction(request.body)
 			);
 			return sendSuccess(reply, result, 201);
 		},

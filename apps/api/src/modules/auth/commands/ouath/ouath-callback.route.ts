@@ -1,6 +1,7 @@
 import { successResponseSchema } from '@requil/types';
 import { errorResponseSchema } from '@requil/types/api';
 import {
+	LoginResponse,
 	loginResponseSchema,
 	oauthCallbackInputSchema,
 } from '@requil/types/auth';
@@ -9,7 +10,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { env } from '@/config';
 import { sendSuccess } from '@/shared/app/response-wrapper';
-import { oauthCallbackHandler } from './ouath-callback.handler';
+import { oauthCallbackAction } from './ouath-callback.handler';
 
 const ouathCallbackRoute: FastifyPluginAsync = async (fastify) => {
 	fastify.withTypeProvider<ZodTypeProvider>().route({
@@ -25,10 +26,8 @@ const ouathCallbackRoute: FastifyPluginAsync = async (fastify) => {
 			tags: ['auth'],
 		},
 		handler: async (request, reply) => {
-			const result = await oauthCallbackHandler(
-				request.query,
-				fastify.supabase,
-				request.diScope.cradle as Dependencies
+			const result = await fastify.commandBus.execute<LoginResponse>(
+				oauthCallbackAction(request.query)
 			);
 
 			reply

@@ -2,30 +2,50 @@ import type {
 	RefreshTokenInput,
 	RefreshTokenResponse,
 } from '@requil/types/auth';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { mapSupabaseAuthError } from '@/modules/auth/domain/auth.error';
+import type { Action } from '@/shared/cqrs/bus.types';
+import { authActionCreator } from '../..';
 
-export async function refreshTokenHandler(
-	input: RefreshTokenInput,
-	supabase: SupabaseClient
-): Promise<RefreshTokenResponse> {
-	const { refreshToken } = input;
+export const refreshTokenAction =
+	authActionCreator<RefreshTokenInput>('REFRESH_TOKEN');
 
-	const { data, error } = await supabase.auth.refreshSession({
-		refresh_token: refreshToken,
-	});
+export default function refreshTokenHandler({
+	commandBus,
+	supabase,
+	logger,
+}: Dependencies) {
+	const handler = async (
+		action: Action<RefreshTokenInput>
+	): Promise<RefreshTokenResponse> => {
+		logger.info('Refreshing token');
 
-	if (error) {
-		throw mapSupabaseAuthError(error);
-	}
+		const { refreshToken } = action.payload;
 
-	if (!data.session) {
-		throw new Error('No session created during token refresh');
-	}
+		const { data, error } = await supabase.auth.refreshSession({
+			refresh_token: refreshToken,
+		});
+
+		if (error) {
+			throw mapSupabaseAuthError(error);
+		}
+
+		if (!data.session) {
+			throw new Error('No session created during token refresh');
+		}
+
+		return {
+			accessToken: data.session.access_token,
+			refreshToken: data.session.refresh_token,
+			expiresIn: data.session.expires_in,
+		};
+	};
+
+	const init = async () => {
+		commandBus.register(refreshTokenAction.type, handler);
+	};
 
 	return {
-		accessToken: data.session.access_token,
-		refreshToken: data.session.refresh_token,
-		expiresIn: data.session.expires_in,
+		handler,
+		init,
 	};
 }

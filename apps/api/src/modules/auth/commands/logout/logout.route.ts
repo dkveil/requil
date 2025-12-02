@@ -1,11 +1,11 @@
 import { errorResponseSchema, successResponseSchema } from '@requil/types/api';
-import { logoutResponseSchema } from '@requil/types/auth';
+import { type LogoutResponse, logoutResponseSchema } from '@requil/types/auth';
 import { API_ROUTES } from '@requil/utils/api-routes';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { env } from '@/config';
 import { sendSuccess } from '@/shared/app/response-wrapper';
-import { logoutHandler } from './logout.handler';
+import { logoutAction } from './logout.handler';
 
 const logoutRoute: FastifyPluginAsync = async (fastify) => {
 	fastify.withTypeProvider<ZodTypeProvider>().route({
@@ -21,7 +21,10 @@ const logoutRoute: FastifyPluginAsync = async (fastify) => {
 		},
 		handler: async (request, reply) => {
 			const token = request.cookies.requil_access_token || '';
-			const result = await logoutHandler(token, fastify.supabase);
+
+			const result = await fastify.commandBus.execute<LogoutResponse>(
+				logoutAction({ accessToken: token })
+			);
 
 			reply
 				.clearCookie('requil_access_token', {

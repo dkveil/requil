@@ -1,4 +1,5 @@
 import {
+	GetOAuthUrlResponse,
 	getOAuthUrlInputSchema,
 	getOAuthUrlResponseSchema,
 	successResponseSchema,
@@ -8,7 +9,7 @@ import { API_ROUTES } from '@requil/utils/api-routes';
 import { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { sendSuccess } from '@/shared/app/response-wrapper';
-import { getOAuthUrlHandler } from './ouath.handler';
+import { getOAuthUrlAction } from './ouath.handler';
 
 const oauthRoute: FastifyPluginAsync = async (fastify) => {
 	fastify.withTypeProvider<ZodTypeProvider>().route({
@@ -24,7 +25,9 @@ const oauthRoute: FastifyPluginAsync = async (fastify) => {
 			},
 		},
 		handler: async (request, reply) => {
-			const result = await getOAuthUrlHandler(request.query, fastify.supabase);
+			const result = await fastify.commandBus.execute<GetOAuthUrlResponse>(
+				getOAuthUrlAction(request.query)
+			);
 			return sendSuccess(reply, result);
 		},
 	});

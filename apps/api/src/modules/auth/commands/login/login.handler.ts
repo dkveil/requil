@@ -1,35 +1,48 @@
 import type { LoginInput, LoginResponse } from '@requil/types/auth';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { mapSupabaseAuthError } from '@/modules/auth/domain/auth.error';
+import type { Action } from '@/shared/cqrs/bus.types';
+import { authActionCreator } from '../..';
 
-export async function loginHandler(
-	input: LoginInput,
-	supabase: SupabaseClient
-): Promise<LoginResponse> {
-	const { email, password } = input;
+export const loginAction = authActionCreator('LOGIN');
 
-	const { data, error } = await supabase.auth.signInWithPassword({
-		email,
-		password,
-	});
+export default function loginHandler({ commandBus, supabase }: Dependencies) {
+	const handler = async (
+		action: Action<LoginInput>
+	): Promise<LoginResponse> => {
+		const { email, password } = action.payload;
 
-	if (error) {
-		throw mapSupabaseAuthError(error, { email });
-	}
+		const { data, error } = await supabase.auth.signInWithPassword({
+			email,
+			password,
+		});
 
-	if (!data.session) {
-		throw new Error('No session created');
-	}
+		if (error) {
+			throw mapSupabaseAuthError(error, { email });
+		}
 
-	const { session, user } = data;
+		if (!data.session) {
+			throw new Error('No session created');
+		}
+
+		const { session, user } = data;
+
+		return {
+			accessToken: session.access_token,
+			refreshToken: session.refresh_token,
+			expiresIn: session.expires_in,
+			user: {
+				id: user.id,
+				email: user.email || '',
+			},
+		};
+	};
+
+	const init = async () => {
+		commandBus.register(loginAction.type, handler);
+	};
 
 	return {
-		accessToken: session.access_token,
-		refreshToken: session.refresh_token,
-		expiresIn: session.expires_in,
-		user: {
-			id: user.id,
-			email: user.email || '',
-		},
+		init,
+		handler,
 	};
 }

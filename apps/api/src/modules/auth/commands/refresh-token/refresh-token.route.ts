@@ -1,12 +1,15 @@
 import { ERROR_CODES, successResponseSchema } from '@requil/types';
 import { errorResponseSchema } from '@requil/types/api';
-import { refreshTokenResponseSchema } from '@requil/types/auth';
+import {
+	RefreshTokenResponse,
+	refreshTokenResponseSchema,
+} from '@requil/types/auth';
 import { API_ROUTES } from '@requil/utils/api-routes';
 import type { FastifyPluginAsync } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { env } from '@/config';
 import { sendError, sendSuccess } from '@/shared/app/response-wrapper';
-import { refreshTokenHandler } from './refresh-token.handler';
+import { refreshTokenAction } from './refresh-token.handler';
 
 const refreshTokenRoute: FastifyPluginAsync = async (fastify) => {
 	fastify.withTypeProvider<ZodTypeProvider>().route({
@@ -33,9 +36,8 @@ const refreshTokenRoute: FastifyPluginAsync = async (fastify) => {
 				);
 			}
 
-			const result = await refreshTokenHandler(
-				{ refreshToken },
-				fastify.supabase
+			const result = await fastify.commandBus.execute<RefreshTokenResponse>(
+				refreshTokenAction({ refreshToken })
 			);
 
 			reply
