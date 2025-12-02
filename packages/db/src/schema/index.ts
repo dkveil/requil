@@ -3,8 +3,6 @@ export * from './enums';
 export * from './api-keys';
 export * from './assets';
 export * from './events';
-// TODO: Remove this after testing
-export * from './example';
 export * from './relations';
 export * from './sending';
 export * from './subscribers';
