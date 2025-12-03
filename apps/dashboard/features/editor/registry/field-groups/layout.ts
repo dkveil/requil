@@ -1,4 +1,20 @@
-import { createFieldGroup } from './config';
+import { createFieldGroup, FieldConfig } from './config';
+
+export const paddingFields: Record<string, FieldConfig> = {
+	padding: {
+		schema: {
+			type: 'number',
+			minimum: 0,
+			default: 0,
+		},
+		field: {
+			key: 'padding',
+			label: 'Padding',
+			type: 'padding',
+			defaultExpanded: true,
+		},
+	},
+};
 
 export const layoutGroup = createFieldGroup({
 	id: 'layout',
@@ -43,19 +59,7 @@ export const layoutGroup = createFieldGroup({
 				step: 1,
 			},
 		},
-		padding: {
-			schema: {
-				type: 'number',
-				minimum: 0,
-				default: 0,
-			},
-			field: {
-				key: 'padding',
-				label: 'Padding',
-				type: 'padding',
-				defaultExpanded: true,
-			},
-		},
+		...paddingFields,
 	},
 });
 

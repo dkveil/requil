@@ -33,6 +33,7 @@ type GeneratedFieldGroup = {
 	defaults: Record<string, unknown>;
 	inspectorGroup: InspectorGroup;
 	inspectorFields: InspectorField[];
+	fieldKeys: string[];
 };
 
 export function createFieldGroup<T extends string>(
@@ -64,6 +65,7 @@ export function createFieldGroup<T extends string>(
 			fields: fieldKeys,
 		},
 		inspectorFields,
+		fieldKeys,
 	};
 }
 
@@ -80,12 +82,14 @@ export function mergeFieldGroups(
 				fields: [...acc.inspectorGroup.fields, ...group.inspectorGroup.fields],
 			},
 			inspectorFields: [...acc.inspectorFields, ...group.inspectorFields],
+			fieldKeys: [...acc.fieldKeys, ...group.fieldKeys],
 		}),
 		{
 			schema: {},
 			defaults: {},
 			inspectorGroup: { id: 'merged', label: 'Merged', fields: [] },
 			inspectorFields: [],
+			fieldKeys: [],
 		}
 	);
 }

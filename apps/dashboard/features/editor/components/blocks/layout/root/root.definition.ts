@@ -1,5 +1,18 @@
 import type { ComponentDefinition } from '@requil/types/editor';
-import { stylesGroup } from '../../../../registry/field-groups';
+import {
+	borderFields,
+	createFieldGroup,
+	fillFields,
+} from '../../../../registry/field-groups';
+
+const rootStylesGroup = createFieldGroup({
+	id: 'rootStyles',
+	label: 'Styles',
+	fields: {
+		...fillFields,
+		...borderFields,
+	},
+});
 
 export const RootDefinition: ComponentDefinition = {
 	type: 'Root',
@@ -15,17 +28,17 @@ export const RootDefinition: ComponentDefinition = {
 	propsSchema: {
 		type: 'object',
 		properties: {
-			...stylesGroup.schema,
+			...rootStylesGroup.schema,
 		},
 	},
 
 	defaultProps: {
-		...stylesGroup.defaults,
+		...rootStylesGroup.defaults,
 		fill: { color: '#ffffff' },
 	},
 
 	inspectorConfig: {
-		groups: [stylesGroup.inspectorGroup],
-		fields: [...stylesGroup.inspectorFields],
+		groups: [rootStylesGroup.inspectorGroup],
+		fields: [...rootStylesGroup.inspectorFields],
 	},
 };

@@ -24,6 +24,49 @@ export const fillFields: Record<string, FieldConfig> = {
 	},
 };
 
+export const borderFields: Record<string, FieldConfig> = {
+	border: {
+		schema: {
+			type: 'object',
+			default: null,
+		},
+		field: {
+			key: 'border',
+			label: 'Border',
+			type: 'group',
+			isCollapsible: false,
+			isAddable: true,
+			emptyLabel: 'Add...',
+			children: [
+				{
+					key: 'width',
+					label: 'Width',
+					type: 'slider',
+					min: 0,
+					max: 20,
+					step: 1,
+				},
+				{
+					key: 'color',
+					label: 'Color',
+					type: 'color',
+				},
+				{
+					key: 'style',
+					label: 'Style',
+					type: 'select',
+					options: [
+						{ label: 'Solid', value: 'solid' },
+						{ label: 'Dashed', value: 'dashed' },
+						{ label: 'Dotted', value: 'dotted' },
+						{ label: 'Double', value: 'double' },
+					],
+				},
+			],
+		},
+	},
+};
+
 export const stylesGroup = createFieldGroup({
 	id: 'styles',
 	label: 'Styles',
@@ -45,46 +88,7 @@ export const stylesGroup = createFieldGroup({
 			},
 		},
 		...fillFields,
-		border: {
-			schema: {
-				type: 'object',
-				default: null,
-			},
-			field: {
-				key: 'border',
-				label: 'Border',
-				type: 'group',
-				isCollapsible: false,
-				isAddable: true,
-				emptyLabel: 'Add...',
-				children: [
-					{
-						key: 'width',
-						label: 'Width',
-						type: 'slider',
-						min: 0,
-						max: 20,
-						step: 1,
-					},
-					{
-						key: 'color',
-						label: 'Color',
-						type: 'color',
-					},
-					{
-						key: 'style',
-						label: 'Style',
-						type: 'select',
-						options: [
-							{ label: 'Solid', value: 'solid' },
-							{ label: 'Dashed', value: 'dashed' },
-							{ label: 'Dotted', value: 'dotted' },
-							{ label: 'Double', value: 'double' },
-						],
-					},
-				],
-			},
-		},
+		...borderFields,
 		radius: {
 			schema: {
 				type: 'number',
@@ -100,63 +104,6 @@ export const stylesGroup = createFieldGroup({
 				max: 50,
 			},
 		},
-		// TODO: not supported yet
-		// backgroundImage: {
-		// 	schema: {
-		// 		type: 'object',
-		// 		default: {
-		// 			image: '',
-		// 			size: 'cover',
-		// 			position: 'center',
-		// 		}
-		// 	},
-		// 	field: {
-		// 		key: 'backgroundImage',
-		// 		label: 'Background Image',
-		// 		type: 'group',
-		// 		isCollapsible: true,
-		// 		isExpanded: false,
-		// 		children: [
-		// 			{
-		// 				key: 'image',
-		// 				label: 'Image URL',
-		// 				type: 'image',
-		// 				placeholder: 'https://example.com/image.jpg',
-		// 			},
-		// 			{
-		// 				key: 'size',
-		// 				label: 'Size',
-		// 				type: 'select',
-		// 				options: [
-		// 					{ label: 'Cover', value: 'cover' },
-		// 					{ label: 'Contain', value: 'contain' },
-		// 					{ label: 'Auto', value: 'auto' },
-		// 				],
-		// 			},
-		// 			{
-		// 				key: 'position',
-		// 				label: 'Position',
-		// 				type: 'select',
-		// 				options: [
-		// 					{ label: 'Left Top', value: 'left top' },
-		// 					{ label: 'Left Center', value: 'left center' },
-		// 					{ label: 'Left Bottom', value: 'left bottom' },
-		// 					{ label: 'Center Top', value: 'center top' },
-		// 					{ label: 'Center', value: 'center' },
-		// 					{ label: 'Center Bottom', value: 'center bottom' },
-		// 					{ label: 'Right Top', value: 'right top' },
-		// 					{ label: 'Right Center', value: 'right center' },
-		// 					{ label: 'Right Bottom', value: 'right bottom' },
-		// 					{ label: 'Top', value: 'top' },
-		// 					{ label: 'Bottom', value: 'bottom' },
-		// 					{ label: 'Left', value: 'left' },
-		// 					{ label: 'Right', value: 'right' },
-		// 					{ label: 'Custom', value: 'custom' },
-		// 				],
-		// 			},
-		// 		],
-		// 	},
-		// },
 	},
 });
 

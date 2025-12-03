@@ -22,7 +22,6 @@ export function EmailRoot({
 			className={className}
 			style={{
 				maxWidth: '600px',
-				padding: '20px',
 				...generatedStyles,
 				...style,
 			}}
