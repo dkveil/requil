@@ -21,6 +21,7 @@
 		"test:watch": "vitest"
 	},
 	"dependencies": {
+		"@react-email/components": "^1.0.1",
 		"@requil/db": "workspace:*",
 		"@requil/types": "workspace:*",
 		"@requil/utils": "workspace:*",

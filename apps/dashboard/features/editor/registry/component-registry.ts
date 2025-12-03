@@ -2,10 +2,8 @@ import type {
 	ComponentCategory,
 	ComponentDefinition,
 } from '@requil/types/editor';
-import { CONTENT_COMPONENTS } from '../components/content';
-import { LAYOUT_COMPONENTS } from '../components/layout';
-
-// import { MEDIA_COMPONENTS } from './media-components'; // Future
+import { CONTENT_COMPONENTS } from './content-components';
+import { LAYOUT_COMPONENTS } from './layout-components';
 
 class ComponentRegistryManager {
 	private registry: Map<string, ComponentDefinition> = new Map();
@@ -73,7 +71,6 @@ class ComponentRegistryManager {
 		const component = this.get(type);
 		if (!component) return false;
 
-		// TODO: Validate against propsSchema using ajv or zod
 		return true;
 	}
 }

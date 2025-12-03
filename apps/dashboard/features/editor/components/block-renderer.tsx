@@ -4,21 +4,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { convertPropsToStyles } from '../lib/props-to-styles';
 import { BlockActions } from './block-actions';
-import { Button as ButtonBlock } from './content/button/button';
-import { Heading as HeadingBlock } from './content/heading/heading';
-import { Image as ImageBlock } from './content/image/image';
-import { List as ListBlock } from './content/list/list';
-import { Quote as QuoteBlock } from './content/quote/quote';
-import { SocialIcons as SocialIconsBlock } from './content/social-icons/social-icons';
-import { Text as TextBlock } from './content/text/text';
 import { DropZone } from './drop-zone';
-import { Block } from './layout/block/block';
-import { Column as ColumnBlock } from './layout/column/column';
-import { Columns as ColumnsBlock } from './layout/columns/columns';
-import { Container as ContainerBlock } from './layout/container/container';
-import { Divider as DividerBlock } from './layout/divider/divider';
-import { Root as RootBlock } from './layout/root/root';
-import { Spacer as SpacerBlock } from './layout/spacer/spacer';
 
 export interface BlockRendererProps {
 	block: BlockIR;
@@ -39,7 +25,6 @@ export interface BlockRendererProps {
 	parentHasLink?: boolean;
 }
 
-// Helper function to render children with drop zones
 export function renderChildrenWithDropZones(
 	block: BlockIR,
 	isCanvas = true,
@@ -188,134 +173,33 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 				}
 			: interactionProps;
 
-	// Calculate if block can move up/down
-	// This would require parent's children info, which we'll compute when needed
-	// For now, we'll pass the handlers and let BlockActions determine if enabled
-
-	const commonBlockProps = {
-		block,
-		isCanvas,
-		viewport,
-		isStacked,
-		styles,
-		interactionProps: combinedInteractionProps,
-		onSelect,
-		onHover,
-		selectedBlockId,
-		hoveredBlockId,
-		onSelectParent,
-		onMoveUp,
-		onMoveDown,
-		onDelete,
-	};
-
-	const blockContent = (() => {
-		switch (block.type) {
-			case 'Root':
-				return <RootBlock {...commonBlockProps} />;
-
-			case 'Container':
-				return <ContainerBlock {...commonBlockProps} />;
-
-			case 'Block':
-				return <Block {...commonBlockProps} />;
-
-			case 'Columns':
-				return <ColumnsBlock {...commonBlockProps} />;
-
-			case 'Column':
-				return <ColumnBlock {...commonBlockProps} />;
-
-			case 'Spacer':
-				return <SpacerBlock {...commonBlockProps} />;
-
-			case 'Divider':
-				return <DividerBlock {...commonBlockProps} />;
-
-			case 'Text':
-				return <TextBlock {...commonBlockProps} />;
-
-			case 'Heading':
-				return <HeadingBlock {...commonBlockProps} />;
-
-			case 'Button':
-				return <ButtonBlock {...commonBlockProps} />;
-
-			case 'Image':
-				return <ImageBlock {...commonBlockProps} />;
-
-			case 'List':
-				return <ListBlock {...commonBlockProps} />;
-
-			case 'Quote':
-				return <QuoteBlock {...commonBlockProps} />;
-
-			case 'SocialIcons':
-				return <SocialIconsBlock {...commonBlockProps} />;
-
-			default:
-				return (
-					<div
-						{...interactionProps}
-						className={cn(
-							interactionProps.className,
-							'border border-red-500 bg-red-50 p-4'
-						)}
-						data-block-type='Unknown'
-						data-block-id={block.id}
-					>
-						<div className='text-red-600 text-sm'>
-							Unknown block type: {block.type}
-						</div>
-					</div>
-				);
-		}
-	})();
+	const blockContent = (
+		<div
+			{...combinedInteractionProps}
+			style={styles}
+			data-block-type={block.type}
+			data-block-id={block.id}
+		>
+			{/* TODO: Implement block components */}
+			<div className='p-4 border border-dashed border-gray-300 text-gray-500 text-sm'>
+				{block.type}: {block.id}
+			</div>
+		</div>
+	);
 
 	if (isSelected && block.type !== 'Root' && isCanvas) {
 		const canMoveUp = siblingIndex > 0;
 		const canMoveDown = siblingIndex < siblingCount - 1;
 
-		const isBlockWithWidth =
-			typeof block.props.width === 'number' ||
-			(typeof block.props.width === 'string' &&
-				block.props.width.includes('%'));
-
-		const isStackedColumn = isStacked && block.type === 'Column';
-
-		let wrapperClassName = 'block-wrapper-other';
-		wrapperClassName =
-			isBlockWithWidth && block.type !== 'Image'
-				? 'block-wrapper-column-explicit'
-				: 'block-wrapper-column-flex';
-
 		return (
-			<div
-				className={wrapperClassName}
-				style={{
-					position: 'relative',
-					width: isStackedColumn
-						? '100%'
-						: isBlockWithWidth && block.type !== 'Image'
-							? (block.props.width as string | number)
-							: 'auto',
-				}}
-			>
+			<div style={{ position: 'relative' }}>
 				{blockContent}
 				<BlockActions
 					blockId={block.id}
-					onMoveUp={() => {
-						onMoveUp?.(block.id);
-					}}
-					onMoveDown={() => {
-						onMoveDown?.(block.id);
-					}}
-					onDelete={() => {
-						onDelete?.(block.id);
-					}}
-					onSelectParent={() => {
-						onSelectParent?.(block.id);
-					}}
+					onMoveUp={() => onMoveUp?.(block.id)}
+					onMoveDown={() => onMoveDown?.(block.id)}
+					onDelete={() => onDelete?.(block.id)}
+					onSelectParent={() => onSelectParent?.(block.id)}
 					canMoveUp={canMoveUp}
 					canMoveDown={canMoveDown}
 					hasParent={!!parentId}
