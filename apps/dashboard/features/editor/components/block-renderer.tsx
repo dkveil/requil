@@ -3,7 +3,7 @@ import type { BlockIR } from '@requil/types';
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { BlockActions } from './block-actions';
-import { RootBlock } from './blocks/layout';
+import { ContainerBlock, RootBlock } from './blocks/layout';
 import { DropZone } from './drop-zone';
 
 export interface BlockRendererProps {
@@ -181,6 +181,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 		onMoveUp,
 		onMoveDown,
 		onDelete,
+		onSelectParent,
 		interactionProps: combinedInteractionProps,
 	};
 
@@ -188,6 +189,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 		switch (block.type) {
 			case 'Root':
 				return <RootBlock {...commonBlockProps} />;
+			case 'Container':
+				return <ContainerBlock {...commonBlockProps} />;
 
 			default:
 				return (

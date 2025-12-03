@@ -7,7 +7,7 @@ import {
 	render,
 } from '@react-email/components';
 import { BlockIR, Document } from '@requil/types';
-import { EmailRoot } from './components';
+import { EmailContainer, EmailRoot } from './components';
 import { toPlaintext } from './plaintext';
 
 function renderBlock(block: BlockIR): React.ReactNode {
@@ -16,6 +16,8 @@ function renderBlock(block: BlockIR): React.ReactNode {
 	switch (block.type) {
 		case 'Root':
 			return <EmailRoot block={block}>{children}</EmailRoot>;
+		case 'Container':
+			return <EmailContainer block={block}>{children}</EmailContainer>;
 		default:
 			return <div>Unknown block type: {block.type}</div>;
 	}
