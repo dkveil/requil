@@ -2,8 +2,8 @@ import { useDraggable } from '@dnd-kit/core';
 import type { BlockIR } from '@requil/types';
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { convertPropsToStyles } from '../lib/props-to-styles';
 import { BlockActions } from './block-actions';
+import { RootBlock } from './blocks/layout';
 import { DropZone } from './drop-zone';
 
 export interface BlockRendererProps {
@@ -87,7 +87,6 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 	block,
 	isCanvas = true,
 	viewport = 'desktop',
-	isStacked = false,
 	onSelect,
 	onHover,
 	selectedBlockId,
@@ -123,8 +122,6 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 		}
 	};
 
-	const styles = convertPropsToStyles(block.props);
-
 	const {
 		attributes,
 		listeners,
@@ -147,8 +144,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 				onMouseLeave: handleMouseLeave,
 				className: cn(
 					'transition-all relative',
-					isSelected && 'ring-2 ring-blue-500 ring-inset',
-					isHovered && 'ring-1 ring-blue-300 ring-inset',
+					isSelected && 'outline outline-2 outline-primary -outline-offset-2',
+					isHovered && 'outline outline-1 outline-primary/50 -outline-offset-1',
 					isCanvas && 'cursor-pointer'
 				),
 			}
@@ -173,19 +170,39 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 				}
 			: interactionProps;
 
-	const blockContent = (
-		<div
-			{...combinedInteractionProps}
-			style={styles}
-			data-block-type={block.type}
-			data-block-id={block.id}
-		>
-			{/* TODO: Implement block components */}
-			<div className='p-4 border border-dashed border-gray-300 text-gray-500 text-sm'>
-				{block.type}: {block.id}
-			</div>
-		</div>
-	);
+	const commonBlockProps = {
+		block,
+		isCanvas,
+		viewport,
+		onSelect,
+		onHover,
+		selectedBlockId,
+		hoveredBlockId,
+		onMoveUp,
+		onMoveDown,
+		onDelete,
+		interactionProps: combinedInteractionProps,
+	};
+
+	const blockContent = (() => {
+		switch (block.type) {
+			case 'Root':
+				return <RootBlock {...commonBlockProps} />;
+
+			default:
+				return (
+					<div
+						{...combinedInteractionProps}
+						data-block-type={block.type}
+						data-block-id={block.id}
+					>
+						<div className='p-4 border border-dashed border-gray-300 text-gray-500 text-sm'>
+							{block.type}: {block.id}
+						</div>
+					</div>
+				);
+		}
+	})();
 
 	if (isSelected && block.type !== 'Root' && isCanvas) {
 		const canMoveUp = siblingIndex > 0;

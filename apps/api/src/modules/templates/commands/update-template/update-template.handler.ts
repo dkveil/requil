@@ -1,4 +1,4 @@
-import { convertDocumentToHtml } from '@requil/email-engine';
+// import { convertDocumentToHtml } from '@requil/email-engine';
 import type { Document } from '@requil/types';
 import {
 	UpdateTemplateInput,
@@ -51,16 +51,16 @@ export default function updateTemplateHandler({
 
 		if (updateData.builderStructure) {
 			const document = updateData.builderStructure as unknown as Document;
-			const htmlResult = convertDocumentToHtml(document);
+			// const htmlResult = convertDocumentToHtml(document);
 
-			if (htmlResult.errors.length > 0) {
-				logger.warn(
-					{ errors: htmlResult.errors, templateId: id },
-					'HTML conversion had errors'
-				);
-			}
+			// if (htmlResult.errors.length > 0) {
+			// 	logger.warn(
+			// 		{ errors: htmlResult.errors, templateId: id },
+			// 		'HTML conversion had errors'
+			// 	);
+			// }
 
-			html = htmlResult.html;
+			// html = htmlResult.html;
 		}
 
 		const result = await templateRepository.updateTemplate(
