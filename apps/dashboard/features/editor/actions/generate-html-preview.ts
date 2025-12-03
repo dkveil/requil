@@ -1,6 +1,6 @@
 'use server';
 
-// import { convertDocumentToHtml } from '@requil/email-engine';
+import { renderDocumentToHtml } from '@requil/email-engine';
 import type { Document } from '@requil/types/editor';
 
 export type HtmlPreviewResult = {
@@ -21,17 +21,13 @@ export async function generateHtmlPreview(
 	}
 
 	try {
-		// const result = convertDocumentToHtml(document);
+		const result = await renderDocumentToHtml(document);
 
-		// return {
-		// 	success: result.errors.length === 0,
-		// 	html: result.html,
-		// 	warnings: result.warnings,
-		// 	errors: result.errors,
-		// };
 		return {
-			success: false,
-			errors: ['HTML preview generation not implemented'],
+			success: result.errors.length === 0,
+			html: result.html,
+			warnings: result.warnings,
+			errors: result.errors,
 		};
 	} catch (error) {
 		return {
