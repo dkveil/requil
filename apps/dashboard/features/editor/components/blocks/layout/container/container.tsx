@@ -34,7 +34,9 @@ export function ContainerBlock({
 	});
 
 	const hasChildren = block.children && block.children.length > 0;
-	const extractedWrapperStyles = extractWrapperStyles(block.props);
+	const extractedWrapperStyles = !hasChildren
+		? extractWrapperStyles(block.props)
+		: undefined;
 
 	return (
 		<div
@@ -46,28 +48,42 @@ export function ContainerBlock({
 			)}
 			data-block-type='Container'
 			data-block-id={block.id}
-			style={extractedWrapperStyles}
+			style={{
+				position: !hasChildren && isCanvas ? 'relative' : undefined,
+				...extractedWrapperStyles,
+			}}
 		>
 			<EmailContainer block={block}>
-				<RenderChildren
-					block={block}
-					isCanvas={isCanvas}
-					viewport={viewport}
-					onSelect={onSelect}
-					onHover={onHover}
-					selectedBlockId={selectedBlockId}
-					hoveredBlockId={hoveredBlockId}
-					onMoveUp={onMoveUp}
-					onMoveDown={onMoveDown}
-					onDelete={onDelete}
-					onSelectParent={onSelectParent}
-				/>
-
-				{!hasChildren && isCanvas && (
-					<div className='min-h-[100px] h-[inherit]! flex items-center justify-center text-center text-muted-foreground py-8 text-sm border border-dashed border-muted-foreground/30 rounded'>
+				{hasChildren ? (
+					<RenderChildren
+						block={block}
+						isCanvas={isCanvas}
+						viewport={viewport}
+						onSelect={onSelect}
+						onHover={onHover}
+						selectedBlockId={selectedBlockId}
+						hoveredBlockId={hoveredBlockId}
+						onMoveUp={onMoveUp}
+						onMoveDown={onMoveDown}
+						onDelete={onDelete}
+						onSelectParent={onSelectParent}
+					/>
+				) : isCanvas ? (
+					<div
+						style={{
+							position: 'absolute',
+							inset: 0,
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							textAlign: 'center',
+							pointerEvents: 'none',
+						}}
+						className='text-muted-foreground text-sm border border-dashed border-muted-foreground/30 rounded'
+					>
 						Empty container - drag elements here
 					</div>
-				)}
+				) : null}
 			</EmailContainer>
 		</div>
 	);
