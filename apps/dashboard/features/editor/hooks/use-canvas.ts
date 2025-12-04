@@ -16,6 +16,7 @@ export function useCanvas() {
 	const editingBlockId = useCanvasStore((state) => state.editingBlockId);
 	const viewport = useCanvasStore((state) => state.viewport);
 	const zoom = useCanvasStore((state) => state.zoom);
+	const canvasWidth = useCanvasStore((state) => state.canvasWidth);
 	const isModified = useCanvasStore((state) => state.isModified);
 
 	// Actions
@@ -47,6 +48,7 @@ export function useCanvas() {
 
 	const setViewport = useCanvasStore((state) => state.setViewport);
 	const setZoom = useCanvasStore((state) => state.setZoom);
+	const setCanvasWidth = useCanvasStore((state) => state.setCanvasWidth);
 
 	const markAsModified = useCanvasStore((state) => state.markAsModified);
 	const markAsSaved = useCanvasStore((state) => state.markAsSaved);
@@ -64,6 +66,7 @@ export function useCanvas() {
 		editingBlockId,
 		viewport,
 		zoom,
+		canvasWidth,
 		isModified,
 
 		// Document actions
@@ -98,6 +101,7 @@ export function useCanvas() {
 		// UI
 		setViewport,
 		setZoom,
+		setCanvasWidth,
 
 		// Utility
 		markAsModified,

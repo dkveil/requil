@@ -30,6 +30,7 @@ interface CanvasState {
 	// UI State
 	viewport: 'desktop' | 'mobile';
 	zoom: number;
+	canvasWidth: number;
 	isModified: boolean;
 }
 
@@ -75,6 +76,7 @@ interface CanvasActions {
 	// UI actions
 	setViewport: (viewport: 'desktop' | 'mobile') => void;
 	setZoom: (zoom: number) => void;
+	setCanvasWidth: (width: number) => void;
 
 	// Utility
 	reset: () => void;
@@ -93,6 +95,7 @@ const initialState: CanvasState = {
 	dropPosition: null,
 	viewport: 'desktop',
 	zoom: 1,
+	canvasWidth: 900,
 	isModified: false,
 };
 
@@ -553,10 +556,17 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 				set({ dropTargetId: targetId, dropPosition: position }),
 
 			// Set viewport
-			setViewport: (viewport) => set({ viewport }),
+			setViewport: (viewport) => {
+				const width = viewport === 'mobile' ? 375 : 900;
+				set({ viewport, canvasWidth: width });
+			},
 
 			// Set zoom
 			setZoom: (zoom) => set({ zoom: Math.max(0.25, Math.min(2, zoom)) }),
+
+			// Set canvas width
+			setCanvasWidth: (width) =>
+				set({ canvasWidth: Math.max(320, Math.min(1200, width)) }),
 
 			// Mark as modified
 			markAsModified: () => set({ isModified: true }),

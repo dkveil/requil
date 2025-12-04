@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useCanvas, useCanvasKeyboardShortcuts } from '../hooks/use-canvas';
 import { createDefaultDocument } from '../lib/block-factory';
 import { BlockRenderer } from './block-renderer';
+import { ResizableCanvas } from './resizable-canvas';
 
 export function Canvas() {
 	const {
@@ -51,30 +52,30 @@ export function Canvas() {
 		<div className='h-full flex flex-col bg-background'>
 			<div
 				onClick={handleCanvasClick}
-				className='flex-1 overflow-auto bg-muted p-8 canvas-wrapper'
+				className='flex-1 overflow-auto bg-muted canvas-wrapper'
 			>
 				<div
 					style={{
 						transform: `scale(${zoom})`,
 						transformOrigin: 'top center',
-						maxWidth: viewport === 'mobile' ? '375px' : '100%',
-						margin: '0 auto',
 					}}
 				>
-					<BlockRenderer
-						block={document.root}
-						isCanvas={true}
-						viewport={viewport}
-						onSelect={selectBlock}
-						onHover={hoverBlock}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onMoveUp={moveBlockUp}
-						onMoveDown={moveBlockDown}
-						onDelete={removeBlock}
-						onSelectParent={selectParentBlock}
-						parentId={null}
-					/>
+					<ResizableCanvas viewport={viewport}>
+						<BlockRenderer
+							block={document.root}
+							isCanvas={true}
+							viewport={viewport}
+							onSelect={selectBlock}
+							onHover={hoverBlock}
+							selectedBlockId={selectedBlockId}
+							hoveredBlockId={hoveredBlockId}
+							onMoveUp={moveBlockUp}
+							onMoveDown={moveBlockDown}
+							onDelete={removeBlock}
+							onSelectParent={selectParentBlock}
+							parentId={null}
+						/>
+					</ResizableCanvas>
 				</div>
 			</div>
 		</div>

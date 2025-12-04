@@ -1,6 +1,7 @@
 import { useDroppable } from '@dnd-kit/core';
 import { EmailRoot } from '@requil/email-engine';
 import { cn } from '@/lib/utils';
+import { useCanvas } from '../../../../hooks/use-canvas';
 import {
 	RenderChildren,
 	type RenderChildrenProps,
@@ -22,6 +23,7 @@ export function RootBlock({
 	onSelectParent,
 	interactionProps,
 }: RootBlockProps) {
+	const { canvasWidth } = useCanvas();
 	const { setNodeRef, isOver } = useDroppable({
 		id: `block-${block.id}`,
 		data: {
@@ -33,6 +35,7 @@ export function RootBlock({
 	});
 
 	const hasChildren = block.children && block.children.length > 0;
+	const width = isCanvas ? canvasWidth : viewport === 'mobile' ? 375 : 'auto';
 
 	return (
 		<div
@@ -44,7 +47,8 @@ export function RootBlock({
 				'w-full'
 			)}
 			style={{
-				maxWidth: viewport === 'mobile' ? '375px' : '900px',
+				width: typeof width === 'number' ? `${width}px` : width,
+				maxWidth: '100%',
 				margin: '0 auto',
 			}}
 			data-block-type='Root'
