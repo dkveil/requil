@@ -23,6 +23,7 @@ export default {
 			'always',
 			[
 				'app',
+				'ai-plan',
 				// Apps
 				'api',
 				'dashboard',

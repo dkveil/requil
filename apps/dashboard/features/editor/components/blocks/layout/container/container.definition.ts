@@ -12,9 +12,7 @@ export const ContainerDefinition: ComponentDefinition = {
 
 	propsSchema: {
 		type: 'object',
-		properties: {
-			fullWidth: { type: 'boolean', default: true },
-		},
+		properties: {},
 	},
 
 	defaultProps: {
@@ -22,19 +20,7 @@ export const ContainerDefinition: ComponentDefinition = {
 	},
 
 	inspectorConfig: {
-		groups: [
-			{
-				id: 'layout',
-				label: 'Layout',
-				fields: ['fullWidth'],
-			},
-		],
-		fields: [
-			{
-				key: 'fullWidth',
-				label: 'Full Width',
-				type: 'toggle',
-			},
-		],
+		groups: [],
+		fields: [],
 	},
 };

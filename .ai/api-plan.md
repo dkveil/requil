@@ -7,7 +7,7 @@
 - **Workspace Members** (`workspace_members`) - User membership and roles
 - **Workspace Invitations** (`workspace_invitations`) - Invitation management
 - **API Keys** (`api_keys`, `api_key_scopes`) - Authentication credentials with scopes
-- **Templates** (`templates`, `template_snapshots`) - Email template versioning with dual storage (MJML + builder JSON structure)
+- **Templates** (`templates`, `template_snapshots`) - Email template versioning with builder JSON structure (rendered via React Email)
 - **Brand Kit** (`workspace_brandkit`) - Workspace branding configuration
 - **Transports** (`workspace_transports`) - Email delivery configuration (Resend/SMTP)
 - **Send Jobs** (`send_jobs`, `send_recipients`) - Email sending orchestration
@@ -193,98 +193,128 @@ DELETE /v1/workspace/invitations/{invitationId}
 
 > **📝 Template Storage Architecture**
 >
-> **Primary Storage Format: Builder Structure (JSON)**
+> **Primary Storage Format: Document (JSON)**
 >
-> Templates are created and edited using a visual builder that works with a structured JSON format. This builder structure is the **source of truth** stored in the database.
+> Templates are created and edited using a visual builder that works with a structured JSON format called `Document`. This document is the **source of truth** stored in the database.
 >
-> **Builder Structure** (Stored in DB):
+> **Rendering Engine: React Email**
+>
+> Document structure is converted to React Email components server-side, which then render to HTML. This approach provides:
+> - Type-safe component rendering
+> - Modern React-based email development
+> - Excellent email client compatibility
+> - No intermediate step - direct document → React Email → HTML
+>
+> **Document Structure** (Stored in DB):
+> - Wrapper object containing version, root block, and metadata
+> - **Document Schema**: `{ version, root: BlockIR, metadata? }`
+>   - `version`: Schema version (default: "1.0")
+>   - `root`: Root block of the template (BlockIR)
+>   - `metadata`: Optional email metadata (subject, preheader, sender info, etc.)
+>
+> **Block Structure** (BlockIR):
 > - Hierarchical JSON tree representing visual email components
-> - Each element is an object with `type` (category), `name` (specific element), `properties`, and optionally `children`
-> - **Element Structure**: `{ type, name, properties, children? }`
->   - `type`: Category of element (layout, content, media, advanced)
->   - `name`: Specific element name (container, heading, image, etc.)
-> - **Available elements**:
->   - **Layout** (`type: "layout"`): `container`, `section`, `column`, `columns-2`, `columns-3`, `row`
->   - **Content** (`type: "content"`): `heading`, `paragraph`, `text`, `button`, `divider`, `spacer`
->   - **Media** (`type: "media"`): `image`, `video`
->   - **Advanced** (`type: "advanced"`): `social-links`, `unsubscribe`, `custom`
+> - Each block is an object with `id`, `type`, `props`, and optionally `name`, `children`, `slots`
+> - **Block Schema**: `{ id, type, name?, props, children?, slots? }`
+>   - `id`: Unique identifier (UUID)
+>   - `type`: Block type name (container, section, heading, button, etc.)
+>   - `name`: Optional display name for the block
+>   - `props`: Block-specific properties (styling, content, etc.)
+>   - `children`: Nested child blocks (for container elements)
+>   - `slots`: Named slots for advanced layouts (e.g., columns with left/right slots)
 >
-> **Example Builder Structure**:
+> **Available Block Types**:
+> - **Layout**: `container`, `section`, `column`, `columns`, `row`
+> - **Content**: `heading`, `paragraph`, `text`, `button`, `divider`, `spacer`
+> - **Media**: `image`, `video`
+> - **Advanced**: `social-links`, `unsubscribe`, `custom`
+>
+> **Example Document Structure**:
 > ```json
 > {
->   "type": "layout",
->   "name": "container",
->   "properties": {
->     "width": "600px",
->     "backgroundColor": "#ffffff",
->     "fontFamily": "Inter, sans-serif"
+>   "version": "1.0",
+>   "root": {
+>     "id": "550e8400-e29b-41d4-a716-446655440000",
+>     "type": "container",
+>     "props": {
+>       "width": "600px",
+>       "backgroundColor": "#ffffff",
+>       "fontFamily": "Inter, sans-serif"
+>     },
+>     "children": [
+>       {
+>         "id": "550e8400-e29b-41d4-a716-446655440001",
+>         "type": "section",
+>         "props": { "padding": "40px 20px", "backgroundColor": "#f9fafb" },
+>         "children": [
+>           {
+>             "id": "550e8400-e29b-41d4-a716-446655440002",
+>             "type": "heading",
+>             "props": {
+>               "level": 1,
+>               "content": "Welcome {{user_name}}!",
+>               "fontSize": "32px",
+>               "color": "#007AFF",
+>               "align": "center"
+>             }
+>           },
+>           {
+>             "id": "550e8400-e29b-41d4-a716-446655440003",
+>             "type": "paragraph",
+>             "props": {
+>               "content": "We're excited to have you on board.",
+>               "fontSize": "16px",
+>               "color": "#374151",
+>               "lineHeight": "24px"
+>             }
+>           },
+>           {
+>             "id": "550e8400-e29b-41d4-a716-446655440004",
+>             "type": "button",
+>             "props": {
+>               "text": "Complete your profile",
+>               "href": "{{profile_url}}",
+>               "backgroundColor": "#007AFF",
+>               "textColor": "#ffffff",
+>               "borderRadius": "8px",
+>               "padding": "12px 24px"
+>             }
+>           }
+>         ]
+>       }
+>     ]
 >   },
->   "children": [
->     {
->       "type": "layout",
->       "name": "section",
->       "properties": { "padding": "40px 20px", "backgroundColor": "#f9fafb" },
->       "children": [
->         {
->           "type": "content",
->           "name": "heading",
->           "properties": {
->             "level": 1,
->             "content": "Welcome {{user_name}}!",
->             "fontSize": "32px",
->             "color": "#007AFF",
->             "align": "center"
->           }
->         },
->         {
->           "type": "content",
->           "name": "paragraph",
->           "properties": {
->             "content": "We're excited to have you on board.",
->             "fontSize": "16px",
->             "color": "#374151",
->             "lineHeight": "24px"
->           }
->         },
->         {
->           "type": "content",
->           "name": "button",
->           "properties": {
->             "text": "Complete your profile",
->             "href": "{{profile_url}}",
->             "backgroundColor": "#007AFF",
->             "textColor": "#ffffff",
->             "borderRadius": "8px",
->             "padding": "12px 24px"
->           }
->         }
->       ]
->     }
->   ]
+>   "metadata": {
+>     "title": "Welcome Email",
+>     "subject": "Welcome to Acme, {{user_name}}!",
+>     "preheader": "Complete your profile to unlock all features",
+>     "senderName": "Acme Corp",
+>     "senderEmail": "noreply@acme.com"
+>   }
 > }
 > ```
 >
 > **Generation Flow**:
-> 1. **Edit**: User creates/edits template in visual builder → `builder_structure` saved to DB
-> 2. **Preview**: Builder structure → MJML (generated) → HTML (compiled) → Preview
-> 3. **Publish**: Builder structure → MJML (generated) → HTML (compiled) → Snapshot (immutable)
-> 4. **Send**: Published snapshot (MJML/HTML cached) → Per-recipient render → Email sent
+> 1. **Edit**: User creates/edits template in visual builder → `document` saved to DB
+> 2. **Preview**: Document → React Email components → HTML → Preview
+> 3. **Publish**: Document → React Email components → HTML → Snapshot (immutable)
+> 4. **Send**: Published snapshot HTML (cached) → Per-recipient variable interpolation → Email sent
 >
 > **What's Stored**:
-> - **Draft templates**: `builder_structure` (primary), optionally cached MJML/HTML for preview
-> - **Published snapshots**: `builder_structure` + generated `mjml` + compiled `html` + `plaintext`
-> - **Reasoning**: Builder for editing, MJML for compatibility, HTML for sending
+> - **Draft templates**: `document` (primary), optionally cached HTML for preview
+> - **Published snapshots**: `document` + compiled `html` + `plaintext`
+> - **Reasoning**: Document for editing, HTML for sending (React Email renders on-demand)
 >
 > **API Flexibility**:
-> - Dashboard/Builder: Works with `builder_structure` endpoints
-> - API users: Can submit pre-made MJML directly (converted to builder internally for storage)
-> - Both approaches supported for maximum flexibility
+> - Dashboard/Builder: Works with `document` endpoints
+> - API users: Can submit raw HTML directly for simple use cases
+> - Document format recommended for full feature support
 
 #### AI Generate Template
 ```
 POST /v1/templates/generate
 ```
-**Description**: Generate email template using AI (returns builder structure)
+**Description**: Generate email template using AI (returns document structure)
 **Auth**: API Key (`templates:write`) or User session (member)
 **Request Body**:
 ```json
@@ -302,54 +332,61 @@ POST /v1/templates/generate
 **Success Response** (200):
 ```json
 {
-  "builder_structure": {
-    "type": "layout",
-    "name": "container",
-    "properties": {
-      "width": "600px",
-      "backgroundColor": "#ffffff",
-      "fontFamily": "Inter, sans-serif"
+  "document": {
+    "version": "1.0",
+    "root": {
+      "id": "gen-001",
+      "type": "container",
+      "props": {
+        "width": "600px",
+        "backgroundColor": "#ffffff",
+        "fontFamily": "Inter, sans-serif"
+      },
+      "children": [
+        {
+          "id": "gen-002",
+          "type": "section",
+          "props": { "padding": "40px 20px", "backgroundColor": "#f9fafb" },
+          "children": [
+            {
+              "id": "gen-003",
+              "type": "heading",
+              "props": {
+                "level": 1,
+                "content": "Welcome {{user_name}}!",
+                "fontSize": "32px",
+                "color": "#007AFF",
+                "align": "center"
+              }
+            },
+            {
+              "id": "gen-004",
+              "type": "paragraph",
+              "props": {
+                "content": "We're excited to have you on board.",
+                "fontSize": "16px",
+                "color": "#374151"
+              }
+            },
+            {
+              "id": "gen-005",
+              "type": "button",
+              "props": {
+                "text": "Complete your profile",
+                "href": "{{profile_url}}",
+                "backgroundColor": "#007AFF",
+                "textColor": "#ffffff",
+                "borderRadius": "8px"
+              }
+            }
+          ]
+        }
+      ]
     },
-    "children": [
-      {
-        "type": "layout",
-        "name": "section",
-        "properties": { "padding": "40px 20px", "backgroundColor": "#f9fafb" },
-        "children": [
-          {
-            "type": "content",
-            "name": "heading",
-            "properties": {
-              "level": 1,
-              "content": "Welcome {{user_name}}!",
-              "fontSize": "32px",
-              "color": "#007AFF",
-              "align": "center"
-            }
-          },
-          {
-            "type": "content",
-            "name": "paragraph",
-            "properties": {
-              "content": "We're excited to have you on board.",
-              "fontSize": "16px",
-              "color": "#374151"
-            }
-          },
-          {
-            "type": "content",
-            "name": "button",
-            "properties": {
-              "text": "Complete your profile",
-              "url": "{{profile_url}}",
-              "backgroundColor": "#007AFF",
-              "textColor": "#ffffff",
-              "borderRadius": "8px"
-            }
-          }
-        ]
-      }
-    ]
+    "metadata": {
+      "subject": "Welcome to Acme, {{user_name}}!",
+      "preheader": "Complete your profile to unlock all features"
+    }
   },
   "variables_schema": {
     "type": "object",
@@ -363,7 +400,6 @@ POST /v1/templates/generate
     "Welcome to Acme, {{user_name}}!",
     "Get started with Acme"
   ],
-  "preheader": "Complete your profile to unlock all features",
   "notes": ["Uses primary CTA color", "Mobile-optimized layout"],
   "safety_flags": {
     "contrast_issues": [],
@@ -375,10 +411,10 @@ POST /v1/templates/generate
 ```
 
 > **AI Generation Flow**:
-> - AI generates builder structure directly based on prompt and brand kit
+> - AI generates document structure directly based on prompt and brand kit
 > - Variables extracted from content ({{placeholders}}) and included in schema
-> - Safety flags estimated from builder properties (colors, content, etc.)
-> - MJML/HTML generated on-demand for preview (not stored at this stage)
+> - Safety flags estimated from block props (colors, content, etc.)
+> - HTML generated on-demand via React Email for preview (not stored at this stage)
 
 **Error Responses**:
 - `400 Bad Request` - Invalid prompt or brand kit
@@ -389,46 +425,53 @@ POST /v1/templates/generate
 ```
 POST /v1/templates
 ```
-**Description**: Create a new template draft (builder structure is primary storage)
+**Description**: Create a new template draft (document is primary storage)
 **Auth**: API Key (`templates:write`) or User session (member)
 
-**Request Body (Primary: Builder format)**:
+**Request Body (Primary: Document format)**:
 ```json
 {
   "stable_id": "welcome-email",
   "name": "Welcome Email",
-  "builder_structure": {
-    "type": "layout",
-    "name": "container",
-    "properties": { "width": "600px", "backgroundColor": "#ffffff" },
-    "children": [
-      {
-        "type": "layout",
-        "name": "section",
-        "properties": { "padding": "40px 20px" },
-        "children": [
-          {
-            "type": "content",
-            "name": "heading",
-            "properties": {
-              "level": 1,
-              "content": "Welcome {{user_name}}!",
-              "fontSize": "32px",
-              "color": "#007AFF"
+  "document": {
+    "version": "1.0",
+    "root": {
+      "id": "root-001",
+      "type": "container",
+      "props": { "width": "600px", "backgroundColor": "#ffffff" },
+      "children": [
+        {
+          "id": "section-001",
+          "type": "section",
+          "props": { "padding": "40px 20px" },
+          "children": [
+            {
+              "id": "heading-001",
+              "type": "heading",
+              "props": {
+                "level": 1,
+                "content": "Welcome {{user_name}}!",
+                "fontSize": "32px",
+                "color": "#007AFF"
+              }
+            },
+            {
+              "id": "button-001",
+              "type": "button",
+              "props": {
+                "text": "Get started",
+                "href": "{{cta_url}}",
+                "backgroundColor": "#007AFF"
+              }
             }
-          },
-          {
-            "type": "content",
-            "name": "button",
-            "properties": {
-              "text": "Get started",
-              "url": "{{cta_url}}",
-              "backgroundColor": "#007AFF"
-            }
-          }
-        ]
-      }
-    ]
+          ]
+        }
+      ]
+    },
+    "metadata": {
+      "subject": "Welcome {{user_name}}!",
+      "preheader": "Get started today"
+    }
   },
   "variables_schema": {
     "type": "object",
@@ -437,18 +480,16 @@ POST /v1/templates
       "cta_url": { "type": "string", "format": "uri" }
     },
     "required": ["user_name", "cta_url"]
-  },
-  "subject_lines": ["Welcome {{user_name}}!"],
-  "preheader": "Get started today"
+  }
 }
 ```
 
-**Request Body (Alternative: MJML for API users)**:
+**Request Body (Alternative: Raw HTML for API users)**:
 ```json
 {
   "stable_id": "welcome-email",
   "name": "Welcome Email",
-  "mjml": "<mjml>...</mjml>",
+  "html": "<html>...</html>",
   "variables_schema": { ... },
   "subject_lines": ["Welcome!"],
   "preheader": "Get started today"
@@ -456,9 +497,9 @@ POST /v1/templates
 ```
 
 > **Note**:
-> - **Builder format** (recommended): Used by visual editor, stored directly in database
-> - **MJML format**: Accepted for API flexibility, automatically converted to builder structure for storage
-> - If MJML provided, it's parsed and converted to builder_structure server-side
+> - **Document format** (recommended): Used by visual editor, stored directly in database
+> - **HTML format**: Accepted for simple API use cases (no editor features like visual editing)
+> - Document is rendered to HTML via React Email on-demand
 > - variables_schema is auto-extracted from {{placeholders}} if not provided
 
 **Success Response** (201):
@@ -469,16 +510,16 @@ POST /v1/templates
   "stable_id": "welcome-email",
   "name": "Welcome Email",
   "current_snapshot_id": null,
-  "has_builder_structure": true,
-  "has_mjml": true,
+  "has_document": true,
+  "has_html": true,
   "created_at": "2025-10-26T10:00:00Z"
 }
 ```
 
-> **Response Note**: `has_builder_structure` and `has_mjml` indicate which formats are stored. Use GET endpoint to retrieve actual content.
+> **Response Note**: `has_document` and `has_html` indicate which formats are stored. Use GET endpoint to retrieve actual content.
 
 **Error Responses**:
-- `400 Bad Request` - Invalid MJML, builder structure, or schema
+- `400 Bad Request` - Invalid document structure or schema
 - `409 Conflict` - stable_id already exists in workspace
 
 #### List Templates
@@ -520,8 +561,8 @@ GET /v1/templates/{stableId}
 **Description**: Get template details with current snapshot
 **Auth**: API Key (`templates:read`) or User session (member)
 **Query Parameters**:
-- `include_builder` (boolean, default: false) - Include builder_structure in response
-- `include_mjml` (boolean, default: true) - Include MJML in response
+- `include_document` (boolean, default: true) - Include document structure in response
+- `include_html` (boolean, default: false) - Include rendered HTML in response
 
 **Success Response** (200):
 ```json
@@ -530,28 +571,29 @@ GET /v1/templates/{stableId}
   "stable_id": "welcome-email",
   "name": "Welcome Email",
   "draft": {
-    "builder_structure": {
-      "type": "layout",
-      "name": "container",
-      "properties": { "width": "600px" },
-      "children": [ ... ]
+    "document": {
+      "version": "1.0",
+      "root": {
+        "id": "root-001",
+        "type": "container",
+        "props": { "width": "600px" },
+        "children": [ ... ]
+      },
+      "metadata": {
+        "subject": "Welcome!",
+        "preheader": "Get started today"
+      }
     },
-    "mjml": "<mjml>...</mjml>",
     "variables_schema": { ... },
-    "subject_lines": ["Welcome!"],
-    "preheader": "Get started today",
     "updated_at": "2025-10-26T09:00:00Z"
   },
   "current_snapshot": {
     "id": "snap_456",
     "version": 3,
     "published_at": "2025-10-25T15:00:00Z",
-    "mjml": "<mjml>...</mjml>",
     "html": "<html>...</html>",
     "plaintext": "Welcome...",
     "variables_schema": { ... },
-    "subject_lines": ["Welcome!"],
-    "preheader": "Get started",
     "size_bytes": 45230,
     "safety_flags": { ... }
   },
@@ -560,10 +602,10 @@ GET /v1/templates/{stableId}
 ```
 
 > **Note**:
-> - `draft` contains unpublished changes (includes builder_structure if `include_builder=true`)
-> - `current_snapshot` contains published version (always MJML/HTML only)
-> - If `include_builder=false`, `builder_structure` is omitted from draft
-> - If `include_mjml=false`, MJML is omitted (useful for large templates when only builder is needed)
+> - `draft` contains unpublished changes (includes document if `include_document=true`)
+> - `current_snapshot` contains published version (HTML rendered from document via React Email)
+> - If `include_document=false`, `document` is omitted from draft
+> - If `include_html=true`, HTML is generated on-demand from document
 
 **Error Responses**:
 - `404 Not Found` - Template doesn't exist
@@ -575,49 +617,31 @@ PATCH /v1/templates/{stableId}
 **Description**: Update template draft (doesn't affect published snapshot)
 **Auth**: API Key (`templates:write`) or User session (member)
 
-**Request Body (Update MJML)**:
+**Request Body (Update Document)**:
 ```json
 {
   "name": "Updated Name",
-  "mjml": "<mjml>...</mjml>",
-  "variables_schema": { ... },
-  "subject_lines": ["New subject"],
-  "preheader": "New preheader"
-}
-```
-
-**Request Body (Update Builder Structure)**:
-```json
-{
-  "name": "Updated Name",
-  "builder_structure": {
-    "type": "layout",
-    "name": "container",
-    "properties": { "width": "600px" },
-    "children": [ ... ]
+  "document": {
+    "version": "1.0",
+    "root": {
+      "id": "root-001",
+      "type": "container",
+      "props": { "width": "600px" },
+      "children": [ ... ]
+    },
+    "metadata": {
+      "subject": "New subject",
+      "preheader": "New preheader"
+    }
   },
-  "variables_schema": { ... },
-  "subject_lines": ["New subject"],
-  "preheader": "New preheader"
-}
-```
-
-**Request Body (Update Both)**:
-```json
-{
-  "name": "Updated Name",
-  "builder_structure": { ... },
-  "mjml": "<mjml>...</mjml>",
-  "variables_schema": { ... },
-  "subject_lines": ["New subject"],
-  "preheader": "New preheader"
+  "variables_schema": { ... }
 }
 ```
 
 > **Note**:
 > - All fields are optional in PATCH request
-> - Updating `builder_structure` will auto-regenerate MJML unless explicitly provided
-> - Updating `mjml` alone will clear `builder_structure` (unless `keep_builder=true` in query params)
+> - `document` is the source of truth - HTML is generated via React Email on-demand
+> - Subject and preheader are part of document.metadata
 > - Draft changes do not affect published snapshot until `POST /publish` is called
 
 **Success Response** (200): Updated template object
@@ -626,7 +650,7 @@ PATCH /v1/templates/{stableId}
 ```
 POST /v1/templates/{stableId}/preview
 ```
-**Description**: Generate HTML preview from current draft (builder → MJML → HTML)
+**Description**: Generate HTML preview from current draft (builder → React Email → HTML)
 **Auth**: API Key (`templates:read`) or User session (member)
 **Request Body**:
 ```json
@@ -646,7 +670,6 @@ POST /v1/templates/{stableId}/preview
 {
   "html": "<html>...</html>",
   "plaintext": "Plain text version...",
-  "mjml": "<mjml>...</mjml>",
   "size_bytes": 46230,
   "safety_flags": {
     "contrast_issues": [],
@@ -658,21 +681,21 @@ POST /v1/templates/{stableId}/preview
 ```
 
 > **Note**:
-> - Preview uses current draft's builder_structure (not published snapshot)
-> - MJML generated from builder, then compiled to HTML
+> - Preview uses current draft's document (not published snapshot)
+> - Document rendered to HTML via React Email components
 > - Variables interpolated for realistic preview
 > - Safety checks performed on generated HTML
 > - Cached for 5 minutes (invalidated on draft update)
 
 **Error Responses**:
 - `404 Not Found` - Template doesn't exist
-- `400 Bad Request` - Builder conversion or MJML compilation failed
+- `400 Bad Request` - Document invalid or rendering failed
 
 #### Publish Template Snapshot
 ```
 POST /v1/templates/{stableId}/publish
 ```
-**Description**: Publish immutable snapshot from current draft (builder → MJML → HTML)
+**Description**: Publish immutable snapshot from current draft (document → React Email → HTML)
 **Auth**: API Key (`templates:write`) or User session (member)
 **Request Body**:
 ```json
@@ -682,11 +705,11 @@ POST /v1/templates/{stableId}/publish
 ```
 
 > **Note**:
-> - Publishes current draft's `builder_structure` as immutable snapshot
-> - MJML and HTML generated automatically from builder structure
-> - All fields (variables_schema, subject_lines, preheader) taken from draft
+> - Publishes current draft's `document` as immutable snapshot
+> - HTML generated automatically via React Email rendering
+> - All fields (variables_schema, metadata) taken from draft
 > - Only `notes` can be added for this publish operation
-> - Builder structure, generated MJML, and compiled HTML all stored in snapshot
+> - Document structure and compiled HTML stored in snapshot
 
 **Success Response** (201):
 ```json
@@ -695,13 +718,16 @@ POST /v1/templates/{stableId}/publish
   "template_id": "tmpl_123",
   "version": 4,
   "published_at": "2025-10-26T10:00:00Z",
-  "builder_structure": {
-    "type": "layout",
-    "name": "container",
-    "properties": { ... },
-    "children": [ ... ]
+  "document": {
+    "version": "1.0",
+    "root": {
+      "id": "root-001",
+      "type": "container",
+      "props": { ... },
+      "children": [ ... ]
+    },
+    "metadata": { ... }
   },
-  "mjml": "<mjml>...</mjml>",
   "html": "<html>...</html>",
   "plaintext": "Plain text version...",
   "size_bytes": 46120,
@@ -715,10 +741,10 @@ POST /v1/templates/{stableId}/publish
 ```
 
 > **Snapshot Storage**:
-> - All three formats stored: `builder_structure` (source), `mjml` (intermediate), `html` (final)
+> - Two formats stored: `document` (source), `html` (final)
 > - Allows future rollback to previous version and continue editing from that state
-> - HTML/MJML used for actual sending (cached in Redis)
-> - Builder structure allows viewing/copying old design to new template
+> - HTML used for actual sending (cached in Redis)
+> - Document allows viewing/copying old design to new template
 
 **Error Responses**:
 - `400 Bad Request` - Validation failed (guardrails)
@@ -1586,37 +1612,38 @@ GET /v1/usage/history
 
 ### 4.1 Template Validation
 
-#### MJML Validation
-- Valid MJML syntax checked before saving
-- Compiled to HTML and validated
-- Maximum size: 150KB (hard limit)
+#### Document Schema Validation
+- Valid Document/BlockIR structure checked before saving
+- Document rendered to HTML via React Email and validated
+- Maximum HTML size: 150KB (hard limit)
 
-#### Builder Structure Validation
-- **Schema Validation**: Builder structure validated against internal JSON schema
-  - Required fields: `type` (category), `name` (element), `properties`
-  - Optional field: `children` (for container elements)
-  - **Categories** (`type`):
-    - `layout`: Container elements (container, section, column, etc.)
-    - `content`: Text and interactive elements (heading, paragraph, button, etc.)
-    - `media`: Media elements (image, video)
-    - `advanced`: Special elements (social-links, unsubscribe, custom)
-  - **Element validation**: Each `name` must be valid for its `type` category
-- **Conversion to MJML**: Builder structure converted to MJML server-side
-  - Each `type + name` combination maps to MJML component (e.g., `type:content, name:button` → `<mj-button>`)
-  - Properties transformed to MJML attributes
-  - Recursive processing of `children` array for container elements
-- **Validation After Conversion**: Generated MJML validated using same rules as direct MJML
+#### Block Structure Validation (BlockIR)
+- **Schema Validation**: Document validated against Zod schema
+  - **Document required fields**: `version`, `root` (BlockIR)
+  - **Document optional fields**: `metadata` (subject, preheader, sender info)
+  - **BlockIR required fields**: `id` (UUID), `type`, `props`
+  - **BlockIR optional fields**: `name`, `children`, `slots`
+- **Block Type validation**: Each `type` must be a known block type
+  - Layout blocks: `container`, `section`, `column`, `columns`, `row`
+  - Content blocks: `heading`, `paragraph`, `text`, `button`, `divider`, `spacer`
+  - Media blocks: `image`, `video`
+  - Advanced blocks: `social-links`, `unsubscribe`, `custom`
+- **Rendering to HTML**: Document rendered via React Email components
+  - Each block `type` maps to React Email component
+  - Props transformed to component props
+  - Recursive processing of `children` and `slots` arrays
+- **Validation After Rendering**: Generated HTML validated for email compatibility
 - **Error Handling**:
-  - Invalid builder structure → `400 INVALID_BUILDER_STRUCTURE`
-  - Unknown type/name combination → `400 UNKNOWN_BUILDER_ELEMENT`
-  - Conversion errors → `400 BUILDER_CONVERSION_ERROR` with path to problematic node
-  - Post-conversion MJML errors → Same as direct MJML validation errors
+  - Invalid document structure → `400 INVALID_DOCUMENT_STRUCTURE`
+  - Unknown block type → `400 UNKNOWN_BLOCK_TYPE`
+  - Rendering errors → `400 RENDER_ERROR` with path to problematic block
+  - HTML validation errors → `400 HTML_VALIDATION_ERROR`
 
 > **Implementation Note**:
-> - Builder → MJML conversion happens in `@requil/email-engine` package
-> - Mapping rules defined in configuration (type + name → MJML component)
-> - Extensible system allows adding new element types (post-MVP)
-> - Builder structure is primary storage, MJML generated on-demand
+> - Document → HTML rendering happens in `@requil/email-engine` package
+> - Uses React Email components for cross-client compatibility
+> - Extensible system allows adding new block types (post-MVP)
+> - Document is primary storage, HTML generated on-demand via React Email
 
 #### Variables Schema Validation (AJV)
 - JSON Schema validation for variables
@@ -1757,23 +1784,16 @@ GET /v1/usage/history
   - Invalidation: Never (snapshots are immutable)
   - Used for: Actual email sending (per-recipient variable interpolation only)
 
-- **Draft Preview** (builder → MJML → HTML):
+- **Draft Preview** (document → React Email → HTML):
   - Key: `template:{template_id}:draft:preview:{variables_hash}`
   - Value: Rendered HTML with variables
   - TTL: 5 minutes (frequently updated during editing)
   - Invalidation: On draft update
   - Used for: Real-time preview in editor
 
-- **Builder → MJML Conversion** (intermediate):
-  - Key: `template:{template_id}:draft:mjml`
-  - Value: Generated MJML from builder structure
-  - TTL: 1 hour
-  - Invalidation: On draft builder_structure update
-  - Used for: Preview generation, validation
-
 > **Cache Flow**:
-> - **Editing**: builder_structure (DB) → [cache MJML] → [cache HTML preview]
-> - **Publishing**: builder_structure → generate & store MJML/HTML in snapshot (DB)
+> - **Editing**: document (DB) → React Email render → [cache HTML preview]
+> - **Publishing**: document → React Email render → store HTML in snapshot (DB)
 > - **Sending**: snapshot HTML (cached) → interpolate variables → send
 
 #### Brand Kit Cache (Redis)
@@ -1818,12 +1838,12 @@ All errors follow consistent structure:
 - `HTTP_LINK` - Non-HTTPS link detected
 - `HTML_SIZE_EXCEEDED` - HTML exceeds 150KB limit
 - `INVALID_EMAIL` - Malformed email address
-- `INVALID_MJML` - MJML syntax error
-- `INVALID_BUILDER_STRUCTURE` - Builder structure validation failed (missing required fields)
-- `UNKNOWN_BUILDER_ELEMENT` - Unknown type/name combination in builder structure
-- `BUILDER_CONVERSION_ERROR` - Error converting builder to MJML
-- `MISSING_TEMPLATE_FORMAT` - Neither MJML nor builder_structure provided
-- `MISSING_REQUIRED_PROPERTY` - Builder element missing required property
+- `INVALID_DOCUMENT_STRUCTURE` - Document structure validation failed (missing required fields)
+- `UNKNOWN_BLOCK_TYPE` - Unknown block type in document
+- `RENDER_ERROR` - Error rendering document to HTML via React Email
+- `HTML_VALIDATION_ERROR` - Generated HTML failed email compatibility validation
+- `MISSING_TEMPLATE_FORMAT` - Neither document nor html provided
+- `MISSING_REQUIRED_PROP` - Block missing required prop
 
 #### Authentication/Authorization Errors
 - `401 UNAUTHORIZED` - Missing or invalid API key/session
@@ -1900,49 +1920,44 @@ Validation errors include detailed field-level information:
 }
 ```
 
-**Builder Structure Validation Error Example**:
+**Document Validation Error Example**:
 ```json
 {
   "ok": false,
   "error": {
-    "code": "BUILDER_CONVERSION_ERROR",
-    "message": "Failed to convert builder structure to MJML",
+    "code": "RENDER_ERROR",
+    "message": "Failed to render document to HTML",
     "details": [
       {
-        "code": "UNKNOWN_BUILDER_ELEMENT",
-        "message": "Unknown element name 'custom-block' for type 'content'",
-        "path": "children[0].children[1]",
+        "code": "UNKNOWN_BLOCK_TYPE",
+        "message": "Unknown block type 'custom-block'",
+        "path": "root.children[0].children[1]",
         "received": {
-          "type": "content",
-          "name": "custom-block"
+          "id": "block-001",
+          "type": "custom-block"
         },
-        "allowed_names_for_type": {
-          "content": ["heading", "paragraph", "text", "button", "divider", "spacer"],
-          "layout": ["container", "section", "column", "columns-2", "columns-3", "row"],
-          "media": ["image", "video"],
-          "advanced": ["social-links", "unsubscribe", "custom"]
-        }
+        "allowed_types": ["container", "section", "column", "columns", "row", "heading", "paragraph", "text", "button", "divider", "spacer", "image", "video", "social-links", "unsubscribe", "custom"]
       },
       {
-        "code": "MISSING_REQUIRED_PROPERTY",
-        "message": "Button element missing required property 'url'",
-        "path": "children[0].children[2].properties",
-        "element": {
-          "type": "content",
-          "name": "button"
+        "code": "MISSING_REQUIRED_PROP",
+        "message": "Button block missing required prop 'href'",
+        "path": "root.children[0].children[2].props",
+        "block": {
+          "id": "button-001",
+          "type": "button"
         },
-        "required": ["text", "url"],
+        "required": ["text", "href"],
         "received": ["text", "backgroundColor"]
       },
       {
-        "code": "INVALID_BUILDER_STRUCTURE",
-        "message": "Missing required field 'name'",
-        "path": "children[1]",
+        "code": "INVALID_DOCUMENT_STRUCTURE",
+        "message": "Block missing required field 'id'",
+        "path": "root.children[1]",
         "received": {
-          "type": "layout",
-          "properties": {}
+          "type": "section",
+          "props": {}
         },
-        "required_fields": ["type", "name", "properties"]
+        "required_fields": ["id", "type", "props"]
       }
     ]
   },
