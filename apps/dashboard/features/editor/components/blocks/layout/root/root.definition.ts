@@ -1,8 +1,8 @@
 import type { ComponentDefinition } from '@requil/types/editor';
 import {
-	borderFields,
 	createFieldGroup,
 	fillFields,
+	marginFields,
 	paddingFields,
 } from '../../../../registry/field-groups';
 
@@ -11,7 +11,6 @@ const rootStylesGroup = createFieldGroup({
 	label: 'Styles',
 	fields: {
 		...fillFields,
-		...borderFields,
 	},
 });
 
@@ -20,6 +19,7 @@ const layoutGroup = createFieldGroup({
 	label: 'Layout',
 	fields: {
 		...paddingFields,
+		...marginFields,
 	},
 });
 
@@ -46,6 +46,7 @@ export const RootDefinition: ComponentDefinition = {
 		...rootStylesGroup.defaults,
 		...layoutGroup.defaults,
 		fill: { color: '#ffffff' },
+		bodyFill: { color: '#ffffff' },
 	},
 
 	inspectorConfig: {

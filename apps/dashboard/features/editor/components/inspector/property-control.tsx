@@ -314,6 +314,22 @@ export function PropertyControl({
 						value={value as any}
 						onChange={onChange}
 						defaultExpanded={field.defaultExpanded}
+						type='padding'
+						allowAuto={false}
+					/>
+				</div>
+			);
+
+		case 'margin':
+			return (
+				<div className='space-y-2'>
+					<Label className='text-xs text-muted-foreground'>{field.label}</Label>
+					<PaddingControl
+						value={value as any}
+						onChange={onChange}
+						defaultExpanded={field.defaultExpanded}
+						type='margin'
+						allowAuto={true}
 					/>
 				</div>
 			);

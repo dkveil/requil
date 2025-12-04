@@ -1,11 +1,4 @@
-import {
-	Body,
-	Font,
-	Head,
-	Html,
-	Preview,
-	render,
-} from '@react-email/components';
+import { Font, Head, Html, Preview, render } from '@react-email/components';
 import { BlockIR, Document } from '@requil/types';
 import { EmailContainer, EmailRoot } from './components';
 import { toPlaintext } from './plaintext';
@@ -38,7 +31,7 @@ function EmailTemplate({ document, previewText }: EmailTemplateProps) {
 				/>
 			</Head>
 			{previewText && <Preview>{previewText}</Preview>}
-			<Body>{renderBlock(document.root)}</Body>
+			{renderBlock(document.root)}
 		</Html>
 	);
 }

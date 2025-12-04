@@ -21,7 +21,7 @@ export function RadiusControl({
 	return (
 		<BoxControl
 			value={value}
-			onChange={onChange}
+			onChange={(value) => onChange(value as RadiusValue | number)}
 			type='radius'
 			max={max}
 		/>

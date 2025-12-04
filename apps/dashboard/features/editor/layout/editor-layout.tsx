@@ -324,7 +324,7 @@ export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
 						/>
 						<div className='flex-1 relative'>
 							<Canvas />
-							<DevInfoBanner />
+							{/* <DevInfoBanner /> */}
 						</div>
 						<SettingsSidebar workspaceId={workspaceId} />
 					</div>

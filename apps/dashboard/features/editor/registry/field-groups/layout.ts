@@ -3,15 +3,60 @@ import { createFieldGroup, FieldConfig } from './config';
 export const paddingFields: Record<string, FieldConfig> = {
 	padding: {
 		schema: {
-			type: 'number',
-			minimum: 0,
+			oneOf: [
+				{ type: 'number', minimum: 0 },
+				{
+					type: 'object',
+					properties: {
+						top: { oneOf: [{ type: 'number' }] },
+						right: { oneOf: [{ type: 'number' }] },
+						bottom: { oneOf: [{ type: 'number' }] },
+						left: { oneOf: [{ type: 'number' }] },
+					},
+				},
+			],
 			default: 0,
 		},
 		field: {
 			key: 'padding',
 			label: 'Padding',
 			type: 'padding',
-			defaultExpanded: true,
+			defaultExpanded: false,
+		},
+	},
+};
+
+export const marginFields: Record<string, FieldConfig> = {
+	margin: {
+		schema: {
+			oneOf: [
+				{ type: 'number', minimum: 0 },
+				{ type: 'string', enum: ['auto'] },
+				{
+					type: 'object',
+					properties: {
+						top: {
+							oneOf: [{ type: 'number' }, { type: 'string', enum: ['auto'] }],
+						},
+						right: {
+							oneOf: [{ type: 'number' }, { type: 'string', enum: ['auto'] }],
+						},
+						bottom: {
+							oneOf: [{ type: 'number' }, { type: 'string', enum: ['auto'] }],
+						},
+						left: {
+							oneOf: [{ type: 'number' }, { type: 'string', enum: ['auto'] }],
+						},
+					},
+				},
+			],
+			default: 0,
+		},
+		field: {
+			key: 'margin',
+			label: 'Margin',
+			type: 'margin',
+			defaultExpanded: false,
 		},
 	},
 };

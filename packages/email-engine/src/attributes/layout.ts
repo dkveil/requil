@@ -16,6 +16,15 @@ export function convertAlignToTableAlign(
 	return alignMap[align];
 }
 
+type SpacingValue = number | 'auto';
+
+interface SpacingObject {
+	top?: SpacingValue;
+	right?: SpacingValue;
+	bottom?: SpacingValue;
+	left?: SpacingValue;
+}
+
 export function convertPadding(padding: unknown): string | undefined {
 	if (padding === undefined || padding === null) return undefined;
 
@@ -28,18 +37,59 @@ export function convertPadding(padding: unknown): string | undefined {
 	}
 
 	if (typeof padding === 'object') {
-		const p = padding as {
-			top?: number;
-			right?: number;
-			bottom?: number;
-			left?: number;
-		};
+		const p = padding as SpacingObject;
 
-		if (!(p.top || p.right || p.bottom || p.left)) {
+		const hasAnyValue =
+			p.top !== undefined ||
+			p.right !== undefined ||
+			p.bottom !== undefined ||
+			p.left !== undefined;
+
+		if (!hasAnyValue) {
 			return undefined;
 		}
 
-		return `${p.top || 0}px ${p.right || 0}px ${p.bottom || 0}px ${p.left || 0}px`;
+		const formatValue = (val: SpacingValue | undefined) => {
+			if (val === undefined || val === 0) return '0';
+			if (val === 'auto') return 'auto';
+			return `${val}px`;
+		};
+
+		return `${formatValue(p.top)} ${formatValue(p.right)} ${formatValue(p.bottom)} ${formatValue(p.left)}`;
+	}
+
+	return undefined;
+}
+
+export function convertMargin(margin: unknown): string | undefined {
+	if (margin === undefined || margin === null) return undefined;
+
+	if (margin === 'auto') {
+		return 'auto';
+	}
+
+	if (typeof margin === 'number') {
+		return margin === 0 ? undefined : `${margin}px`;
+	}
+
+	if (typeof margin === 'string') {
+		return margin;
+	}
+
+	if (typeof margin === 'object') {
+		const m = margin as SpacingObject;
+
+		if (!(m.top || m.right || m.bottom || m.left)) {
+			return undefined;
+		}
+
+		const formatValue = (val: SpacingValue | undefined) => {
+			if (val === 'auto') return 'auto';
+			if (val === undefined || val === 0) return '0';
+			return `${val}px`;
+		};
+
+		return `${formatValue(m.top)} ${formatValue(m.right)} ${formatValue(m.bottom)} ${formatValue(m.left)}`;
 	}
 
 	return undefined;
@@ -57,6 +107,11 @@ export function generateLayoutStyles(
 	const paddingValue = convertPadding(props.padding);
 	if (paddingValue) {
 		styles.padding = paddingValue;
+	}
+
+	const marginValue = convertMargin(props.margin);
+	if (marginValue) {
+		styles.margin = marginValue;
 	}
 
 	return styles;

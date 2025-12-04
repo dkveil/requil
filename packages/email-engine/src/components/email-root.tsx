@@ -1,4 +1,4 @@
-import { Container } from '@react-email/components';
+import { Body, Container } from '@react-email/components';
 import type { BlockIR } from '@requil/types';
 import { generateAllStyles } from '../attributes';
 
@@ -7,6 +7,7 @@ export type EmailRootProps = {
 	children: React.ReactNode;
 	className?: string;
 	style?: React.CSSProperties;
+	isCanvas?: boolean;
 };
 
 export function EmailRoot({
@@ -14,11 +15,14 @@ export function EmailRoot({
 	children,
 	className,
 	style,
+	isCanvas = false,
 }: EmailRootProps) {
 	const generatedStyles = generateAllStyles(block.props);
 
+	const BodyTag = isCanvas ? Container : Body;
+
 	return (
-		<Container
+		<BodyTag
 			className={className}
 			style={{
 				maxWidth: '600px',
@@ -26,7 +30,7 @@ export function EmailRoot({
 				...style,
 			}}
 		>
-			<Container>{children}</Container>
-		</Container>
+			{children}
+		</BodyTag>
 	);
 }

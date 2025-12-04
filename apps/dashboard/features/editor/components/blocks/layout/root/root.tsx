@@ -55,6 +55,7 @@ export function RootBlock({
 					maxWidth: viewport === 'mobile' ? '375px' : '600px',
 					minHeight: !hasChildren && isCanvas ? '400px' : undefined,
 				}}
+				isCanvas
 			>
 				<RenderChildren
 					block={block}

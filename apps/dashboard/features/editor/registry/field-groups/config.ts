@@ -7,6 +7,12 @@ type JSONSchemaProperty = {
 	maximum?: number;
 	default: unknown;
 	placeholder?: string;
+	oneOf?: Array<{
+		type?: 'string' | 'number' | 'boolean' | 'object';
+		enum?: readonly string[];
+		minimum?: number;
+		properties?: Record<string, { oneOf?: JSONSchemaProperty['oneOf'] }>;
+	}>;
 };
 
 export type FieldConfig = {
