@@ -8,7 +8,7 @@ export const ContainerDefinition: ComponentDefinition = {
 	description: 'Section container for grouping content',
 	icon: 'Square',
 
-	allowedChildren: [],
+	allowedChildren: ['Container'],
 	allowedParents: ['Root'],
 
 	propsSchema: {

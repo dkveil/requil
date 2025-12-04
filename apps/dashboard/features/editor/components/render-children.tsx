@@ -40,6 +40,7 @@ export function RenderChildren({
 					id={`dropzone-${block.id}-0`}
 					parentId={block.id}
 					position={0}
+					fullHeight={children.length === 0}
 				/>
 			)}
 

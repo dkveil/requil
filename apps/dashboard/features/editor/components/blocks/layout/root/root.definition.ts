@@ -22,7 +22,7 @@ export const RootDefinition: ComponentDefinition = {
 	icon: 'Mail',
 	isHidden: true,
 
-	allowedChildren: [],
+	allowedChildren: ['Container'],
 	minChildren: 0,
 
 	propsSchema: {
