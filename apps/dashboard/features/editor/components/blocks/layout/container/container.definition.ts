@@ -1,6 +1,9 @@
 import { ComponentDefinition } from '@requil/types/editor';
-import { layoutGroup } from '../../../../registry/field-groups/layout';
-import { sizeGroup } from '../../../../registry/field-groups/size';
+import {
+	layoutGroup,
+	sizeGroup,
+	stylesGroup,
+} from '../../../../registry/field-groups';
 
 export const ContainerDefinition: ComponentDefinition = {
 	type: 'Container',
@@ -17,17 +20,33 @@ export const ContainerDefinition: ComponentDefinition = {
 		properties: {
 			...sizeGroup.schema,
 			...layoutGroup.schema,
+			...stylesGroup.schema,
 		},
 	},
 
 	defaultProps: {
-		fullWidth: true,
 		...sizeGroup.defaults,
 		...layoutGroup.defaults,
+		...stylesGroup.defaults,
+		maxWidth: '600px',
+		margin: {
+			top: 0,
+			right: 'auto',
+			bottom: 0,
+			left: 'auto',
+		},
 	},
 
 	inspectorConfig: {
-		groups: [sizeGroup.inspectorGroup, layoutGroup.inspectorGroup],
-		fields: [...sizeGroup.inspectorFields, ...layoutGroup.inspectorFields],
+		groups: [
+			sizeGroup.inspectorGroup,
+			layoutGroup.inspectorGroup,
+			stylesGroup.inspectorGroup,
+		],
+		fields: [
+			...sizeGroup.inspectorFields,
+			...layoutGroup.inspectorFields,
+			...stylesGroup.inspectorFields,
+		],
 	},
 };

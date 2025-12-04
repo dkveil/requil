@@ -1,5 +1,6 @@
 import { useDroppable } from '@dnd-kit/core';
 import { EmailContainer } from '@requil/email-engine';
+import { extractWrapperStyles } from '@/features/editor/lib/canvas-utils';
 import { cn } from '@/lib/utils';
 import {
 	RenderChildren,
@@ -33,6 +34,7 @@ export function ContainerBlock({
 	});
 
 	const hasChildren = block.children && block.children.length > 0;
+	const extractedWrapperStyles = extractWrapperStyles(block.props);
 
 	return (
 		<div
@@ -44,6 +46,7 @@ export function ContainerBlock({
 			)}
 			data-block-type='Container'
 			data-block-id={block.id}
+			style={extractedWrapperStyles}
 		>
 			<EmailContainer block={block}>
 				<RenderChildren
@@ -61,7 +64,7 @@ export function ContainerBlock({
 				/>
 
 				{!hasChildren && isCanvas && (
-					<div className='min-h-[100px] flex items-center justify-center text-center text-muted-foreground py-8 text-sm border border-dashed border-muted-foreground/30 rounded'>
+					<div className='min-h-[100px] h-[inherit]! flex items-center justify-center text-center text-muted-foreground py-8 text-sm border border-dashed border-muted-foreground/30 rounded'>
 						Empty container - drag elements here
 					</div>
 				)}

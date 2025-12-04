@@ -21,7 +21,6 @@ export function EmailContainer({
 		<Container
 			className={className}
 			style={{
-				maxWidth: '600px',
 				...generatedStyles,
 				...style,
 			}}

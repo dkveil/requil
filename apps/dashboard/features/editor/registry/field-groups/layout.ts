@@ -105,6 +105,7 @@ export const layoutGroup = createFieldGroup({
 			},
 		},
 		...paddingFields,
+		...marginFields,
 	},
 });
 
