@@ -3,6 +3,7 @@ import {
 	borderFields,
 	createFieldGroup,
 	fillFields,
+	paddingFields,
 } from '../../../../registry/field-groups';
 
 const rootStylesGroup = createFieldGroup({
@@ -11,6 +12,14 @@ const rootStylesGroup = createFieldGroup({
 	fields: {
 		...fillFields,
 		...borderFields,
+	},
+});
+
+const layoutGroup = createFieldGroup({
+	id: 'layout',
+	label: 'Layout',
+	fields: {
+		...paddingFields,
 	},
 });
 
@@ -29,16 +38,21 @@ export const RootDefinition: ComponentDefinition = {
 		type: 'object',
 		properties: {
 			...rootStylesGroup.schema,
+			...layoutGroup.schema,
 		},
 	},
 
 	defaultProps: {
 		...rootStylesGroup.defaults,
+		...layoutGroup.defaults,
 		fill: { color: '#ffffff' },
 	},
 
 	inspectorConfig: {
-		groups: [rootStylesGroup.inspectorGroup],
-		fields: [...rootStylesGroup.inspectorFields],
+		groups: [rootStylesGroup.inspectorGroup, layoutGroup.inspectorGroup],
+		fields: [
+			...rootStylesGroup.inspectorFields,
+			...layoutGroup.inspectorFields,
+		],
 	},
 };

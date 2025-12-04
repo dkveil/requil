@@ -89,8 +89,8 @@ export default function EditorHeader() {
 
 	return (
 		<header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 py-1'>
-			<div className='flex h-10 items-center justify-between gap-4 px-4'>
-				<div className='flex items-center flex-1 gap-4'>
+			<div className='flex h-10 items-center justify-between gap-1 px-2 sm:gap-2 sm:px-3 lg:gap-4 lg:px-4'>
+				<div className='flex items-center flex-1 min-w-0 gap-1 sm:gap-2 lg:gap-4'>
 					<Link href={DASHBOARD_ROUTES.HOME}>
 						<LogoSmall
 							variant='light'
@@ -99,13 +99,18 @@ export default function EditorHeader() {
 					</Link>
 					<Separator
 						orientation='vertical'
-						className=' h-[24px]!'
+						className='h-[24px] hidden lg:block'
 					/>
 
-					<span className='text-xl uppercase'>{projectName}</span>
+					<span
+						className='text-base sm:text-lg lg:text-xl uppercase truncate max-w-[80px] sm:max-w-[120px] lg:max-w-none'
+						title={projectName}
+					>
+						{projectName}
+					</span>
 					<Separator
 						orientation='vertical'
-						className=' h-[24px]!'
+						className='h-[24px] hidden lg:block'
 					/>
 					<div className='flex items-center gap-1'>
 						<Button
@@ -129,61 +134,67 @@ export default function EditorHeader() {
 					</div>
 					<Separator
 						orientation='vertical'
-						className=' h-[24px]!'
+						className='h-[24px] hidden md:block'
 					/>
 					<Button
 						variant='ghost'
-						size='sm'
+						size='icon-sm'
+						className='md:w-auto md:px-3'
 						onClick={() => setEmailSettingsModalOpen(true)}
 						title={t('emailSettings')}
 					>
-						<Settings className='h-4 w-4 mr-1' />
-						{t('emailSettings')}
+						<Settings className='h-4 w-4 md:mr-1' />
+						<span className='hidden md:inline'>{t('emailSettings')}</span>
 					</Button>
 					{isDevelopment && (
 						<>
 							<Separator
 								orientation='vertical'
-								className=' h-[24px]!'
+								className='h-[24px] hidden lg:block'
 							/>
 							<Button
 								variant='ghost'
-								size='sm'
+								size='icon-sm'
+								className='hidden sm:flex md:w-auto md:px-3'
 								onClick={() => setHtmlPreviewModalOpen(true)}
 								title='HTML Preview (Dev Only)'
 							>
-								<Code className='h-4 w-4 mr-1' />
-								HTML Preview
+								<Code className='h-4 w-4 md:mr-1' />
+								<span className='hidden md:inline'>HTML Preview</span>
 							</Button>
 						</>
 					)}
 				</div>
 
-				<div>
+				<div className='flex items-center gap-0'>
 					<Button
 						variant='ghost'
+						size='icon-sm'
+						className='md:w-auto md:px-3'
 						onClick={() => setViewport('desktop')}
-						className={
-							viewport === 'desktop' ? 'bg-primary text-primary-foreground' : ''
-						}
+						title={t('dekstop')}
 					>
-						<Monitor className='h-4 w-4' />
-						{t('dekstop')}
+						<Monitor
+							className={`h-4 w-4 md:mr-1 ${viewport === 'desktop' ? 'text-primary' : ''}`}
+						/>
+						<span className='hidden md:inline'>{t('dekstop')}</span>
 					</Button>
 					<Button
 						variant='ghost'
+						size='icon-sm'
+						className='md:w-auto md:px-3'
 						onClick={() => setViewport('mobile')}
-						className={
-							viewport === 'mobile' ? 'bg-primary text-primary-foreground' : ''
-						}
+						title={t('mobile')}
 					>
-						<Smartphone className='h-4 w-4' />
-						{t('mobile')}
+						<Smartphone
+							className={`h-4 w-4 md:mr-1 ${viewport === 'mobile' ? 'text-primary' : ''}`}
+						/>
+						<span className='hidden md:inline'>{t('mobile')}</span>
 					</Button>
 				</div>
 
-				<div className='flex justify-end items-center flex-1 gap-2'>
-					<div className='flex items-center gap-1'>
+				<div className='flex justify-end items-center flex-1 min-w-0 gap-1 sm:gap-2'>
+					<div className='hidden sm:flex items-center gap-1'>
 						<Button
 							variant='ghost'
 							size='icon-sm'
@@ -192,7 +203,7 @@ export default function EditorHeader() {
 						>
 							<Minus className='h-4 w-4' />
 						</Button>
-						<span className='text-sm font-medium min-w-[60px] text-center text-foreground'>
+						<span className='text-xs lg:text-sm font-medium min-w-[40px] lg:min-w-[60px] text-center text-foreground'>
 							{Math.round(zoom * 100)}%
 						</span>
 						<Button
@@ -207,16 +218,20 @@ export default function EditorHeader() {
 
 					<Separator
 						orientation='vertical'
-						className='h-[36px]!'
+						className='h-[36px] hidden xl:block'
 					/>
 					<Button
 						variant='outline'
+						size='sm'
+						className='hidden xl:inline-flex'
 						disabled
 					>
 						API
 					</Button>
 					<Button
 						variant='outline'
+						size='sm'
+						className='hidden xl:inline-flex'
 						disabled
 					>
 						{t('testEmail')}
@@ -224,23 +239,34 @@ export default function EditorHeader() {
 
 					<Separator
 						orientation='vertical'
-						className='h-[36px]!'
+						className='h-[36px] hidden md:block'
 					/>
 
-					<Link href={DASHBOARD_ROUTES.HOME}>
-						<Button variant='outline'>{t('exit')}</Button>
+					<Link
+						href={DASHBOARD_ROUTES.HOME}
+						className='hidden sm:block'
+					>
+						<Button
+							variant='outline'
+							size='sm'
+						>
+							{t('exit')}
+						</Button>
 					</Link>
 					<Button
 						variant='default'
+						size='sm'
 						disabled={!isModified || templateId === 'new' || isSaving}
 						onClick={handleSave}
 					>
 						{isSaving ? (
-							<Loader2 className='h-4 w-4 mr-2 animate-spin' />
+							<Loader2 className='h-4 w-4 sm:mr-2 animate-spin' />
 						) : (
-							<Save className='h-4 w-4 mr-2' />
+							<Save className='h-4 w-4 sm:mr-2' />
 						)}
-						{isSaving ? t('saving') : t('save')}
+						<span className='hidden sm:inline'>
+							{isSaving ? t('saving') : t('save')}
+						</span>
 					</Button>
 				</div>
 			</div>

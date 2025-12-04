@@ -26,7 +26,7 @@ export function EmailRoot({
 				...style,
 			}}
 		>
-			{children}
+			<Container>{children}</Container>
 		</Container>
 	);
 }

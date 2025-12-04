@@ -1,4 +1,5 @@
 import { ComponentDefinition } from '@requil/types/editor';
+import { layoutGroup } from '../../../../registry/field-groups/layout';
 import { sizeGroup } from '../../../../registry/field-groups/size';
 
 export const ContainerDefinition: ComponentDefinition = {
@@ -9,22 +10,24 @@ export const ContainerDefinition: ComponentDefinition = {
 	icon: 'Square',
 
 	allowedChildren: ['Container'],
-	allowedParents: ['Root'],
+	allowedParents: ['Root', 'Container'],
 
 	propsSchema: {
 		type: 'object',
 		properties: {
 			...sizeGroup.schema,
+			...layoutGroup.schema,
 		},
 	},
 
 	defaultProps: {
 		fullWidth: true,
 		...sizeGroup.defaults,
+		...layoutGroup.defaults,
 	},
 
 	inspectorConfig: {
-		groups: [sizeGroup.inspectorGroup],
-		fields: [...sizeGroup.inspectorFields],
+		groups: [sizeGroup.inspectorGroup, layoutGroup.inspectorGroup],
+		fields: [...sizeGroup.inspectorFields, ...layoutGroup.inspectorFields],
 	},
 };
