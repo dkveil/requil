@@ -98,7 +98,7 @@ export function HtmlPreviewModal({
 			open={open}
 			onOpenChange={onOpenChange}
 		>
-			<DialogContent className='max-w-6xl h-[90vh] flex flex-col'>
+			<DialogContent className='max-w-[800px]! h-[90vh] flex flex-col'>
 				<DialogHeader>
 					<DialogTitle>HTML Preview</DialogTitle>
 					<DialogDescription>
@@ -182,10 +182,10 @@ export function HtmlPreviewModal({
 								</div>
 							</div>
 						) : (
-							<div className='w-full h-full bg-muted/30 rounded-md overflow-hidden'>
+							<div className='max-w-[600px] bg-muted/30 rounded-md mx-auto overflow-hidden'>
 								<iframe
 									srcDoc={renderResult.html}
-									className='w-full h-full border-0'
+									className='w-full border-0 bg-transparent'
 									title='Email Preview'
 									sandbox='allow-same-origin'
 								/>

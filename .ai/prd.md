@@ -2,7 +2,7 @@
 
 ## 1. Przegląd produktu
 
-ReLettr to API-first engine do generowania (AI), walidacji, renderowania i wysyłki e‑maili transakcyjnych i kampanijnych. MVP konsoliduje rozproszony dziś proces: od tworzenia szablonów MJML+Liquid i twardej walidacji jakości, przez per‑odbiorcę render, po niezawodną wysyłkę przez adaptery Resend lub SMTP. Orkiestrację retry i batchów zapewnia QStash, a rate‑limiting, idempotencję i cache realizuje Upstash Redis. Nad silnikiem działa prosty edytor z guardrails oraz cienka warstwa newsletter demo.
+ReLettr to API-first engine do generowania (AI), walidacji, renderowania i wysyłki e‑maili transakcyjnych i kampanijnych. MVP konsoliduje rozproszony dziś proces: od tworzenia szablonów React Email (komponenty TSX) i twardej walidacji jakości, przez per‑odbiorcę render, po niezawodną wysyłkę przez adaptery Resend lub SMTP. Orkiestrację retry i batchów zapewnia QStash, a rate‑limiting, idempotencję i cache realizuje Upstash Redis. Nad silnikiem działa prosty edytor z guardrails.
 
 Zakres MVP
 - Silnik szablonów: AI Generate, walidacja zmiennych i jakości, publikacja snapshotu (immutable), render, automatyczny plaintext
@@ -11,8 +11,7 @@ Zakres MVP
 - Orkiestracja i odporność: QStash retry z backoff, fan‑out batchów, proste planowanie
 - Redis: rate limit per workspace/transport, idempotencja żądań, cache, progres kampanii
 - Edytor: drag‑and‑drop, AI‑refine, panel variables, checklista jakości, publish (snapshot)
-- Newsletter demo: double opt‑in, lista subskrybentów, jednorazowa kampania, tracking open/click
-- Bezpieczeństwo: API Keys ze scope’ami, RLS (Supabase), szyfrowanie SMTP creds, HMAC webhooków, audyt
+- Bezpieczeństwo: API Keys ze scope'ami, RLS (Supabase), szyfrowanie SMTP creds, HMAC webhooków, audyt
 - SDK typów: @relettr/types generowane z OpenAPI (bez klienta HTTP)
 
 Grupa docelowa
@@ -22,7 +21,7 @@ Golden path
 - Edytor/AI → publish szablonu → jeden POST do /v1/send → monitoring statusów
 
 Wysokopoziomowa architektura
-- Monolit aplikacyjny (API + render + wysyłka + endpointy workerowe wywoływane przez QStash; bez osobnego serwisu worker w MVP) w turborepo, QStash do retry/batch, Upstash Redis do limitów i cache, adaptery transportów (Resend/SMTP), cienka warstwa newsletter demo i dashboard podstawowy
+- Monolit aplikacyjny (API + render + wysyłka + endpointy workerowe wywoływane przez QStash; bez osobnego serwisu worker w MVP) w turborepo, QStash do retry/batch, Upstash Redis do limitów i cache, adaptery transportów (Resend/SMTP) i dashboard podstawowy
 - Front: dwa niezależne fronty – Dashboard (Next.js App Router) i Website (Astro lub Next.js SSG)
 
 
@@ -49,12 +48,12 @@ Ograniczenia i założenia
 ## 3. Wymagania funkcjonalne
 
 3.1 Silnik szablonów
-- AI Generate (serwerowo): prompt + brandKit → MJML z Liquid, variablesSchema, subjectLines[], preheader, notes[], safety.flags[]
+- AI Generate (serwerowo): prompt + brandKit → React Email (TSX), variablesSchema, subjectLines[], preheader, notes[], safety.flags[]
 - Guardrails jakości: WCAG AA (kontrast z auto‑fixem), alt‑texty 100%, tylko HTTPS + rel="noopener", limity długości (nagłówek/CTA/akapit), HTML < 150 kB (hard‑stop), automatyczny plaintext
 - Publikacja snapshotu: stableId + template_snapshot_id (immutable), audyt publikacji; pełne wersjonowanie/changelog/compatibility check po MVP
 - Walidacja zmiennych w czasie żądania; tryby strict/permissive; defaulty w schemacie; breaking change = nowa wersja schematu
  - Walidacja zmiennych w czasie żądania; tryby strict/permissive; defaulty w schemacie; breaking change = nowy snapshot schematu (pełne wersjonowanie po MVP)
-- Cache: skompilowany MJML/HTML i brandKit w Redis
+- Cache: skompilowany HTML (z React Email) i brandKit w Redis
 
 3.2 API
 - POST /v1/send: centralny endpoint (walidacja → render per odbiorca → wysyłka transportem)
@@ -82,20 +81,23 @@ Ograniczenia i założenia
 3.5 Redis i limity
 - Rate limiting (token bucket) per workspace i per transport; startowe RPS według planu
 - Idempotencja: lock:send:{Idempotency‑Key} + hash(ciała) + result:send:{key} (utrwalony wynik) z TTL; deduplikacja żądań i statusy per‑recipient dla częściowych sukcesów
-- Cache: variablesSchema, skompilowany MJML/HTML, brandKit; liczniki progresu kampanii i checkpointy
+- Cache: variablesSchema, skompilowany HTML (z React Email), brandKit; liczniki progresu kampanii i checkpointy
 
 3.6 Edytor
-- Drag‑and‑drop (GrapesJS/Unlayer) + presety bloków (tekst, obraz, CTA, kolumny 2/3, divider, stopka)
+- Drag‑and‑drop oparty na React Email – presety bloków (tekst, obraz, CTA, kolumny 2/3, divider, stopka)
+- Spójność między widokiem w edytorze a generowanym HTML dzięki współdzielonym komponentom React Email
 - AI‑refine fragmentów (skrót, ton, tłumaczenie, regeneracja sekcji)
 - Panel Variables z żywą walidacją wg variablesSchema
 - Checklista jakości: kontrast/alt/linki/rozmiar/placeholdery
 - Publikacja: draft → published snapshot (immutable); audyt publikacji; bez pełnego rollback w MVP (opcjonalnie: 1‑step rollback do poprzedniego snapshotu)
 
-3.7 Newsletter demo
+3.7 Newsletter demo (poza zakresem MVP – do rozważenia w przyszłości)
 - Formularze: hostowana strona i embed; double opt‑in
 - Subskrybenci: atrybuty (JSONB), tagi, statusy; suppression i List‑Unsubscribe honorowane
 - Kampania jednorazowa: wybór szablonu/segmentu → /v1/send transportem wybranym przez workspace
- - Tracking: piksel open (wyłączenie po MVP), redirect click; podstawowe dashboardy
+- Tracking: piksel open (wyłączenie po MVP), redirect click; podstawowe dashboardy
+
+Uwaga: Funkcjonalność newsletter demo została przeniesiona poza zakres MVP. Decyzja o wprowadzeniu tej funkcjonalności zostanie podjęta w przyszłości na podstawie feedbacku użytkowników i priorytetów biznesowych.
 
 3.8 Bezpieczeństwo i zgodność
 - API Keys (hash + scopes), RLS (Supabase), role minimalne: owner/member
@@ -118,6 +120,7 @@ Ograniczenia i założenia
 ## 4. Granice produktu
 
 Poza zakresem MVP
+- Newsletter demo (double opt‑in, lista subskrybentów, kampanie, tracking) – do rozważenia w przyszłości
 - Pełne SDK (klient HTTP), CLI, rozszerzenia IDE
 - Zaawansowane automations/drip, journey builder, A/B testy
 - Szerokie integracje CRM/ESP (poza Resend/SMTP)
@@ -139,6 +142,7 @@ Priorytety (MVP vs po MVP)
   - /v1/templates/:stableId/validate (pre‑check), cache, rate‑limit, minimalne logi audytowe (US‑028 MVP‑min)
   - Bezpieczeństwo: API Keys + scopes, szyfrowanie SMTP creds, RLS
 - Po MVP (nice‑to‑have, marketer/operator):
+  - Newsletter demo: double opt‑in, lista subskrybentów, jednorazowa kampania, tracking (do rozważenia)
   - Wyłączenie open trackingu (US‑023), advanced dashboardy, opened/clicked w pełnym zakresie
   - Planowanie kampanii w UI, zaawansowane segmentacje, rozbudowane metryki p95 i raporty
   - Pełne wersjonowanie/changelog, rollback wielopoziomowy
@@ -159,19 +163,20 @@ Kryteria akceptacji:
 
 1) ID: US-002
 Tytuł: AI Generate szablonu
-Opis: Jako developer chcę wygenerować bazowy MJML+Liquid na podstawie promptu i brandKit.
+Opis: Jako developer chcę wygenerować bazowy szablon React Email na podstawie promptu i brandKit.
 Kryteria akceptacji:
-- Wejście: prompt, brandKit; wyjście zawiera MJML+Liquid, variablesSchema, subjectLines[], preheader
+- Wejście: prompt, brandKit; wyjście zawiera React Email (TSX), variablesSchema, subjectLines[], preheader
 - Wynik zawiera safety.flags[] i notes[]
 - Wygenerowany HTML po kompilacji przechodzi guardrails lub zwraca ostrzeżenia/błędy
 
 1) ID: US-003
 Tytuł: Edycja szablonu w edytorze
-Opis: Jako marketer chcę modyfikować blokami treści i wstawiać {{variables}}.
+Opis: Jako marketer chcę modyfikować blokami treści i wstawiać zmienne (props).
 Kryteria akceptacji:
 - Dostępne bloki: tekst, obraz, CTA, 2/3 kolumny, divider, stopka
-- Podgląd mobile/desktop odzwierciedla Liquid placeholders
+- Podgląd mobile/desktop odzwierciedla zmienne (React Email props) z przykładowymi wartościami
 - Zmiany zapisują się jako draft; brak wpływu na opublikowane wersje
+- Spójność między widokiem w edytorze a generowanym HTML dzięki komponentom React Email
 
 1) ID: US-004
 Tytuł: Checklista jakości w edytorze
@@ -283,7 +288,7 @@ Kryteria akceptacji:
 - Link prowadzi do hostowanej strony rezygnacji i aktualizuje status
 - Zmiana statusu wpływa na suppression list
 
-1)  ID: US-019
+1)  ID: US-019 (po MVP – do rozważenia)
 Tytuł: Formularz double opt‑in (hostowany)
 Opis: Jako marketer chcę zbierać subskrybentów z potwierdzeniem.
 Kryteria akceptacji:
@@ -291,7 +296,7 @@ Kryteria akceptacji:
 - Kliknięcie w link potwierdza i ustawia status active
 - Próba wielokrotna respektuje idempotencję i suppression
 
-1)  ID: US-020
+1)  ID: US-020 (po MVP – do rozważenia)
 Tytuł: Embed formularza na stronie
 Opis: Jako developer chcę łatwo osadzić formularz.
 Kryteria akceptacji:
@@ -299,7 +304,7 @@ Kryteria akceptacji:
 - Walidacja e‑mail po stronie klienta i serwera
 - CORS i rate limit chronią endpointy
 
-1)  ID: US-021
+1)  ID: US-021 (po MVP – do rozważenia)
 Tytuł: Zarządzanie subskrybentami i tagami
 Opis: Jako marketer chcę atrybuty JSONB, tagi i statusy.
 Kryteria akceptacji:
@@ -307,7 +312,7 @@ Kryteria akceptacji:
 - Filtrowanie po tagach i atrybutach przy kampanii
 - Zmiana statusu wpływa na wysyłkę i suppression
 
-1)  ID: US-022
+1)  ID: US-022 (po MVP – do rozważenia)
 Tytuł: Kampania jednorazowa przez /v1/send
 Opis: Jako marketer chcę wysłać kampanię do segmentu.
 Kryteria akceptacji:
@@ -343,7 +348,7 @@ Kryteria akceptacji:
 Tytuł: Cache renderu i brandKit
 Opis: Jako developer chcę niskich czasów p95 renderu.
 Kryteria akceptacji:
-- Cache skompilowanego MJML/HTML w Redis z sensownym TTL
+- Cache skompilowanego HTML (z React Email) w Redis z sensownym TTL
 - P95 render < 300 ms po rozgrzaniu
 - Miss cache nie powoduje błędów guardrails
 
@@ -498,7 +503,6 @@ Odporność i skalowanie
 Adopcja i aktywność
 - ≥ 5 zespołów wysyła w produkcji przez /v1/send
 - ≥ 10 kampanii end‑to‑end + kilkaset transakcyjnych wysyłek
-- ≥ 1 000 potwierdzonych subskrybentów (double opt‑in) w warstwie demo
 
 Biznes i satysfakcja
 - ≥ 3 płacące zespoły (Starter/Pro) w pierwszym miesiącu

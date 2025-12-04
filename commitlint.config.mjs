@@ -23,7 +23,6 @@ export default {
 			'always',
 			[
 				'app',
-				'ai-plan',
 				// Apps
 				'api',
 				'dashboard',
@@ -56,6 +55,9 @@ export default {
 				// Meta
 				'monorepo',
 				'cursor',
+				//documents
+				'ai-plan',
+				'prd',
 			],
 		],
 		'scope-empty': [1, 'never'],
