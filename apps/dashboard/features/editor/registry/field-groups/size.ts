@@ -21,34 +21,18 @@ export const sizeGroup = createFieldGroup({
 				],
 			},
 		},
-		height: {
+		minHeight: {
 			schema: {
 				type: 'string',
 				default: 'auto',
 			},
 			field: {
-				key: 'height',
-				label: 'Height',
+				key: 'minHeight',
+				label: 'Min Height',
 				type: 'size',
 				placeholder: 'auto',
 				options: [
 					{ label: 'Auto', value: 'auto' },
-					{ label: 'px', value: 'px' },
-					{ label: '%', value: '%' },
-				],
-			},
-		},
-		minWidth: {
-			schema: {
-				type: 'string',
-				default: null,
-			},
-			field: {
-				key: 'minWidth',
-				label: 'Min Width',
-				type: 'size',
-				placeholder: '0',
-				options: [
 					{ label: 'px', value: 'px' },
 					{ label: '%', value: '%' },
 				],

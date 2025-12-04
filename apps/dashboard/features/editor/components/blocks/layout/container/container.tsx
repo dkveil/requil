@@ -33,10 +33,8 @@ export function ContainerBlock({
 		disabled: !isCanvas,
 	});
 
-	const hasChildren = block.children && block.children.length > 0;
-	const extractedWrapperStyles = !hasChildren
-		? extractWrapperStyles(block.props)
-		: undefined;
+	const hasChildren = Boolean(block.children && block.children.length > 0);
+	const extractedWrapperStyles = extractWrapperStyles(block.props, hasChildren);
 
 	return (
 		<div
@@ -54,21 +52,20 @@ export function ContainerBlock({
 			}}
 		>
 			<EmailContainer block={block}>
-				{hasChildren ? (
-					<RenderChildren
-						block={block}
-						isCanvas={isCanvas}
-						viewport={viewport}
-						onSelect={onSelect}
-						onHover={onHover}
-						selectedBlockId={selectedBlockId}
-						hoveredBlockId={hoveredBlockId}
-						onMoveUp={onMoveUp}
-						onMoveDown={onMoveDown}
-						onDelete={onDelete}
-						onSelectParent={onSelectParent}
-					/>
-				) : isCanvas ? (
+				<RenderChildren
+					block={block}
+					isCanvas={isCanvas}
+					viewport={viewport}
+					onSelect={onSelect}
+					onHover={onHover}
+					selectedBlockId={selectedBlockId}
+					hoveredBlockId={hoveredBlockId}
+					onMoveUp={onMoveUp}
+					onMoveDown={onMoveDown}
+					onDelete={onDelete}
+					onSelectParent={onSelectParent}
+				/>
+				{!hasChildren && isCanvas && (
 					<div
 						style={{
 							position: 'absolute',
@@ -83,7 +80,7 @@ export function ContainerBlock({
 					>
 						Empty container - drag elements here
 					</div>
-				) : null}
+				)}
 			</EmailContainer>
 		</div>
 	);

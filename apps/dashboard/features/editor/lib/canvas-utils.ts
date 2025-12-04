@@ -1,17 +1,23 @@
 import { generateAllStyles } from '@requil/email-engine';
 import { BlockIR } from '@requil/types';
 
-export function extractWrapperStyles(props: BlockIR['props']) {
-	const shouldSetMinHeight = props.height === 'auto';
+export function extractWrapperStyles(
+	props: BlockIR['props'],
+	hasChildren: boolean
+) {
+	const hasNoMinHeight = !props.minHeight || props.minHeight === 'auto';
+	const isMinHeightTooSmall =
+		typeof props.minHeight === 'string' &&
+		props.minHeight.endsWith('px') &&
+		Number(props.minHeight.replace('px', '')) < 30;
+	const shouldSetMinHeight = hasNoMinHeight || isMinHeightTooSmall;
 
 	const stylesToExtract = {
+		fill: shouldSetMinHeight ? props.fill : 'transparent',
 		maxWidth: props.maxWidth,
 		margin: props.margin,
 		width: props.width,
-		height: props.height,
-		minWidth: props.minWidth,
-		minHeight: shouldSetMinHeight ? '100px' : props.height,
-		maxHeight: props.maxHeight,
+		minHeight: !hasChildren && shouldSetMinHeight ? '100px' : props.minHeight,
 	};
 
 	const styles = generateAllStyles(stylesToExtract);

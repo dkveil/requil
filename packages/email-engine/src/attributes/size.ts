@@ -9,8 +9,8 @@ export function generateSizeStyles(
 		styles.width = props.width as string;
 	}
 
-	if (props.height) {
-		styles.height = props.height as string;
+	if (props.minHeight) {
+		styles.minHeight = props.minHeight as string;
 	}
 
 	if (props.minWidth) {
