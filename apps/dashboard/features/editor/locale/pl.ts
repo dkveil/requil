@@ -53,6 +53,8 @@ export const editorPlLocales = {
 		addedBlockToSelectedBlock: 'Dodano blok {blockType} do wybranego bloku',
 		addedBlockToCanvas: 'Dodano blok {blockType} do kanwy',
 		noDocumentAvailable: 'Brak dokumentu',
+		blockNotAllowedInParent:
+			'{childType} nie może być umieszczony wewnątrz {parentType}',
 		elementsSidebar: {
 			addElements: 'Dodaj elementy',
 			layers: 'Warstwy',

@@ -1,6 +1,8 @@
 import type { BlockIR, Document } from '@requil/types';
+import { toast } from 'sonner';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { componentRegistry } from '../registry/component-registry';
 
 // History state for undo/redo
 interface HistoryState {
@@ -37,9 +39,13 @@ interface CanvasActions {
 	setDocument: (doc: Document) => void;
 	updateBlock: (blockId: string, updates: Partial<BlockIR>) => void;
 	updateMetadata: (metadata: Partial<Document['metadata']>) => void;
-	addBlock: (parentId: string, block: BlockIR, position?: number) => void;
+	addBlock: (parentId: string, block: BlockIR, position?: number) => boolean;
 	removeBlock: (blockId: string) => void;
-	moveBlock: (blockId: string, newParentId: string, position: number) => void;
+	moveBlock: (
+		blockId: string,
+		newParentId: string,
+		position: number
+	) => boolean;
 	moveBlockUp: (blockId: string) => void;
 	moveBlockDown: (blockId: string) => void;
 	selectParentBlock: (blockId: string) => void;
@@ -162,7 +168,9 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 								type: 'Column',
 								props: { width: 'auto' },
 							};
-							newRoot = addBlockToTree(newRoot, blockId, newColumn);
+							const result = addBlockToTree(newRoot, blockId, newColumn);
+							if (result === null) return;
+							newRoot = result;
 						}
 					} else if (diff < 0 && block.children) {
 						// Remove columns
@@ -189,7 +197,7 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 			// Add a block to a parent
 			addBlock: (parentId, block, position) => {
 				const { document, history } = get();
-				if (!(document && history)) return;
+				if (!(document && history)) return false;
 
 				const newRoot = addBlockToTree(
 					document.root,
@@ -197,6 +205,9 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 					block,
 					position
 				);
+
+				if (newRoot === null) return false;
+
 				const newDoc = { ...document, root: newRoot };
 
 				set({
@@ -208,6 +219,8 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 					},
 					isModified: true,
 				});
+
+				return true;
 			},
 
 			removeBlock: (blockId) => {
@@ -286,18 +299,20 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 			// Move a block to a new parent
 			moveBlock: (blockId, newParentId, position) => {
 				const { document, history } = get();
-				if (!(document && history)) return;
+				if (!(document && history)) return false;
 
 				// First, find and extract the block
 				const blockToMove = findBlockInTree(document.root, blockId);
-				if (!blockToMove) return;
+				if (!blockToMove) return false;
 
 				// Remove from old location
 				let newRoot = removeBlockFromTree(document.root, blockId);
-				if (!newRoot) return;
+				if (!newRoot) return false;
 
 				// Add to new location
 				newRoot = addBlockToTree(newRoot, newParentId, blockToMove, position);
+
+				if (newRoot === null) return false;
 
 				const newDoc = { ...document, root: newRoot };
 
@@ -310,6 +325,8 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 					},
 					isModified: true,
 				});
+
+				return true;
 			},
 
 			// Move block up in its parent's children
@@ -334,7 +351,14 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 				if (!newRoot) return;
 
 				// Add at new position (one up)
-				newRoot = addBlockToTree(newRoot, parent.id, block, currentIndex - 1);
+				const result = addBlockToTree(
+					newRoot,
+					parent.id,
+					block,
+					currentIndex - 1
+				);
+				if (result === null) return;
+				newRoot = result;
 
 				const newDoc = { ...document, root: newRoot };
 
@@ -372,7 +396,14 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 				if (!newRoot) return;
 
 				// Add at new position (one down)
-				newRoot = addBlockToTree(newRoot, parent.id, block, currentIndex + 1);
+				const resultDown = addBlockToTree(
+					newRoot,
+					parent.id,
+					block,
+					currentIndex + 1
+				);
+				if (resultDown === null) return;
+				newRoot = resultDown;
 
 				const newDoc = { ...document, root: newRoot };
 
@@ -424,6 +455,9 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 					clonedBlock,
 					position + 1
 				);
+
+				if (newRoot === null) return;
+
 				const newDoc = { ...document, root: newRoot };
 
 				set({
@@ -433,7 +467,7 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 						present: newDoc,
 						future: [],
 					},
-					selectedBlockId: clonedBlock.id, // Select the new block
+					selectedBlockId: clonedBlock.id,
 					isModified: true,
 				});
 			},
@@ -571,8 +605,13 @@ function addBlockToTree(
 	parentId: string,
 	newBlock: BlockIR,
 	position?: number
-): BlockIR {
+): BlockIR | null {
 	if (block.id === parentId) {
+		if (!componentRegistry.canHaveChild(block.type, newBlock.type)) {
+			toast.error(`${newBlock.type} cannot be placed inside ${block.type}`);
+			return null;
+		}
+
 		const children = block.children || [];
 		const insertPosition = position !== undefined ? position : children.length;
 		const newChildren = [
@@ -584,12 +623,13 @@ function addBlockToTree(
 	}
 
 	if (block.children) {
-		return {
-			...block,
-			children: block.children.map((child) =>
-				addBlockToTree(child, parentId, newBlock, position)
-			),
-		};
+		const newChildren: BlockIR[] = [];
+		for (const child of block.children) {
+			const result = addBlockToTree(child, parentId, newBlock, position);
+			if (result === null) return null;
+			newChildren.push(result);
+		}
+		return { ...block, children: newChildren };
 	}
 
 	return block;

@@ -53,6 +53,7 @@ export const editorEnLocales = {
 		addedBlockToSelectedBlock: 'Added {blockType} to selected block',
 		addedBlockToCanvas: 'Added {blockType} to canvas',
 		noDocumentAvailable: 'No document available',
+		blockNotAllowedInParent: '{childType} cannot be placed inside {parentType}',
 		elementsSidebar: {
 			addElements: 'Add elements',
 			layers: 'Layers',

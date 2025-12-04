@@ -145,18 +145,28 @@ export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
 					};
 
 					if (overData?.type === 'drop-zone') {
-						addBlock(overData.parentId, newBlock, overData.position);
-						toast.success(t('addedBlockToCanvas', { blockType: 'Image' }));
-						selectBlock(newBlock.id);
+						const success = addBlock(
+							overData.parentId,
+							newBlock,
+							overData.position
+						);
+						if (success) {
+							toast.success(t('addedBlockToCanvas', { blockType: 'Image' }));
+							selectBlock(newBlock.id);
+						}
 						return;
 					}
 				}
 
 				if (targetId.startsWith('block-')) {
 					const blockId = targetId.replace('block-', '');
-					addBlock(blockId, newBlock);
-					toast.success(t('addedBlockToSelectedBlock', { blockType: 'Image' }));
-					selectBlock(newBlock.id);
+					const success = addBlock(blockId, newBlock);
+					if (success) {
+						toast.success(
+							t('addedBlockToSelectedBlock', { blockType: 'Image' })
+						);
+						selectBlock(newBlock.id);
+					}
 					return;
 				}
 			}
@@ -184,9 +194,17 @@ export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
 				};
 
 				if (overData?.type === 'drop-zone') {
-					addBlock(overData.parentId, newBlock, overData.position);
-					toast.success(t('addedBlockToCanvas', { blockType: componentType }));
-					selectBlock(newBlock.id);
+					const success = addBlock(
+						overData.parentId,
+						newBlock,
+						overData.position
+					);
+					if (success) {
+						toast.success(
+							t('addedBlockToCanvas', { blockType: componentType })
+						);
+						selectBlock(newBlock.id);
+					}
 					return;
 				}
 			}
@@ -194,11 +212,13 @@ export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
 			// Fallback: drop on block directly
 			if (targetId.startsWith('block-')) {
 				const blockId = targetId.replace('block-', '');
-				addBlock(blockId, newBlock);
-				toast.success(
-					t('addedBlockToSelectedBlock', { blockType: componentType })
-				);
-				selectBlock(newBlock.id);
+				const success = addBlock(blockId, newBlock);
+				if (success) {
+					toast.success(
+						t('addedBlockToSelectedBlock', { blockType: componentType })
+					);
+					selectBlock(newBlock.id);
+				}
 				return;
 			}
 		}
@@ -223,8 +243,14 @@ export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
 					);
 
 					if (!shouldBlock) {
-						moveBlock(activeData.blockId, overData.parentId, overData.position);
-						toast.success(t('movedBlock'));
+						const success = moveBlock(
+							activeData.blockId,
+							overData.parentId,
+							overData.position
+						);
+						if (success) {
+							toast.success(t('movedBlock'));
+						}
 					}
 					return;
 				}
@@ -239,8 +265,14 @@ export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
 					const targetBlock = findBlockById(document?.root, targetBlockId);
 					if (targetBlock) {
 						const position = targetBlock.children?.length || 0;
-						moveBlock(activeData.blockId, targetBlockId, position);
-						toast.success(t('movedBlock'));
+						const success = moveBlock(
+							activeData.blockId,
+							targetBlockId,
+							position
+						);
+						if (success) {
+							toast.success(t('movedBlock'));
+						}
 					}
 				}
 				return;
@@ -255,20 +287,25 @@ export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
 			return;
 		}
 
+		let success = false;
 		if (selectedBlockId) {
-			addBlock(selectedBlockId, newBlock);
-			toast.success(t('addedBlockToSelectedBlock', { blockType }));
+			success = addBlock(selectedBlockId, newBlock);
+			if (success) {
+				toast.success(t('addedBlockToSelectedBlock', { blockType }));
+			}
 		} else if (document) {
-			// Add to root if nothing is selected
-			addBlock(document.root.id, newBlock);
-			toast.success(t('addedBlockToCanvas', { blockType }));
+			success = addBlock(document.root.id, newBlock);
+			if (success) {
+				toast.success(t('addedBlockToCanvas', { blockType }));
+			}
 		} else {
 			toast.error(t('noDocumentAvailable'));
 			return;
 		}
 
-		// Auto-select the newly added block
-		selectBlock(newBlock.id);
+		if (success) {
+			selectBlock(newBlock.id);
+		}
 	};
 
 	return (
