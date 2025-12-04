@@ -74,6 +74,11 @@ export function SettingsSidebar({ workspaceId }: SettingsSidebarProps = {}) {
 
 	const componentDef = componentRegistry.get(blockToEdit.type);
 
+	const effectiveProps = {
+		...componentDef?.defaultProps,
+		...blockToEdit.props,
+	};
+
 	const handlePropChange = (propName: string, value: unknown) => {
 		if (propName.includes('.')) {
 			const updatedProps = setNestedValue(
@@ -234,8 +239,8 @@ export function SettingsSidebar({ workspaceId }: SettingsSidebarProps = {}) {
 									<div className='space-y-3'>
 										{groupFields.map((field) => {
 											const value = field.key.includes('.')
-												? getNestedValue(blockToEdit.props, field.key)
-												: blockToEdit.props[field.key];
+												? getNestedValue(effectiveProps, field.key)
+												: effectiveProps[field.key];
 
 											if (value === undefined) return null;
 

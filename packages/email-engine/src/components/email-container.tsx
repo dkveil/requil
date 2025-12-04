@@ -22,7 +22,6 @@ export function EmailContainer({
 			className={className}
 			style={{
 				width: '100%',
-				padding: 300,
 				...generatedStyles,
 				...style,
 			}}

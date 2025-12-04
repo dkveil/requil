@@ -1,4 +1,5 @@
 import { ComponentDefinition } from '@requil/types/editor';
+import { sizeGroup } from '../../../../registry/field-groups/size';
 
 export const ContainerDefinition: ComponentDefinition = {
 	type: 'Container',
@@ -12,15 +13,18 @@ export const ContainerDefinition: ComponentDefinition = {
 
 	propsSchema: {
 		type: 'object',
-		properties: {},
+		properties: {
+			...sizeGroup.schema,
+		},
 	},
 
 	defaultProps: {
 		fullWidth: true,
+		...sizeGroup.defaults,
 	},
 
 	inspectorConfig: {
-		groups: [],
-		fields: [],
+		groups: [sizeGroup.inspectorGroup],
+		fields: [...sizeGroup.inspectorFields],
 	},
 };
