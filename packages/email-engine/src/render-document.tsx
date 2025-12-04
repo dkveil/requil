@@ -1,6 +1,11 @@
 import { Font, Head, Html, Preview, render } from '@react-email/components';
 import { BlockIR, Document } from '@requil/types';
-import { EmailContainer, EmailRoot, EmailSection } from './components';
+import {
+	EmailContainer,
+	EmailDivider,
+	EmailRoot,
+	EmailSection,
+} from './components';
 import { toPlaintext } from './plaintext';
 
 function renderBlock(block: BlockIR): React.ReactNode {
@@ -13,6 +18,8 @@ function renderBlock(block: BlockIR): React.ReactNode {
 			return <EmailContainer block={block}>{children}</EmailContainer>;
 		case 'Section':
 			return <EmailSection block={block}>{children}</EmailSection>;
+		case 'Divider':
+			return <EmailDivider block={block} />;
 		default:
 			return <div>Unknown block type: {block.type}</div>;
 	}

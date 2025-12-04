@@ -15,16 +15,20 @@ type JSONSchemaProperty = {
 	}>;
 };
 
+type FieldDefinition = Omit<
+	InspectorField,
+	'defaultValue' | 'description' | 'group' | 'rows' | 'children'
+> & {
+	isAddable?: boolean;
+	emptyLabel?: string;
+	defaultExpanded?: boolean;
+	defaultValue?: unknown;
+	children?: FieldDefinition[];
+};
+
 export type FieldConfig = {
 	schema: JSONSchemaProperty;
-	field: Omit<
-		InspectorField,
-		'defaultValue' | 'description' | 'group' | 'rows'
-	> & {
-		isAddable?: boolean;
-		emptyLabel?: string;
-		defaultExpanded?: boolean;
-	};
+	field: FieldDefinition;
 };
 
 type FieldGroupConfig<T extends string = string> = {

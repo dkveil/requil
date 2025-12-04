@@ -13,9 +13,10 @@ export function extractWrapperStyles(
 	const shouldSetMinHeight = hasNoMinHeight || isMinHeightTooSmall;
 
 	const stylesToExtract = {
-		fill: shouldSetMinHeight ? props.fill : 'transparent',
+		fill: props.fill,
 		maxWidth: props.maxWidth,
 		margin: props.margin,
+		padding: props.padding,
 		width: props.width,
 		minHeight: !hasChildren && shouldSetMinHeight ? '100px' : props.minHeight,
 	};

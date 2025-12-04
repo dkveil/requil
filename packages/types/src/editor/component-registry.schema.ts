@@ -34,6 +34,7 @@ export const BaseInspectorFieldSchema = z.object({
 		'padding',
 		'margin',
 		'radius',
+		'border',
 		'size',
 		'image',
 		'textarea',

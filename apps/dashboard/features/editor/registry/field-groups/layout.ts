@@ -65,26 +65,20 @@ export const layoutGroup = createFieldGroup({
 	id: 'layout',
 	label: 'Layout',
 	fields: {
-		align: {
+		verticalAlign: {
 			schema: {
 				type: 'string',
-				enum: ['flex-start', 'center', 'flex-end', 'stretch', 'baseline'],
-				default: 'flex-start',
+				enum: ['top', 'middle', 'bottom'],
+				default: 'top',
 			},
 			field: {
-				key: 'align',
-				label: 'Align',
+				key: 'verticalAlign',
+				label: 'Vertical Align',
 				type: 'iconSelect',
 				options: [
-					{ label: 'Start', value: 'flex-start', icon: 'AlignStartHorizontal' },
-					{ label: 'Center', value: 'center', icon: 'AlignCenterHorizontal' },
-					{ label: 'End', value: 'flex-end', icon: 'AlignEndHorizontal' },
-					{
-						label: 'Stretch',
-						value: 'stretch',
-						icon: 'AlignVerticalSpaceAround',
-					},
-					{ label: 'Baseline', value: 'baseline', icon: 'Baseline' },
+					{ label: 'Top', value: 'top', icon: 'AlignStartVertical' },
+					{ label: 'Middle', value: 'middle', icon: 'AlignCenterVertical' },
+					{ label: 'Bottom', value: 'bottom', icon: 'AlignEndVertical' },
 				],
 			},
 		},

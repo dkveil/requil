@@ -33,36 +33,9 @@ export const borderFields: Record<string, FieldConfig> = {
 		field: {
 			key: 'border',
 			label: 'Border',
-			type: 'group',
-			isCollapsible: false,
+			type: 'border',
 			isAddable: true,
 			emptyLabel: 'Add...',
-			children: [
-				{
-					key: 'width',
-					label: 'Width',
-					type: 'slider',
-					min: 0,
-					max: 20,
-					step: 1,
-				},
-				{
-					key: 'color',
-					label: 'Color',
-					type: 'color',
-				},
-				{
-					key: 'style',
-					label: 'Style',
-					type: 'select',
-					options: [
-						{ label: 'Solid', value: 'solid' },
-						{ label: 'Dashed', value: 'dashed' },
-						{ label: 'Dotted', value: 'dotted' },
-						{ label: 'Double', value: 'double' },
-					],
-				},
-			],
 		},
 	},
 };

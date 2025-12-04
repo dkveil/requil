@@ -17,15 +17,20 @@ export function EmailSection({
 }: EmailSectionProps) {
 	const generatedStyles = generateAllStyles(block.props);
 
+	const { minHeight, ...restStyles } = generatedStyles as {
+		minHeight?: string | number;
+		[key: string]: string | number | undefined;
+	};
+
 	return (
 		<Section
 			className={className}
 			style={{
-				...generatedStyles,
+				...restStyles,
 				...style,
 			}}
 		>
-			{children}
+			<div style={minHeight ? { minHeight } : undefined}>{children}</div>
 		</Section>
 	);
 }

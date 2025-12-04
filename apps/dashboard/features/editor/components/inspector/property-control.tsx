@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { isFieldVisible } from '../../lib/field-utils';
 import { ArrayControl } from './controls/array-control';
+import { BorderControl } from './controls/border-control';
 import { IconSelect } from './controls/icon-select';
 import { ImagePickerControl } from './controls/image-picker-control';
 import { PaddingControl } from './controls/padding-control';
@@ -345,6 +346,54 @@ export function PropertyControl({
 					/>
 				</div>
 			);
+
+		case 'border': {
+			const borderIsEmpty = !value || value === null;
+
+			if (field.isAddable && borderIsEmpty) {
+				return (
+					<div className='flex items-center justify-between'>
+						<Label className='text-xs text-muted-foreground'>
+							{field.label}
+						</Label>
+						<button
+							type='button'
+							onClick={() => {
+								onChange({ width: 1, color: '#000000', style: 'solid' });
+							}}
+							className='px-3 py-1 text-xs bg-accent/50 hover:bg-accent text-muted-foreground hover:text-foreground transition-colors rounded border border-accent'
+						>
+							{field.emptyLabel || 'Add...'}
+						</button>
+					</div>
+				);
+			}
+
+			return (
+				<div className='space-y-2'>
+					<div className='flex items-center justify-between'>
+						<Label className='text-xs text-muted-foreground'>
+							{field.label}
+						</Label>
+						{field.isAddable && !borderIsEmpty && (
+							<button
+								type='button'
+								onClick={() => onChange(null)}
+								className='text-xs text-muted-foreground hover:text-foreground transition-colors'
+								aria-label='Remove'
+							>
+								✕
+							</button>
+						)}
+					</div>
+					<BorderControl
+						value={value as any}
+						onChange={onChange}
+						defaultExpanded={field.defaultExpanded}
+					/>
+				</div>
+			);
+		}
 
 		case 'size':
 			return (

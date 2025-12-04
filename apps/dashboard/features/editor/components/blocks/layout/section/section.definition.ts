@@ -1,4 +1,9 @@
 import { ComponentDefinition } from '@requil/types/editor';
+import {
+	layoutGroup,
+	sizeGroup,
+	stylesGroup,
+} from '@/features/editor/registry/field-groups';
 
 export const SectionDefinition: ComponentDefinition = {
 	type: 'Section',
@@ -7,15 +12,34 @@ export const SectionDefinition: ComponentDefinition = {
 	description: 'Section for grouping content',
 	icon: 'Columns2',
 
-	allowedChildren: ['Section'],
-	allowedParents: ['Root', 'Container'],
+	allowedChildren: ['Section', 'Divider'],
+	allowedParents: ['Root', 'Container', 'Section'],
 
-	propsSchema: {},
+	propsSchema: {
+		type: 'object',
+		properties: {
+			...sizeGroup.schema,
+			...layoutGroup.schema,
+			...stylesGroup.schema,
+		},
+	},
 
-	defaultProps: {},
+	defaultProps: {
+		...sizeGroup.defaults,
+		...layoutGroup.defaults,
+		...stylesGroup.defaults,
+	},
 
 	inspectorConfig: {
-		groups: [],
-		fields: [],
+		groups: [
+			sizeGroup.inspectorGroup,
+			layoutGroup.inspectorGroup,
+			stylesGroup.inspectorGroup,
+		],
+		fields: [
+			...sizeGroup.inspectorFields,
+			...layoutGroup.inspectorFields,
+			...stylesGroup.inspectorFields,
+		],
 	},
 };

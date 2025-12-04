@@ -185,7 +185,7 @@ export function HtmlPreviewModal({
 							<div className='max-w-[600px] bg-muted/30 rounded-md mx-auto overflow-hidden'>
 								<iframe
 									srcDoc={renderResult.html}
-									className='w-full h-full border-0 bg-transparent'
+									className='w-full h-[600px] border-0 bg-transparent'
 									title='Email Preview'
 									sandbox='allow-same-origin'
 								/>

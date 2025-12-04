@@ -1,19 +1,19 @@
 import type { BlockIR } from '@requil/types';
 
-export function convertAlignToTableAlign(
-	align: unknown
-): 'left' | 'center' | 'right' | undefined {
-	if (!align || typeof align !== 'string') return undefined;
+export function convertVerticalAlign(
+	verticalAlign: unknown
+): 'top' | 'middle' | 'bottom' {
+	if (!verticalAlign || typeof verticalAlign !== 'string') return 'top';
 
-	const alignMap: Record<string, 'left' | 'center' | 'right'> = {
-		'flex-start': 'left',
-		center: 'center',
-		'flex-end': 'right',
-		stretch: 'left',
-		baseline: 'left',
-	};
+	if (
+		verticalAlign === 'top' ||
+		verticalAlign === 'middle' ||
+		verticalAlign === 'bottom'
+	) {
+		return verticalAlign;
+	}
 
-	return alignMap[align];
+	return 'top';
 }
 
 type SpacingValue = number | 'auto';
@@ -103,6 +103,11 @@ export function generateLayoutStyles(
 	props: BlockIR['props']
 ): Record<string, string | undefined> {
 	const styles: Record<string, string | undefined> = {};
+
+	const verticalAlign = convertVerticalAlign(props.verticalAlign);
+	if (verticalAlign) {
+		styles.verticalAlign = verticalAlign;
+	}
 
 	const paddingValue = convertPadding(props.padding);
 	if (paddingValue) {

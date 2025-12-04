@@ -1,11 +1,14 @@
 import {
 	AlignCenter,
 	AlignCenterHorizontal,
+	AlignCenterVertical,
 	AlignEndHorizontal,
+	AlignEndVertical,
 	AlignJustify,
 	AlignLeft,
 	AlignRight,
 	AlignStartHorizontal,
+	AlignStartVertical,
 	AlignVerticalSpaceAround,
 	Baseline,
 } from 'lucide-react';
@@ -33,6 +36,9 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 	AlignStartHorizontal,
 	AlignCenterHorizontal,
 	AlignEndHorizontal,
+	AlignStartVertical,
+	AlignCenterVertical,
+	AlignEndVertical,
 	AlignVerticalSpaceAround,
 	Baseline,
 };
