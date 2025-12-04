@@ -40,10 +40,11 @@ export function RootBlock({
 			{...interactionProps}
 			className={cn(
 				interactionProps?.className,
-				isOver && isCanvas && 'ring-2 ring-primary ring-inset'
+				isOver && isCanvas && 'ring-2 ring-primary ring-inset',
+				'w-full'
 			)}
 			style={{
-				maxWidth: viewport === 'mobile' ? '375px' : '600px',
+				maxWidth: viewport === 'mobile' ? '375px' : '900px',
 				margin: '0 auto',
 			}}
 			data-block-type='Root'
@@ -52,8 +53,8 @@ export function RootBlock({
 			<EmailRoot
 				block={block}
 				style={{
-					maxWidth: viewport === 'mobile' ? '375px' : '600px',
 					minHeight: !hasChildren && isCanvas ? '400px' : undefined,
+					width: '100%',
 				}}
 				isCanvas
 			>

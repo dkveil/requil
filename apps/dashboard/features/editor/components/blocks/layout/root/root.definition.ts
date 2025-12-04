@@ -27,7 +27,8 @@ export const RootDefinition: ComponentDefinition = {
 	type: 'Root',
 	category: 'layout',
 	name: 'Root',
-	description: 'Email root container',
+	description:
+		'Root container representing the email document body. Manages document-level styles.',
 	icon: 'Mail',
 	isHidden: true,
 

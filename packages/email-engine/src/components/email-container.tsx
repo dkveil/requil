@@ -1,4 +1,4 @@
-import { Section } from '@react-email/components';
+import { Container } from '@react-email/components';
 import type { BlockIR } from '@requil/types';
 import { generateAllStyles } from '../attributes';
 
@@ -18,15 +18,15 @@ export function EmailContainer({
 	const generatedStyles = generateAllStyles(block.props);
 
 	return (
-		<Section
+		<Container
 			className={className}
 			style={{
-				width: '100%',
+				maxWidth: '600px',
 				...generatedStyles,
 				...style,
 			}}
 		>
 			{children}
-		</Section>
+		</Container>
 	);
 }

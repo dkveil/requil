@@ -1,4 +1,4 @@
-import { Body, Container } from '@react-email/components';
+import { Body } from '@react-email/components';
 import type { BlockIR } from '@requil/types';
 import { generateAllStyles } from '../attributes';
 
@@ -19,13 +19,12 @@ export function EmailRoot({
 }: EmailRootProps) {
 	const generatedStyles = generateAllStyles(block.props);
 
-	const BodyTag = isCanvas ? Container : Body;
+	const BodyTag = isCanvas ? 'div' : Body;
 
 	return (
 		<BodyTag
 			className={className}
 			style={{
-				maxWidth: '600px',
 				...generatedStyles,
 				...style,
 			}}
