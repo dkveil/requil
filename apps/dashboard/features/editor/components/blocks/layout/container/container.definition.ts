@@ -3,7 +3,7 @@ import {
 	layoutGroup,
 	sizeGroup,
 	stylesGroup,
-} from '../../../../registry/field-groups';
+} from '@/features/editor/registry/field-groups';
 
 export const ContainerDefinition: ComponentDefinition = {
 	type: 'Container',

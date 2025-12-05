@@ -3,7 +3,7 @@ import type { BlockIR } from '@requil/types';
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { BlockActions } from './block-actions';
-import { DividerBlock } from './blocks/content';
+import { DividerBlock, HeadingBlock } from './blocks/content';
 import { ContainerBlock, RootBlock, SectionBlock } from './blocks/layout';
 import { DropZone } from './drop-zone';
 
@@ -196,6 +196,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 				return <SectionBlock {...commonBlockProps} />;
 			case 'Divider':
 				return <DividerBlock {...commonBlockProps} />;
+			case 'Heading':
+				return <HeadingBlock {...commonBlockProps} />;
 
 			default:
 				return (

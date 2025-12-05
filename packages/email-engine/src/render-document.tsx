@@ -3,6 +3,7 @@ import { BlockIR, Document } from '@requil/types';
 import {
 	EmailContainer,
 	EmailDivider,
+	EmailHeading,
 	EmailRoot,
 	EmailSection,
 } from './components';
@@ -20,6 +21,8 @@ function renderBlock(block: BlockIR): React.ReactNode {
 			return <EmailSection block={block}>{children}</EmailSection>;
 		case 'Divider':
 			return <EmailDivider block={block} />;
+		case 'Heading':
+			return <EmailHeading block={block} />;
 		default:
 			return <div>Unknown block type: {block.type}</div>;
 	}

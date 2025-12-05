@@ -12,7 +12,7 @@ export const SectionDefinition: ComponentDefinition = {
 	description: 'Section for grouping content',
 	icon: 'Columns2',
 
-	allowedChildren: ['Section', 'Divider'],
+	allowedChildren: ['Section', 'Divider', 'Heading'],
 	allowedParents: ['Root', 'Container', 'Section'],
 
 	propsSchema: {
