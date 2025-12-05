@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
 interface InlineTextEditorProps {
@@ -34,12 +35,13 @@ export function InlineTextEditor({
 		}
 	}, [multiline]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: we need to update the height of the textarea when the value changes
 	useEffect(() => {
 		if (multiline && textareaRef.current) {
 			textareaRef.current.style.height = 'auto';
 			textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
 		}
-	}, [multiline]);
+	}, [multiline, value]);
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -83,6 +85,12 @@ export function InlineTextEditor({
 		e.stopPropagation();
 	};
 
+	const handlePointerDown = (
+		e: React.PointerEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		e.stopPropagation();
+	};
+
 	const commonProps = {
 		value: localValue,
 		onChange: handleChange,
@@ -90,9 +98,11 @@ export function InlineTextEditor({
 		onBlur: handleBlur,
 		onClick: handleClick,
 		onMouseDown: handleMouseDown,
+		onPointerDown: handlePointerDown,
 		style,
 		className: cn(
-			'w-full bg-white/95 border-2 border-blue-500 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500',
+			'p-0! m-0! w-full border-0! bg-white/95 bg-transparent rounded-none focus:outline-none',
+			'font-[inherit]!',
 			className
 		),
 		placeholder,
@@ -100,11 +110,12 @@ export function InlineTextEditor({
 
 	if (multiline) {
 		return (
-			<textarea
+			<Textarea
+				variant='unstyled'
 				ref={textareaRef}
-				{...commonProps}
 				rows={1}
-				className={cn(commonProps.className, 'resize-none overflow-hidden')}
+				{...commonProps}
+				className={cn(commonProps.className, 'overflow-hidden resize-none')}
 			/>
 		);
 	}
