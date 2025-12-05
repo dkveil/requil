@@ -90,6 +90,8 @@ export const editorEnLocales = {
 			tabs: {
 				layout: 'Layout',
 				animation: 'Animation',
+				variables: 'Variables',
+				properties: 'Properties',
 			},
 			sections: {
 				selector: 'Selector',
@@ -102,6 +104,24 @@ export const editorEnLocales = {
 			blockType: 'Block Type',
 			backgroundColor: 'Background Color',
 			animationComingSoon: 'Animation coming soon...',
+			variablesPanel: {
+				previewMode: 'Preview Mode',
+				previewModeDescription: 'Replace variables with dummy data',
+				on: 'ON',
+				off: 'OFF',
+				definedVariables: 'Defined Variables',
+				noVariables: 'No variables defined yet.',
+				addOneToStart: 'Add one below to get started.',
+				addNewVariable: 'Add New Variable',
+				variableNamePlaceholder: 'e.g. firstName',
+				helperText: 'Use camelCase. Used as <codeTag>{example}</codeTag>.',
+				dummyData: 'Test Value',
+				dummyDataPlaceholder: 'Enter sample value...',
+				copyToast: 'Copied {{name}} to clipboard',
+				copyTitle: 'Copy variable tag',
+				removeTitle: 'Remove variable',
+				variableExists: 'Variable with this name already exists',
+			},
 		},
 		layersPanel: {
 			noDocument: 'No document available',

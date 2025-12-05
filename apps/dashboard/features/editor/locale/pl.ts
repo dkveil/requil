@@ -91,6 +91,8 @@ export const editorPlLocales = {
 			tabs: {
 				layout: 'Układ',
 				animation: 'Animacja',
+				variables: 'Zmienne',
+				properties: 'Właściwości',
 			},
 			sections: {
 				selector: 'Selektor',
@@ -103,6 +105,25 @@ export const editorPlLocales = {
 			blockType: 'Typ bloku',
 			backgroundColor: 'Kolor tła',
 			animationComingSoon: 'Animacje wkrótce...',
+			variablesPanel: {
+				previewMode: 'Tryb podglądu',
+				previewModeDescription: 'Zastąp zmienne danymi testowymi',
+				on: 'WŁ',
+				off: 'WYŁ',
+				definedVariables: 'Zdefiniowane zmienne',
+				noVariables: 'Brak zdefiniowanych zmiennych.',
+				addOneToStart: 'Dodaj pierwszą zmienną poniżej.',
+				addNewVariable: 'Dodaj nową zmienną',
+				variableNamePlaceholder: 'np. firstName',
+				helperText:
+					'Używaj camelCase. Wstawiane jako <codeTag>{example}</codeTag>.',
+				dummyData: 'Wartość testowa',
+				dummyDataPlaceholder: 'Wpisz przykładową wartość...',
+				copyToast: 'Skopiowano {{name}} do schowka',
+				copyTitle: 'Kopiuj tag zmiennej',
+				removeTitle: 'Usuń zmienną',
+				variableExists: 'Zmienna o tej nazwie już istnieje',
+			},
 		},
 		movedBlock: 'Blok przeniesiony pomyślnie',
 		blockActions: {

@@ -1,4 +1,4 @@
-import type { BlockIR, Document } from '@requil/types';
+import type { BlockIR, Document, Variable } from '@requil/types';
 import { toast } from 'sonner';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
@@ -32,6 +32,10 @@ interface CanvasState {
 	zoom: number;
 	canvasWidth: number;
 	isModified: boolean;
+
+	// Variables
+	previewMode: boolean;
+	previewData: Record<string, string>;
 }
 
 // Canvas actions
@@ -82,6 +86,14 @@ interface CanvasActions {
 	reset: () => void;
 	markAsModified: () => void;
 	markAsSaved: () => void;
+
+	// Variables
+	setPreviewMode: (enabled: boolean) => void;
+	setPreviewData: (key: string, value: string) => void;
+	loadPreviewData: (data: Record<string, string>) => void;
+	addVariable: (variable: Variable) => void;
+	updateVariable: (id: string, updates: Partial<Variable>) => void;
+	removeVariable: (variableId: string) => void;
 }
 
 const initialState: CanvasState = {
@@ -97,6 +109,8 @@ const initialState: CanvasState = {
 	zoom: 1,
 	canvasWidth: 900,
 	isModified: false,
+	previewMode: false,
+	previewData: {},
 };
 
 export const useCanvasStore = create<CanvasState & CanvasActions>()(
@@ -576,6 +590,89 @@ export const useCanvasStore = create<CanvasState & CanvasActions>()(
 
 			// Reset
 			reset: () => set(initialState),
+
+			// Variables implementation
+			setPreviewMode: (enabled) => set({ previewMode: enabled }),
+
+			setPreviewData: (key, value) =>
+				set((state) => ({
+					previewData: {
+						...state.previewData,
+						[key]: value,
+					},
+				})),
+
+			loadPreviewData: (data) => set({ previewData: data }),
+
+			addVariable: (variable) => {
+				const { document, history } = get();
+				if (!(document && history)) return;
+
+				const currentVariables = document.variables || [];
+
+				if (currentVariables.some((v) => v.name === variable.name)) {
+					toast.error('Variable with this name already exists');
+					return;
+				}
+
+				const newDoc = {
+					...document,
+					variables: [...currentVariables, variable],
+				};
+
+				set({
+					document: newDoc,
+					history: {
+						past: [...history.past, history.present],
+						present: newDoc,
+						future: [],
+					},
+					isModified: true,
+				});
+			},
+
+			removeVariable: (id) => {
+				const { document, history } = get();
+				if (!(document && history)) return;
+
+				const currentVariables = document.variables || [];
+				const newDoc = {
+					...document,
+					variables: currentVariables.filter((v) => v.id !== id),
+				};
+
+				set({
+					document: newDoc,
+					history: {
+						past: [...history.past, history.present],
+						present: newDoc,
+						future: [],
+					},
+					isModified: true,
+				});
+			},
+
+			updateVariable: (id, updates) => {
+				const { document, history } = get();
+				if (!(document && history)) return;
+
+				const currentVariables = document.variables || [];
+				const newVariables = currentVariables.map((v) =>
+					v.id === id ? { ...v, ...updates } : v
+				);
+
+				const newDoc = { ...document, variables: newVariables };
+
+				set({
+					document: newDoc,
+					history: {
+						past: [...history.past, history.present],
+						present: newDoc,
+						future: [],
+					},
+					isModified: true,
+				});
+			},
 		}),
 		{ name: 'canvas-store' }
 	)

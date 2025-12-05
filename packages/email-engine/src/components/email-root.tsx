@@ -25,6 +25,7 @@ export function EmailRoot({
 		<BodyTag
 			className={className}
 			style={{
+				margin: 0,
 				...generatedStyles,
 				...style,
 			}}

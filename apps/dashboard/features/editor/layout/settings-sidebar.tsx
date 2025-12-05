@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PropertyControl } from '../components/inspector/property-control';
 import { Section } from '../components/inspector/section';
 import { SpacingEditor } from '../components/inspector/spacing-editor';
+import { VariablesPanel } from '../components/inspector/variables/variables-panel';
 import { useCanvas } from '../hooks/use-canvas';
 import { getNestedValue, isFieldVisible } from '../lib/field-utils';
 import { componentRegistry } from '../registry/component-registry';
@@ -109,26 +110,26 @@ export function SettingsSidebar({ workspaceId }: SettingsSidebarProps = {}) {
 		<div className='w-80 border-l h-[calc(100%-49px)] bg-card flex flex-col overflow-auto pb-5'>
 			{/* Tabs */}
 			<Tabs
-				defaultValue='layout'
+				defaultValue='properties'
 				className='flex-1 flex flex-col'
 			>
 				<TabsList className='w-full justify-start rounded-none border-b bg-transparent p-0'>
 					<TabsTrigger
-						value='layout'
+						value='properties'
 						className='rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent'
 					>
-						{t('tabs.layout')}
+						{t('tabs.properties')}
 					</TabsTrigger>
 					<TabsTrigger
-						value='animation'
+						value='variables'
 						className='rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent'
 					>
-						{t('tabs.animation')}
+						{t('tabs.variables')}
 					</TabsTrigger>
 				</TabsList>
 
 				<TabsContent
-					value='layout'
+					value='properties'
 					className='flex-1 overflow-auto mt-0'
 				>
 					<div className='p-4 space-y-4'>
@@ -299,14 +300,10 @@ export function SettingsSidebar({ workspaceId }: SettingsSidebarProps = {}) {
 				</TabsContent>
 
 				<TabsContent
-					value='animation'
-					className='flex-1 overflow-auto mt-0'
+					value='variables'
+					className='flex-1 overflow-hidden mt-0 flex flex-col'
 				>
-					<div className='p-4'>
-						<p className='text-sm text-muted-foreground'>
-							{t('animationComingSoon')}
-						</p>
-					</div>
+					<VariablesPanel />
 				</TabsContent>
 			</Tabs>
 		</div>

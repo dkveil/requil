@@ -20,9 +20,19 @@ export const BlockSchema: z.ZodType<BlockIR> = z.lazy(() =>
 	})
 );
 
+export const VariableSchema = z.object({
+	id: z.string(),
+	name: z.string(),
+	label: z.string().optional(),
+	defaultValue: z.string().optional(),
+});
+
+export type Variable = z.infer<typeof VariableSchema>;
+
 export const DocumentSchema = z.object({
 	version: z.string().default('1.0'),
 	root: BlockSchema,
+	variables: z.array(VariableSchema).default([]),
 	metadata: z
 		.object({
 			title: z.string().optional(),

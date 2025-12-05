@@ -50,6 +50,7 @@ export function createDefaultDocument(): Document {
 	return {
 		version: '1.0',
 		root: rootBlock,
+		variables: [],
 		metadata: {
 			title: 'Untitled Template',
 			createdAt: new Date().toISOString(),
