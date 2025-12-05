@@ -59,6 +59,7 @@ export const editorPlLocales = {
 			addElements: 'Dodaj elementy',
 			layers: 'Warstwy',
 			assets: 'Zasoby',
+			assetsUnavailableInDemo: 'Zasoby nie są dostępne w trybie demo',
 			search: 'Szukaj',
 			category: 'Kategoria',
 			component: 'Element',

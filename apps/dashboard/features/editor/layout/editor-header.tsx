@@ -28,9 +28,17 @@ import { HtmlPreviewModal } from '../components/html-preview-modal';
 import { useCanvas } from '../hooks/use-canvas';
 import { useEditor } from '../hooks/use-editor';
 
+type EditorMode = 'workspace' | 'demo';
+
+type EditorHeaderProps = {
+	mode?: EditorMode;
+};
+
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-export default function EditorHeader() {
+export default function EditorHeader({
+	mode = 'workspace',
+}: EditorHeaderProps) {
 	const t = useTranslations('editor.header');
 	const params = useParams();
 	const templateId = params.id as string;
@@ -48,12 +56,14 @@ export default function EditorHeader() {
 		isModified,
 		markAsSaved,
 	} = useCanvas();
+	const isDemo = mode === 'demo';
 	const [emailSettingsModalOpen, setEmailSettingsModalOpen] = useState(false);
 	const [htmlPreviewModalOpen, setHtmlPreviewModalOpen] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: dependencies are correct
 	const handleSave = useCallback(async () => {
+		if (isDemo) return;
 		if (!document || templateId === 'new' || !isModified) return;
 
 		setIsSaving(true);
@@ -73,9 +83,11 @@ export default function EditorHeader() {
 		} finally {
 			setIsSaving(false);
 		}
-	}, [document, templateId, isModified, markAsSaved]);
+	}, [document, templateId, isModified, markAsSaved, isDemo]);
 
 	useEffect(() => {
+		if (isDemo) return;
+
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if ((e.ctrlKey || e.metaKey) && e.key === 's') {
 				e.preventDefault();
@@ -85,7 +97,7 @@ export default function EditorHeader() {
 
 		window.addEventListener('keydown', handleKeyDown);
 		return () => window.removeEventListener('keydown', handleKeyDown);
-	}, [handleSave]);
+	}, [handleSave, isDemo]);
 
 	return (
 		<header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 py-1'>
@@ -136,16 +148,18 @@ export default function EditorHeader() {
 						orientation='vertical'
 						className='h-[24px] hidden md:block'
 					/>
-					<Button
-						variant='ghost'
-						size='icon-sm'
-						className='md:w-auto md:px-3'
-						onClick={() => setEmailSettingsModalOpen(true)}
-						title={t('emailSettings')}
-					>
-						<Settings className='h-4 w-4 md:mr-1' />
-						<span className='hidden md:inline'>{t('emailSettings')}</span>
-					</Button>
+					{!isDemo && (
+						<Button
+							variant='ghost'
+							size='icon-sm'
+							className='md:w-auto md:px-3'
+							onClick={() => setEmailSettingsModalOpen(true)}
+							title={t('emailSettings')}
+						>
+							<Settings className='h-4 w-4 md:mr-1' />
+							<span className='hidden md:inline'>{t('emailSettings')}</span>
+						</Button>
+					)}
 					{isDevelopment && (
 						<>
 							<Separator
@@ -253,27 +267,31 @@ export default function EditorHeader() {
 							{t('exit')}
 						</Button>
 					</Link>
-					<Button
-						variant='default'
-						size='sm'
-						disabled={!isModified || templateId === 'new' || isSaving}
-						onClick={handleSave}
-					>
-						{isSaving ? (
-							<Loader2 className='h-4 w-4 sm:mr-2 animate-spin' />
-						) : (
-							<Save className='h-4 w-4 sm:mr-2' />
-						)}
-						<span className='hidden sm:inline'>
-							{isSaving ? t('saving') : t('save')}
-						</span>
-					</Button>
+					{!isDemo && (
+						<Button
+							variant='default'
+							size='sm'
+							disabled={!isModified || templateId === 'new' || isSaving}
+							onClick={handleSave}
+						>
+							{isSaving ? (
+								<Loader2 className='h-4 w-4 sm:mr-2 animate-spin' />
+							) : (
+								<Save className='h-4 w-4 sm:mr-2' />
+							)}
+							<span className='hidden sm:inline'>
+								{isSaving ? t('saving') : t('save')}
+							</span>
+						</Button>
+					)}
 				</div>
 			</div>
-			<EmailSettingsModal
-				open={emailSettingsModalOpen}
-				onOpenChange={setEmailSettingsModalOpen}
-			/>
+			{!isDemo && (
+				<EmailSettingsModal
+					open={emailSettingsModalOpen}
+					onOpenChange={setEmailSettingsModalOpen}
+				/>
+			)}
 			<HtmlPreviewModal
 				open={htmlPreviewModalOpen}
 				onOpenChange={setHtmlPreviewModalOpen}

@@ -12,6 +12,8 @@ import { ComponentIcon } from '../components/component-icon';
 import { componentRegistry } from '../registry/component-registry';
 import { LayersPanel } from './layers-panel';
 
+type EditorMode = 'workspace' | 'demo';
+
 const CATEGORY_ORDER: ComponentCategory[] = [
 	'layout',
 	'content',
@@ -20,14 +22,16 @@ const CATEGORY_ORDER: ComponentCategory[] = [
 	'data',
 ];
 
-interface ElementsSidebarProps {
+type ElementsSidebarProps = {
 	onAddBlock?: (blockType: string) => void;
-	workspaceId: string;
-}
+	workspaceId?: string;
+	mode?: EditorMode;
+};
 
 export function ElementsSidebar({
 	onAddBlock,
 	workspaceId,
+	mode = 'workspace',
 }: ElementsSidebarProps) {
 	const t = useTranslations('editor.elementsSidebar');
 	const [searchQuery, setSearchQuery] = useState('');
@@ -302,10 +306,18 @@ export function ElementsSidebar({
 						</div>
 
 						{/* Assets Panel */}
-						<AssetsPanel
-							workspaceId={workspaceId}
-							filterType='image'
-						/>
+						{mode === 'workspace' && workspaceId ? (
+							<AssetsPanel
+								workspaceId={workspaceId}
+								filterType='image'
+							/>
+						) : (
+							<div className='flex-1 flex items-center justify-center px-4'>
+								<p className='text-sm text-muted-foreground text-center'>
+									{t('assetsUnavailableInDemo')}
+								</p>
+							</div>
+						)}
 					</>
 				)}
 			</div>
@@ -314,11 +326,11 @@ export function ElementsSidebar({
 }
 
 // Draggable component button
-interface DraggableComponentButtonProps {
+type DraggableComponentButtonProps = {
 	componentType: string;
 	componentName: string;
 	onAddBlock: (blockType: string) => void;
-}
+};
 
 function DraggableComponentButton({
 	componentType,

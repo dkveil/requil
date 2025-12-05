@@ -58,6 +58,7 @@ export const editorEnLocales = {
 			addElements: 'Add elements',
 			layers: 'Layers',
 			assets: 'Assets',
+			assetsUnavailableInDemo: 'Assets are not available in demo mode',
 			search: 'Search',
 			category: 'Category',
 			component: 'Component',

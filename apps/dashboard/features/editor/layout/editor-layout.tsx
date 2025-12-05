@@ -16,12 +16,13 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { Canvas } from '../components/canvas';
 import { ComponentIcon } from '../components/component-icon';
-import { DevInfoBanner } from '../components/dev-info-banner';
 import { useCanvas } from '../hooks/use-canvas';
 import { createBlock } from '../lib/block-factory';
 import EditorHeader from './editor-header';
 import { ElementsSidebar } from './elements-sidebar';
 import { SettingsSidebar } from './settings-sidebar';
+
+type EditorMode = 'workspace' | 'demo';
 
 // Custom modifier to position overlay at exact cursor position (pointer tip)
 const cursorOffsetModifier: Modifier = ({
@@ -49,11 +50,15 @@ const cursorOffsetModifier: Modifier = ({
 	return transform;
 };
 
-interface EditorLayoutProps {
-	workspaceId: string;
-}
+type EditorLayoutProps = {
+	workspaceId?: string;
+	mode?: EditorMode;
+};
 
-export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
+export default function EditorLayout({
+	workspaceId,
+	mode = 'workspace',
+}: EditorLayoutProps) {
 	const { selectedBlockId, document, addBlock, selectBlock, moveBlock } =
 		useCanvas();
 	const t = useTranslations('editor');
@@ -315,12 +320,13 @@ export default function EditorLayout({ workspaceId }: EditorLayoutProps) {
 			onDragEnd={handleDragEnd}
 		>
 			<div className='h-screen w-full overflow-hidden bg-background'>
-				<EditorHeader />
+				<EditorHeader mode={mode} />
 				<div className='flex h-full flex-col'>
 					<div className='flex flex-1'>
 						<ElementsSidebar
 							onAddBlock={handleAddBlock}
 							workspaceId={workspaceId}
+							mode={mode}
 						/>
 						<div className='flex-1 relative'>
 							<Canvas />
