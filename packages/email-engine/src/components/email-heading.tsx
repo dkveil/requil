@@ -1,6 +1,7 @@
 import { Heading } from '@react-email/components';
 import type { BlockIR } from '@requil/types';
 import { generateAllStyles } from '../attributes';
+import { replaceVariables } from '../utils/';
 
 export type EmailHeadingProps = {
 	block: BlockIR;
@@ -9,6 +10,7 @@ export type EmailHeadingProps = {
 	children?: React.ReactNode;
 	canvasContent?: React.ReactNode;
 	style?: React.CSSProperties;
+	variables?: Record<string, string>;
 };
 
 export function EmailHeading({
@@ -17,10 +19,14 @@ export function EmailHeading({
 	children,
 	canvasContent,
 	style,
+	variables,
 	...rest
 }: EmailHeadingProps) {
 	const generatedStyles = generateAllStyles(block.props);
-	const content = canvasContent || (block.props.content as string);
+	const rawContent = canvasContent || (block.props.content as string);
+	const content = variables
+		? replaceVariables(rawContent as string, variables)
+		: rawContent;
 	const level = block.props.level as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
 	return (

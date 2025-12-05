@@ -55,6 +55,7 @@ export default function EditorHeader({
 		document,
 		isModified,
 		markAsSaved,
+		previewData,
 	} = useCanvas();
 	const isDemo = mode === 'demo';
 	const [emailSettingsModalOpen, setEmailSettingsModalOpen] = useState(false);
@@ -296,6 +297,7 @@ export default function EditorHeader({
 				open={htmlPreviewModalOpen}
 				onOpenChange={setHtmlPreviewModalOpen}
 				document={document}
+				variables={previewData || {}}
 			/>
 		</header>
 	);

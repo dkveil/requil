@@ -11,7 +11,8 @@ export type HtmlPreviewResult = {
 };
 
 export async function generateHtmlPreview(
-	document: Document | null
+	document: Document | null,
+	variables?: Record<string, string>
 ): Promise<HtmlPreviewResult> {
 	if (!document) {
 		return {
@@ -21,7 +22,7 @@ export async function generateHtmlPreview(
 	}
 
 	try {
-		const result = await renderDocumentToHtml(document);
+		const result = await renderDocumentToHtml(document, { variables });
 
 		return {
 			success: result.errors.length === 0,

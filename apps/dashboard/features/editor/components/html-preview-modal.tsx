@@ -27,12 +27,14 @@ interface HtmlPreviewModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	document: Document | null;
+	variables?: Record<string, string>;
 }
 
 export function HtmlPreviewModal({
 	open,
 	onOpenChange,
 	document,
+	variables,
 }: HtmlPreviewModalProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [renderResult, setRenderResult] = useState<{
@@ -56,7 +58,7 @@ export function HtmlPreviewModal({
 		async function generate() {
 			setIsLoading(true);
 			try {
-				const result = await generateHtmlPreview(document);
+				const result = await generateHtmlPreview(document, variables);
 
 				if (!isCancelled) {
 					setRenderResult({
@@ -87,7 +89,7 @@ export function HtmlPreviewModal({
 		return () => {
 			isCancelled = true;
 		};
-	}, [open, document]);
+	}, [open, document, variables]);
 
 	const hasErrors = renderResult.errors.length > 0;
 	const hasWarnings = renderResult.warnings.length > 0;

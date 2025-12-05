@@ -9,8 +9,12 @@ import {
 } from './components';
 import { toPlaintext } from './plaintext';
 
-function renderBlock(block: BlockIR): React.ReactNode {
-	const children = block.children?.map((child) => renderBlock(child));
+type RenderContext = {
+	variables?: Record<string, string>;
+};
+
+function renderBlock(block: BlockIR, context: RenderContext): React.ReactNode {
+	const children = block.children?.map((child) => renderBlock(child, context));
 
 	switch (block.type) {
 		case 'Root':
@@ -22,7 +26,12 @@ function renderBlock(block: BlockIR): React.ReactNode {
 		case 'Divider':
 			return <EmailDivider block={block} />;
 		case 'Heading':
-			return <EmailHeading block={block} />;
+			return (
+				<EmailHeading
+					block={block}
+					variables={context.variables}
+				/>
+			);
 		default:
 			return <div>Unknown block type: {block.type}</div>;
 	}
@@ -31,9 +40,14 @@ function renderBlock(block: BlockIR): React.ReactNode {
 type EmailTemplateProps = {
 	document: Document;
 	previewText?: string;
+	variables?: Record<string, string>;
 };
 
-function EmailTemplate({ document, previewText }: EmailTemplateProps) {
+function EmailTemplate({
+	document,
+	previewText,
+	variables,
+}: EmailTemplateProps) {
 	return (
 		<Html>
 			<Head>
@@ -43,7 +57,7 @@ function EmailTemplate({ document, previewText }: EmailTemplateProps) {
 				/>
 			</Head>
 			{previewText && <Preview>{previewText}</Preview>}
-			{renderBlock(document.root)}
+			{renderBlock(document.root, { variables })}
 		</Html>
 	);
 }
@@ -57,7 +71,7 @@ export type RenderResult = {
 
 export async function renderDocumentToHtml(
 	document: Document,
-	options?: { previewText?: string }
+	options?: { previewText?: string; variables?: Record<string, string> }
 ): Promise<RenderResult> {
 	const errors: string[] = [];
 
@@ -71,10 +85,17 @@ export async function renderDocumentToHtml(
 	}
 
 	try {
+		const variablesMap: Record<string, string> = {};
+		for (const v of document.variables || []) {
+			variablesMap[v.name] =
+				options?.variables?.[v.name] ?? v.defaultValue ?? '';
+		}
+
 		const html = await render(
 			<EmailTemplate
 				document={document}
 				previewText={options?.previewText}
+				variables={variablesMap}
 			/>,
 			{ pretty: true }
 		);

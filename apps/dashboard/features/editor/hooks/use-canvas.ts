@@ -54,6 +54,10 @@ export function useCanvas() {
 	const markAsSaved = useCanvasStore((state) => state.markAsSaved);
 	const reset = useCanvasStore((state) => state.reset);
 
+	// Variables
+	const previewMode = useCanvasStore((state) => state.previewMode);
+	const previewData = useCanvasStore((state) => state.previewData);
+
 	// Computed values
 	const selectedBlock = getSelectedBlock();
 
@@ -107,6 +111,10 @@ export function useCanvas() {
 		markAsModified,
 		markAsSaved,
 		reset,
+
+		// Variables
+		previewMode,
+		previewData,
 	};
 }
 

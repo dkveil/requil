@@ -1,5 +1,6 @@
 import { useDroppable } from '@dnd-kit/core';
 import { EmailHeading } from '@requil/email-engine';
+import { replaceVariables } from '@requil/email-engine/';
 import { useCanvas } from '@/features/editor/hooks/use-canvas';
 import { cn } from '@/lib/utils';
 import { InlineTextEditor } from '../../../inline-text-editor';
@@ -21,13 +22,23 @@ export function HeadingBlock({
 		},
 		disabled: !isCanvas,
 	});
-	const { editingBlockId, updateBlock, stopEditing, startEditing } =
-		useCanvas();
+	const {
+		editingBlockId,
+		updateBlock,
+		stopEditing,
+		startEditing,
+		previewMode,
+		previewData,
+	} = useCanvas();
 
 	const { className: interactionClassName, ...dragProps } =
 		interactionProps || {};
 
 	const isEditing = isCanvas && editingBlockId === block.id;
+	const displayContent =
+		!isEditing && previewMode
+			? replaceVariables(block.props.content as string, previewData)
+			: (block.props.content as string);
 
 	const handleDoubleClick = (e: React.MouseEvent) => {
 		if (isCanvas) {
@@ -74,7 +85,10 @@ export function HeadingBlock({
 					/>
 				</EmailHeading>
 			) : (
-				<EmailHeading block={block} />
+				<EmailHeading
+					block={block}
+					canvasContent={displayContent}
+				/>
 			)}
 		</div>
 	);
