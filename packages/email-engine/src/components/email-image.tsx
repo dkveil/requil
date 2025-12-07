@@ -1,4 +1,4 @@
-import { Img } from '@react-email/components';
+import { Img, Section } from '@react-email/components';
 import type { BlockIR } from '@requil/types';
 import React from 'react';
 import { generateAllStyles } from '../attributes';
@@ -34,19 +34,20 @@ export function EmailImage({
 	}
 
 	return (
-		<Img
-			src={src}
-			alt={alt}
-			width={width}
-			height={height}
-			className={className}
-			style={{
-				display: 'block', // Default for emails to avoid gaps
-				maxWidth: '100%',
-				...generatedStyles,
-				...style,
-			}}
-			{...rest}
-		/>
+		<Section style={{ width: '100%' }}>
+			<Img
+				src={src}
+				alt={alt}
+				width={width}
+				height={height}
+				className={className}
+				style={{
+					display: 'block',
+					...generatedStyles,
+					...style,
+				}}
+				{...rest}
+			/>
+		</Section>
 	);
 }

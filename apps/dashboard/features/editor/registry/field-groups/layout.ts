@@ -61,28 +61,20 @@ export const marginFields: Record<string, FieldConfig> = {
 	},
 };
 
-export const layoutGroup = createFieldGroup({
-	id: 'layout',
-	label: 'Layout',
-	fields: {
-		verticalAlign: {
-			schema: {
-				type: 'string',
-				enum: ['top', 'middle', 'bottom'],
-				default: 'top',
-			},
-			field: {
-				key: 'verticalAlign',
-				label: 'Vertical Align',
-				type: 'iconSelect',
-				options: [
-					{ label: 'Top', value: 'top', icon: 'AlignStartVertical' },
-					{ label: 'Middle', value: 'middle', icon: 'AlignCenterVertical' },
-					{ label: 'Bottom', value: 'bottom', icon: 'AlignEndVertical' },
-				],
-			},
-		},
-		gap: {
+export const getLayoutGroup = (
+	options: {
+		verticalAlign?: boolean;
+		horizontalAlign?: boolean;
+		gap?: boolean;
+	} = {}
+) => {
+	const fields: Record<string, FieldConfig> = {
+		...paddingFields,
+		...marginFields,
+	};
+
+	if (options.gap) {
+		fields.gap = {
 			schema: {
 				type: 'number',
 				minimum: 0,
@@ -97,14 +89,56 @@ export const layoutGroup = createFieldGroup({
 				max: 100,
 				step: 1,
 			},
-		},
-		...paddingFields,
-		...marginFields,
-	},
-});
+		};
+	}
 
-export const { schema: layoutSchema, defaults: layoutDefaults } = layoutGroup;
-export const {
-	inspectorGroup: layoutInspectorGroup,
-	inspectorFields: layoutInspectorFields,
-} = layoutGroup;
+	if (options.verticalAlign) {
+		fields.verticalAlign = {
+			schema: {
+				type: 'string',
+				enum: ['top', 'middle', 'bottom'],
+				default: 'top',
+			},
+			field: {
+				key: 'verticalAlign',
+				label: 'Vertical Align',
+				type: 'iconSelect',
+				options: [
+					{ label: 'Top', value: 'top', icon: 'AlignStartVertical' },
+					{
+						label: 'Middle',
+						value: 'middle',
+						icon: 'AlignCenterVertical',
+					},
+					{ label: 'Bottom', value: 'bottom', icon: 'AlignEndVertical' },
+				],
+			},
+		};
+	}
+
+	if (options.horizontalAlign) {
+		fields.align = {
+			schema: {
+				type: 'string',
+				enum: ['left', 'center', 'right'],
+				default: 'center',
+			},
+			field: {
+				key: 'align',
+				label: 'Horizontal Align',
+				type: 'iconSelect',
+				options: [
+					{ label: 'Left', value: 'left', icon: 'AlignLeft' },
+					{ label: 'Center', value: 'center', icon: 'AlignCenter' },
+					{ label: 'Right', value: 'right', icon: 'AlignRight' },
+				],
+			},
+		};
+	}
+
+	return createFieldGroup({
+		id: 'layout',
+		label: 'Layout',
+		fields,
+	});
+};

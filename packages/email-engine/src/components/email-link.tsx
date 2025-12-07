@@ -1,4 +1,4 @@
-import { Link } from '@react-email/components';
+import { Link, Section } from '@react-email/components';
 import type { BlockIR } from '@requil/types';
 import React from 'react';
 import { generateAllStyles } from '../attributes';
@@ -35,18 +35,20 @@ export function EmailLink({
 	const rawTarget = (block.props.target as string) || '_blank';
 
 	return (
-		<Link
-			href={href}
-			target={rawTarget}
-			className={className}
-			style={{
-				textDecoration: 'underline',
-				...generatedStyles,
-				...style,
-			}}
-			{...rest}
-		>
-			{children || content}
-		</Link>
+		<Section style={{ width: '100%' }}>
+			<Link
+				href={href}
+				target={rawTarget}
+				className={className}
+				style={{
+					textDecoration: 'underline',
+					...generatedStyles,
+					...style,
+				}}
+				{...rest}
+			>
+				{children || content}
+			</Link>
+		</Section>
 	);
 }

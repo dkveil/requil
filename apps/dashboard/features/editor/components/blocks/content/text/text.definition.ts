@@ -1,10 +1,12 @@
 import { ComponentDefinition } from '@requil/types';
 import {
-	layoutGroup,
+	getLayoutGroup,
 	stylesGroup,
 	typographyGroup,
 } from '@/features/editor/registry/field-groups';
 import { createFieldGroup } from '@/features/editor/registry/field-groups/config';
+
+const layoutGroup = getLayoutGroup();
 
 export const textGroup = createFieldGroup({
 	id: 'text',

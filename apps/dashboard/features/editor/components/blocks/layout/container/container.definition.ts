@@ -1,9 +1,11 @@
 import { ComponentDefinition } from '@requil/types/editor';
 import {
-	layoutGroup,
+	getLayoutGroup,
 	sizeGroup,
 	stylesGroup,
 } from '@/features/editor/registry/field-groups';
+
+const layoutGroup = getLayoutGroup({ verticalAlign: true });
 
 export const ContainerDefinition: ComponentDefinition = {
 	type: 'Container',

@@ -109,6 +109,11 @@ export function generateLayoutStyles(
 		styles.verticalAlign = verticalAlign;
 	}
 
+	const horizontalAlign = props.align as string;
+	if (horizontalAlign) {
+		styles.textAlign = horizontalAlign;
+	}
+
 	const paddingValue = convertPadding(props.padding);
 	if (paddingValue) {
 		styles.padding = paddingValue;

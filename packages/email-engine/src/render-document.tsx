@@ -4,6 +4,7 @@ import {
 	EmailContainer,
 	EmailDivider,
 	EmailHeading,
+	EmailImage,
 	EmailLink,
 	EmailRoot,
 	EmailSection,
@@ -44,6 +45,13 @@ function renderBlock(block: BlockIR, context: RenderContext): React.ReactNode {
 		case 'Link':
 			return (
 				<EmailLink
+					block={block}
+					variables={context.variables}
+				/>
+			);
+		case 'Image':
+			return (
+				<EmailImage
 					block={block}
 					variables={context.variables}
 				/>

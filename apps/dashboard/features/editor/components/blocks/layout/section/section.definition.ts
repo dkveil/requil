@@ -1,9 +1,11 @@
 import { ComponentDefinition } from '@requil/types/editor';
 import {
-	layoutGroup,
+	getLayoutGroup,
 	sizeGroup,
 	stylesGroup,
 } from '@/features/editor/registry/field-groups';
+
+const layoutGroup = getLayoutGroup({ verticalAlign: true });
 
 export const SectionDefinition: ComponentDefinition = {
 	type: 'Section',
@@ -12,7 +14,7 @@ export const SectionDefinition: ComponentDefinition = {
 	description: 'Section for grouping content',
 	icon: 'Columns2',
 
-	allowedChildren: ['Section', 'Divider', 'Heading', 'Text', 'Link'],
+	allowedChildren: ['Section', 'Divider', 'Heading', 'Text', 'Link', 'Image'],
 	allowedParents: ['Root', 'Container', 'Section'],
 
 	propsSchema: {

@@ -1,9 +1,12 @@
 import { ComponentDefinition } from '@requil/types';
 import {
-	layoutGroup,
+	getLayoutGroup,
+	sizeGroup,
 	stylesGroup,
 } from '@/features/editor/registry/field-groups';
 import { createFieldGroup } from '@/features/editor/registry/field-groups/config';
+
+const layoutGroup = getLayoutGroup();
 
 export const imageGroup = createFieldGroup({
 	id: 'image',
@@ -33,30 +36,6 @@ export const imageGroup = createFieldGroup({
 				placeholder: 'Image description',
 			},
 		},
-		width: {
-			schema: {
-				type: 'string',
-				default: '',
-			},
-			field: {
-				key: 'width',
-				label: 'Width',
-				type: 'text',
-				placeholder: '100% or 600px',
-			},
-		},
-		height: {
-			schema: {
-				type: 'string',
-				default: '',
-			},
-			field: {
-				key: 'height',
-				label: 'Height',
-				type: 'text',
-				placeholder: 'auto or 300px',
-			},
-		},
 	},
 });
 
@@ -75,6 +54,7 @@ export const ImageDefinition: ComponentDefinition = {
 		properties: {
 			...imageGroup.schema,
 			...layoutGroup.schema,
+			...sizeGroup.schema,
 			...stylesGroup.schema,
 		},
 	},
@@ -82,20 +62,29 @@ export const ImageDefinition: ComponentDefinition = {
 	defaultProps: {
 		...imageGroup.defaults,
 		...layoutGroup.defaults,
+		...sizeGroup.defaults,
 		...stylesGroup.defaults,
 		width: '100%',
 		height: 'auto',
+		margin: {
+			top: 0,
+			right: 'auto',
+			bottom: 0,
+			left: 'auto',
+		},
 	},
 
 	inspectorConfig: {
 		groups: [
 			imageGroup.inspectorGroup,
 			layoutGroup.inspectorGroup,
+			sizeGroup.inspectorGroup,
 			stylesGroup.inspectorGroup,
 		],
 		fields: [
 			...imageGroup.inspectorFields,
 			...layoutGroup.inspectorFields,
+			...sizeGroup.inspectorFields,
 			...stylesGroup.inspectorFields,
 		],
 	},

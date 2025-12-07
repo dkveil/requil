@@ -15,12 +15,14 @@ interface AssetsPanelProps {
 	workspaceId: string;
 	onSelectAsset?: (asset: Asset) => void;
 	filterType?: AssetType;
+	autoSelectOnUpload?: boolean;
 }
 
 export function AssetsPanel({
 	workspaceId,
 	onSelectAsset,
 	filterType,
+	autoSelectOnUpload = false,
 }: AssetsPanelProps) {
 	const [assets, setAssets] = useState<Asset[]>([]);
 	const [loading, setLoading] = useState(false);
@@ -63,6 +65,10 @@ export function AssetsPanel({
 				const uploadedAsset = await uploadAsset(workspaceId, file, type);
 				setAssets((prev) => [uploadedAsset, ...prev]);
 				toast.success('Asset uploaded successfully!');
+
+				if (autoSelectOnUpload && onSelectAsset) {
+					onSelectAsset(uploadedAsset);
+				}
 			} catch (error: any) {
 				const message = error?.message || 'Failed to upload asset';
 				toast.error(message);
@@ -70,7 +76,7 @@ export function AssetsPanel({
 				setUploading(false);
 			}
 		},
-		[workspaceId, filterType]
+		[workspaceId, filterType, autoSelectOnUpload, onSelectAsset]
 	);
 
 	const handleDelete = async (assetId: string) => {
@@ -89,6 +95,7 @@ export function AssetsPanel({
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
 		onDrop,
+		useFsAccessApi: false,
 		accept:
 			filterType === 'image'
 				? {
