@@ -40,6 +40,8 @@ export function AssetSelectionDialog({
 			<DialogContent
 				className='max-w-4xl h-[80vh] flex flex-col p-0 gap-0'
 				onInteractOutside={(e) => e.preventDefault()}
+				onPointerDownOutside={(e) => e.preventDefault()}
+				onFocusOutside={(e) => e.preventDefault()}
 			>
 				<DialogHeader className='p-6 pb-2'>
 					<DialogTitle>{t('selectImage')}</DialogTitle>
