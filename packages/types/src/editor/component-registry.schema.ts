@@ -124,9 +124,6 @@ export const ComponentDefinitionSchema = z.object({
 	canHaveText: z.boolean().optional(),
 	isVoid: z.boolean().optional(),
 	isHidden: z.boolean().optional(),
-
-	mjmlTag: z.string().optional(),
-	mjmlAttributes: z.record(z.string(), z.unknown()).optional(),
 });
 
 export type ComponentDefinition = z.infer<typeof ComponentDefinitionSchema>;

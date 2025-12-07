@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DocumentSchema } from '../editor/block-ir.schema';
 
 const STABLE_ID_REGEX = /^[a-z0-9-]+$/;
 
@@ -10,9 +11,8 @@ export const createTemplateSchema = z.object({
 		.max(100)
 		.regex(STABLE_ID_REGEX, 'Invalid stable ID'),
 	name: z.string().min(1, 'Name is required').max(255),
-	decription: z.string().max(1000).optional(),
-	builderStructure: z.record(z.string(), z.any()).optional(),
-	mjml: z.string().min(1, 'MJML is required').optional(),
+	description: z.string().max(1000).optional(),
+	document: DocumentSchema.optional(),
 	variablesSchema: z.record(z.string(), z.any()).optional(),
 	subjectLines: z
 		.array(z.string())

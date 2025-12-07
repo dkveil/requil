@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DocumentSchema } from '../editor/block-ir.schema';
 
 export const getTemplateQuerySchema = z.object({
 	id: z.uuid(),
@@ -10,8 +11,7 @@ export const templateResponseSchema = z.object({
 	stableId: z.string(),
 	name: z.string(),
 	description: z.string().nullable(),
-	builderStructure: z.record(z.string(), z.any()).nullable(),
-	mjml: z.string().nullable(),
+	document: DocumentSchema.nullable(),
 	variablesSchema: z.record(z.string(), z.any()).nullable(),
 	subjectLines: z.array(z.string()).nullable(),
 	preheader: z.string().nullable(),

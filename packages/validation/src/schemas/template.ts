@@ -13,7 +13,7 @@ const jsonSchemaSchema = z.object({
  *   "stableId": "welcome-email",
  *   "name": "Welcome Email",
  *   "description": "Sent to new users after signup",
- *   "mjml": "<mjml>...</mjml>",
+ *   "document": { ... },
  *   "variablesSchema": {
  *     "type": "object",
  *     "properties": {
@@ -34,7 +34,7 @@ export const createTemplateSchema = z.object({
 		),
 	name: z.string().min(1, 'Name is required').max(255),
 	description: z.string().max(1000).optional(),
-	mjml: z.string().min(1, 'MJML content is required'),
+	document: z.record(z.string(), z.unknown()).optional(),
 	variablesSchema: jsonSchemaSchema.optional(),
 	subjectLines: z
 		.array(z.string().min(1).max(998))
@@ -48,7 +48,7 @@ export const createTemplateSchema = z.object({
  * @example
  * {
  *   "name": "Welcome Email - Updated",
- *   "mjml": "<mjml>...</mjml>"
+ *   "document": { ... }
  * }
  */
 export const updateTemplateSchema = createTemplateSchema
@@ -61,7 +61,7 @@ export const updateTemplateSchema = createTemplateSchema
 /**
  * @example
  * {
- *   "mjml": "<mjml>...</mjml>",
+ *   "document": { ... },
  *   "variables": { "firstName": "John" },
  *   "variablesSchema": {
  *     "type": "object",
@@ -73,7 +73,7 @@ export const updateTemplateSchema = createTemplateSchema
  * }
  */
 export const validateTemplateSchema = z.object({
-	mjml: z.string().min(1, 'MJML content is required'),
+	document: z.record(z.string(), z.unknown()).optional(),
 	variables: z.record(z.string(), z.unknown()).optional(),
 	variablesSchema: jsonSchemaSchema.optional(),
 	mode: z.enum(['strict', 'permissive']).optional().default('strict'),
@@ -98,7 +98,7 @@ export const validateTemplateResponseSchema = z.object({
 	valid: z.boolean(),
 	errors: z.array(
 		z.object({
-			type: z.enum(['mjml', 'variables', 'guardrails']),
+			type: z.enum(['document', 'variables', 'guardrails']),
 			message: z.string(),
 			field: z.string().optional(),
 			line: z.number().optional(),

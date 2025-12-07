@@ -51,8 +51,8 @@ export default function updateTemplateHandler({
 
 		let html: string | undefined;
 
-		if (updateData.builderStructure) {
-			const document = updateData.builderStructure as unknown as Document;
+		if (updateData.document) {
+			const document = updateData.document as unknown as Document;
 			const htmlResult = await renderDocumentToHtml(document);
 			if (htmlResult.errors.length > 0) {
 				logger.warn(

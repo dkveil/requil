@@ -1,6 +1,6 @@
 'use client';
 
-import type { UpdateTemplateInput } from '@requil/types/templates';
+import type { Document, UpdateTemplateInput } from '@requil/types';
 import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import {
 	Code,
@@ -70,7 +70,7 @@ export default function EditorHeader({
 		setIsSaving(true);
 		try {
 			const updateData: UpdateTemplateInput = {
-				builderStructure: document as unknown as Record<string, unknown>,
+				document: document as unknown as Document,
 			};
 
 			await templatesApi.update(templateId, updateData);

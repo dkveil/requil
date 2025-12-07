@@ -88,7 +88,7 @@ export default function templateRepository({
 		data: Partial<{
 			name: string;
 			description: string | null;
-			builderStructure: Record<string, unknown> | null;
+			document: Record<string, unknown> | null;
 			html: string | null;
 			variablesSchema: Record<string, unknown> | null;
 			subjectLines: string[] | null;

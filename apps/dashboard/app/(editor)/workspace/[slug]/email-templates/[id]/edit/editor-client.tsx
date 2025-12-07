@@ -44,9 +44,8 @@ export function EditorClient({ workspaceSlug, templateId }: Props) {
 		if (currentTemplate && templateLoaded) {
 			setProjectName(currentTemplate.name || 'Untitled Project');
 
-			if (currentTemplate.builderStructure) {
-				const document =
-					currentTemplate.builderStructure as unknown as Document;
+			if (currentTemplate.document) {
+				const document = currentTemplate.document as unknown as Document;
 				setDocument(document);
 			}
 		}

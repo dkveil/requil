@@ -1,4 +1,5 @@
 import { Template } from '@requil/db';
+import type { Document } from '@requil/types';
 import { TemplateResponse } from '@requil/types';
 import { TemplateValidationError } from './template.error';
 import { CreateTemplateProps, TemplateProps, UserId } from './templates.types';
@@ -18,8 +19,7 @@ export class TemplateEntity {
 			stableId: props.stableId.toLowerCase().trim(),
 			name: props.name,
 			description: props.description ?? null,
-			builderStructure: props.builderStructure ?? null,
-			mjml: props.mjml ?? null,
+			document: (props.document as Document) ?? null,
 			variablesSchema: props.variablesSchema ?? null,
 			subjectLines: props.subjectLines ?? null,
 			preheader: props.preheader ?? null,
@@ -85,15 +85,9 @@ export class TemplateEntity {
 		this.validate();
 	}
 
-	updateContent(data: {
-		builderStructure?: Record<string, any>;
-		mjml?: string;
-	}): void {
-		if (data.builderStructure !== undefined) {
-			this.props.builderStructure = data.builderStructure;
-		}
-		if (data.mjml !== undefined) {
-			this.props.mjml = data.mjml;
+	updateContent(data: { document?: Document }): void {
+		if (data.document !== undefined) {
+			this.props.document = data.document as unknown as any;
 		}
 		this.props.updatedAt = new Date().toISOString();
 	}
@@ -118,12 +112,8 @@ export class TemplateEntity {
 		return this.props.description;
 	}
 
-	get builderStructure(): Record<string, any> | null {
-		return this.props.builderStructure ?? null;
-	}
-
-	get mjml(): string | null {
-		return this.props.mjml;
+	get document(): Document | null {
+		return (this.props.document as Document) ?? null;
 	}
 
 	get createdBy(): string {
@@ -149,8 +139,7 @@ export class TemplateEntity {
 			stableId: this.props.stableId,
 			name: this.props.name,
 			description: this.props.description,
-			builderStructure: this.props.builderStructure ?? null,
-			mjml: this.props.mjml,
+			document: (this.props.document as Document) ?? null,
 			variablesSchema: this.props.variablesSchema ?? null,
 			subjectLines: this.props.subjectLines,
 			preheader: this.props.preheader,

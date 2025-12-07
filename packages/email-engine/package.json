@@ -29,13 +29,11 @@
 		"@requil/validation": "workspace:*",
 		"cheerio": "^1.0.0",
 		"html-to-text": "^9.0.5",
-		"liquidjs": "^10.14.0",
-		"mjml": "^4.15.3"
+		"liquidjs": "^10.14.0"
 	},
 	"devDependencies": {
 		"@requil/config": "workspace:*",
 		"@types/html-to-text": "^9.0.4",
-		"@types/mjml": "^4.7.4",
 		"@types/node": "^24.9.1",
 		"@vitest/coverage-v8": "^3.0.0",
 		"resolve-tspaths": "^0.8.23",
