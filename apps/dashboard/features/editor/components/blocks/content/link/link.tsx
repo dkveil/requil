@@ -1,5 +1,5 @@
 import { useDroppable } from '@dnd-kit/core';
-import { EmailLink } from '@requil/email-engine';
+import { EmailLink, EmailText } from '@requil/email-engine';
 import { replaceVariables } from '@requil/email-engine/';
 import { useCanvas } from '@/features/editor/hooks/use-canvas';
 import { cn } from '@/lib/utils';
@@ -43,14 +43,14 @@ export function LinkBlock({
 	const handleDoubleClick = (e: React.MouseEvent) => {
 		if (isCanvas) {
 			e.stopPropagation();
-			e.preventDefault(); // Zapobiegamy otwarciu linku podczas edycji
+			e.preventDefault();
 			startEditing(block.id);
 		}
 	};
 
 	const handleClick = (e: React.MouseEvent) => {
 		if (isCanvas) {
-			e.preventDefault(); // Zawsze zapobiegamy otwieraniu linku w edytorze
+			e.preventDefault();
 		}
 	};
 
@@ -85,14 +85,17 @@ export function LinkBlock({
 			onClick={handleClick}
 		>
 			{isEditing ? (
-				<EmailLink block={block}>
+				<EmailText
+					style={{ textDecoration: 'underline', margin: '0' }}
+					block={block}
+				>
 					<InlineTextEditor
 						value={block.props.content as string}
 						onChange={handleChange}
 						onComplete={handleComplete}
 						multiline={false}
 					/>
-				</EmailLink>
+				</EmailText>
 			) : (
 				<EmailLink
 					block={block}

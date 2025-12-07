@@ -40,7 +40,6 @@ export function EmailLink({
 			target={rawTarget}
 			className={className}
 			style={{
-				color: '#007bff',
 				textDecoration: 'underline',
 				...generatedStyles,
 				...style,

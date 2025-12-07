@@ -16,12 +16,12 @@ export async function uploadAsset(
 ): Promise<UploadAssetResponse> {
 	try {
 		const formData = new FormData();
-		formData.append('file', file);
 		formData.append('workspaceId', workspaceId);
 		formData.append('type', type);
 		if (alt) {
 			formData.append('alt', alt);
 		}
+		formData.append('file', file);
 
 		const url = API_ROUTES.ASSET.UPLOAD.replace(':workspaceId', workspaceId);
 

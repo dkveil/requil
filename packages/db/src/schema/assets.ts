@@ -93,6 +93,13 @@ export const assets = pgTable(
 			for: 'delete',
 			to: ['authenticated'],
 		}),
+		pgPolicy('assets_service_role_all', {
+			as: 'permissive',
+			for: 'all',
+			to: ['service_role'],
+			using: sql`true`,
+			withCheck: sql`true`,
+		}),
 	]
 );
 

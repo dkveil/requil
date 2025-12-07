@@ -59,6 +59,7 @@ export function AssetsPanel({
 			try {
 				setUploading(true);
 				const type = filterType || 'image';
+
 				const uploadedAsset = await uploadAsset(workspaceId, file, type);
 				setAssets((prev) => [uploadedAsset, ...prev]);
 				toast.success('Asset uploaded successfully!');

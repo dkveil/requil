@@ -17,7 +17,7 @@ export function EmailSection({
 }: EmailSectionProps) {
 	const generatedStyles = generateAllStyles(block.props);
 
-	const { minHeight, ...restStyles } = generatedStyles as {
+	const { minHeight, padding, ...restStyles } = generatedStyles as {
 		minHeight?: string | number;
 		[key: string]: string | number | undefined;
 	};
@@ -30,7 +30,15 @@ export function EmailSection({
 				...style,
 			}}
 		>
-			<div style={minHeight ? { minHeight } : undefined}>{children}</div>
+			<div
+				style={{
+					boxSizing: 'border-box',
+					padding,
+					...(minHeight ? { minHeight } : undefined),
+				}}
+			>
+				{children}
+			</div>
 		</Section>
 	);
 }
