@@ -3,7 +3,7 @@ import { EmailImage } from '@requil/email-engine';
 import { Asset } from '@requil/types';
 import { Image as ImageIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCanvas } from '@/features/editor/hooks/use-canvas';
 import { cn } from '@/lib/utils';
 import { AssetSelectionDialog } from '../../../asset-selection-dialog';
@@ -15,6 +15,7 @@ export function ImageBlock({
 	block,
 	isCanvas = false,
 	interactionProps,
+	selectedBlockId,
 }: ImageBlockProps) {
 	const t = useTranslations('editor.blocks.image');
 	const { setNodeRef, isOver } = useDroppable({
@@ -29,11 +30,20 @@ export function ImageBlock({
 
 	const { updateBlock, startEditing } = useCanvas();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const hasAutoOpened = useRef(false);
 
 	const { className: interactionClassName, ...dragProps } =
 		interactionProps || {};
 
 	const src = block.props.src as string;
+	const isSelected = selectedBlockId === block.id;
+
+	useEffect(() => {
+		if (isCanvas && isSelected && !src && !hasAutoOpened.current) {
+			setIsDialogOpen(true);
+			hasAutoOpened.current = true;
+		}
+	}, [isCanvas, isSelected, src]);
 
 	const handleAssetSelect = (asset: Asset) => {
 		updateBlock(block.id, {
