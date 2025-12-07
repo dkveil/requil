@@ -124,6 +124,7 @@ export function InlineTextEditor({
 		<input
 			ref={inputRef}
 			type='text'
+			size={localValue.length || 1}
 			{...commonProps}
 		/>
 	);

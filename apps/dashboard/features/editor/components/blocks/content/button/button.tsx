@@ -89,7 +89,7 @@ export function ButtonBlock({
 			>
 				{isEditing && (
 					<InlineTextEditor
-						value={block.props.content as string}
+						value={(block.props.content as string) || ''}
 						onChange={handleChange}
 						onComplete={handleComplete}
 						multiline={false}
