@@ -1,3 +1,4 @@
+export * from './email-button';
 export * from './email-container';
 export * from './email-divider';
 export * from './email-heading';

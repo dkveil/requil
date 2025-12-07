@@ -14,7 +14,15 @@ export const SectionDefinition: ComponentDefinition = {
 	description: 'Section for grouping content',
 	icon: 'Columns2',
 
-	allowedChildren: ['Section', 'Divider', 'Heading', 'Text', 'Link', 'Image'],
+	allowedChildren: [
+		'Section',
+		'Divider',
+		'Heading',
+		'Text',
+		'Link',
+		'Image',
+		'Button',
+	],
 	allowedParents: ['Root', 'Container', 'Section'],
 
 	propsSchema: {

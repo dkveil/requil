@@ -4,6 +4,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { BlockActions } from './block-actions';
 import {
+	ButtonBlock,
 	DividerBlock,
 	HeadingBlock,
 	ImageBlock,
@@ -210,7 +211,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 				return <LinkBlock {...commonBlockProps} />;
 			case 'Image':
 				return <ImageBlock {...commonBlockProps} />;
-
+			case 'Button':
+				return <ButtonBlock {...commonBlockProps} />;
 			default:
 				return (
 					<div

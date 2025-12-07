@@ -1,6 +1,7 @@
 import { Font, Head, Html, Preview, render } from '@react-email/components';
 import { BlockIR, Document } from '@requil/types';
 import {
+	EmailButton,
 	EmailContainer,
 	EmailDivider,
 	EmailHeading,
@@ -52,6 +53,13 @@ function renderBlock(block: BlockIR, context: RenderContext): React.ReactNode {
 		case 'Image':
 			return (
 				<EmailImage
+					block={block}
+					variables={context.variables}
+				/>
+			);
+		case 'Button':
+			return (
+				<EmailButton
 					block={block}
 					variables={context.variables}
 				/>
