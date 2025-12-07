@@ -6,6 +6,7 @@ import { BlockActions } from './block-actions';
 import {
 	DividerBlock,
 	HeadingBlock,
+	ImageBlock,
 	LinkBlock,
 	TextBlock,
 } from './blocks/content';
@@ -207,6 +208,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 				return <TextBlock {...commonBlockProps} />;
 			case 'Link':
 				return <LinkBlock {...commonBlockProps} />;
+			case 'Image':
+				return <ImageBlock {...commonBlockProps} />;
 
 			default:
 				return (

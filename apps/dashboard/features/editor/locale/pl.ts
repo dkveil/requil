@@ -132,5 +132,14 @@ export const editorPlLocales = {
 			moveDown: 'Przesuń w dół',
 			delete: 'Usuń',
 		},
+		assets: {
+			selectImage: 'Wybierz obraz',
+		},
+		blocks: {
+			image: {
+				selectImage: 'Wybierz obraz',
+				clickToBrowse: 'Kliknij, aby przeglądać zasoby lub wgrać plik',
+			},
+		},
 	},
 };

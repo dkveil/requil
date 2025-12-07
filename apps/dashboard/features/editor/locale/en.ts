@@ -126,6 +126,15 @@ export const editorEnLocales = {
 		layersPanel: {
 			noDocument: 'No document available',
 		},
+		assets: {
+			selectImage: 'Select Image',
+		},
+		blocks: {
+			image: {
+				selectImage: 'Select Image',
+				clickToBrowse: 'Click to browse assets or upload',
+			},
+		},
 		movedBlock: 'Block moved successfully',
 		blockActions: {
 			selectParent: 'Select parent',
