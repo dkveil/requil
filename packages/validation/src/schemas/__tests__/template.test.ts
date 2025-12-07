@@ -13,7 +13,7 @@ describe('template schemas', () => {
 			const data = {
 				stableId: 'welcome-email',
 				name: 'Welcome Email',
-				mjml: '<mjml><mj-body><mj-text>Hello</mj-text></mj-body></mjml>',
+				document: { root: { type: 'Root', id: '1', props: {} } },
 				subjectLines: ['Welcome to our platform!'],
 			};
 
@@ -25,7 +25,7 @@ describe('template schemas', () => {
 			const data = {
 				stableId: 'invalid_id',
 				name: 'Test',
-				mjml: '<mjml></mjml>',
+				document: {},
 				subjectLines: ['Subject'],
 			};
 
@@ -37,7 +37,7 @@ describe('template schemas', () => {
 			const data = {
 				stableId: 'welcome-email-2025',
 				name: 'Test',
-				mjml: '<mjml></mjml>',
+				document: {},
 				subjectLines: ['Subject'],
 			};
 
@@ -49,7 +49,7 @@ describe('template schemas', () => {
 			const data = {
 				stableId: 'welcome-email',
 				name: 'Welcome Email',
-				mjml: '<mjml></mjml>',
+				document: {},
 				variablesSchema: {
 					type: 'object',
 					properties: {
@@ -67,7 +67,7 @@ describe('template schemas', () => {
 			const data = {
 				stableId: 'test',
 				name: 'Test',
-				mjml: '<mjml></mjml>',
+				document: {},
 				subjectLines: [],
 			};
 
@@ -79,7 +79,7 @@ describe('template schemas', () => {
 			const data = {
 				stableId: 'test',
 				name: 'Test',
-				mjml: '<mjml></mjml>',
+				document: {},
 				subjectLines: Array(6).fill('Subject'),
 			};
 
@@ -91,7 +91,7 @@ describe('template schemas', () => {
 			const data = {
 				stableId: 'test',
 				name: 'Test',
-				mjml: '<mjml></mjml>',
+				document: {},
 				subjectLines: ['a'.repeat(1000)],
 			};
 
@@ -104,7 +104,7 @@ describe('template schemas', () => {
 				stableId: 'newsletter',
 				name: 'Monthly Newsletter',
 				description: 'Our monthly newsletter template',
-				mjml: '<mjml></mjml>',
+				document: {},
 				variablesSchema: {
 					type: 'object',
 					properties: {},
@@ -122,7 +122,7 @@ describe('template schemas', () => {
 			const data = {
 				stableId: 'test',
 				name: 'Test',
-				mjml: '<mjml></mjml>',
+				document: {},
 				subjectLines: ['Subject'],
 				tags: Array(11).fill('tag'),
 			};
@@ -160,9 +160,9 @@ describe('template schemas', () => {
 			expect(result.data).not.toHaveProperty('stableId');
 		});
 
-		it('should validate mjml update', () => {
+		it('should validate document update', () => {
 			const data = {
-				mjml: '<mjml><mj-body><mj-text>Updated</mj-text></mj-body></mjml>',
+				document: { root: {} },
 			};
 
 			const result = updateTemplateSchema.safeParse(data);
@@ -173,7 +173,7 @@ describe('template schemas', () => {
 	describe('validateTemplateSchema', () => {
 		it('should validate template validation request', () => {
 			const data = {
-				mjml: '<mjml><mj-body><mj-text>Hello {{name}}</mj-text></mj-body></mjml>',
+				document: {},
 				variables: { name: 'John' },
 			};
 
@@ -183,7 +183,7 @@ describe('template schemas', () => {
 
 		it('should apply default values', () => {
 			const data = {
-				mjml: '<mjml></mjml>',
+				document: {},
 			};
 
 			const result = validateTemplateSchema.parse(data);
@@ -193,7 +193,7 @@ describe('template schemas', () => {
 
 		it('should validate with variables schema', () => {
 			const data = {
-				mjml: '<mjml></mjml>',
+				document: {},
 				variablesSchema: {
 					type: 'object',
 					properties: {
@@ -209,7 +209,7 @@ describe('template schemas', () => {
 
 		it('should validate with permissive mode', () => {
 			const data = {
-				mjml: '<mjml></mjml>',
+				document: {},
 				mode: 'permissive',
 			};
 
@@ -219,7 +219,7 @@ describe('template schemas', () => {
 
 		it('should validate with guardrails disabled', () => {
 			const data = {
-				mjml: '<mjml></mjml>',
+				document: {},
 				checkGuardrails: false,
 			};
 
