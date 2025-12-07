@@ -23,6 +23,7 @@ export function VariablesPanel() {
 		setPreviewData,
 		addVariable,
 		removeVariable,
+		updateVariable,
 	} = useCanvasStore();
 
 	const [newVarName, setNewVarName] = useState('');
@@ -103,6 +104,7 @@ export function VariablesPanel() {
 										onPreviewChange={(val) =>
 											setPreviewData(variable.name, val)
 										}
+										onUpdate={(updates) => updateVariable(variable.id, updates)}
 										onRemove={() => removeVariable(variable.id)}
 									/>
 								))}

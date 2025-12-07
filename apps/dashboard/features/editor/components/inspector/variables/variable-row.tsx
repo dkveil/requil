@@ -13,6 +13,7 @@ interface VariableRowProps {
 	variable: Variable;
 	previewValue: string;
 	onPreviewChange: (value: string) => void;
+	onUpdate: (updates: Partial<Variable>) => void;
 	onRemove: () => void;
 }
 
@@ -20,6 +21,7 @@ export function VariableRow({
 	variable,
 	previewValue,
 	onPreviewChange,
+	onUpdate,
 	onRemove,
 }: VariableRowProps) {
 	const t = useTranslations('editor.settingsSidebar.variablesPanel');
@@ -85,6 +87,38 @@ export function VariableRow({
 
 			{isExpanded && (
 				<div className='px-3 pb-3 space-y-3 border-t border-accent/50 pt-3'>
+					<div className='space-y-1'>
+						<Label
+							htmlFor={`var-label-${variable.id}`}
+							className='text-xs text-muted-foreground'
+						>
+							Label
+						</Label>
+						<Input
+							id={`var-label-${variable.id}`}
+							value={variable.label || ''}
+							onChange={(e) => onUpdate({ label: e.target.value })}
+							placeholder='Label'
+							className='h-8 text-sm'
+						/>
+					</div>
+
+					<div className='space-y-1'>
+						<Label
+							htmlFor={`var-default-${variable.id}`}
+							className='text-xs text-muted-foreground'
+						>
+							Default Value
+						</Label>
+						<Input
+							id={`var-default-${variable.id}`}
+							value={variable.defaultValue || ''}
+							onChange={(e) => onUpdate({ defaultValue: e.target.value })}
+							placeholder='Default value'
+							className='h-8 text-sm'
+						/>
+					</div>
+
 					<div className='space-y-1'>
 						<Label
 							htmlFor={`var-${variable.id}`}
