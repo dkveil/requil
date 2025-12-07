@@ -1,0 +1,104 @@
+import { useDroppable } from '@dnd-kit/core';
+import { EmailLink } from '@requil/email-engine';
+import { replaceVariables } from '@requil/email-engine/';
+import { useCanvas } from '@/features/editor/hooks/use-canvas';
+import { cn } from '@/lib/utils';
+import { InlineTextEditor } from '../../../inline-text-editor';
+import { RenderChildrenProps } from '../../../render-children';
+
+export type LinkBlockProps = RenderChildrenProps;
+
+export function LinkBlock({
+	block,
+	isCanvas = false,
+	interactionProps,
+}: LinkBlockProps) {
+	const { setNodeRef, isOver } = useDroppable({
+		id: `block-${block.id}`,
+		data: {
+			type: 'block',
+			blockId: block.id,
+			accepts: ['sidebar'],
+		},
+		disabled: !isCanvas,
+	});
+	const {
+		editingBlockId,
+		updateBlock,
+		stopEditing,
+		startEditing,
+		previewMode,
+		previewData,
+	} = useCanvas();
+
+	const { className: interactionClassName, ...dragProps } =
+		interactionProps || {};
+
+	const isEditing = isCanvas && editingBlockId === block.id;
+	const displayContent =
+		!isEditing && previewMode
+			? replaceVariables(block.props.content as string, previewData)
+			: (block.props.content as string);
+
+	const handleDoubleClick = (e: React.MouseEvent) => {
+		if (isCanvas) {
+			e.stopPropagation();
+			e.preventDefault(); // Zapobiegamy otwarciu linku podczas edycji
+			startEditing(block.id);
+		}
+	};
+
+	const handleClick = (e: React.MouseEvent) => {
+		if (isCanvas) {
+			e.preventDefault(); // Zawsze zapobiegamy otwieraniu linku w edytorze
+		}
+	};
+
+	const handleChange = (newValue: string) => {
+		updateBlock(block.id, {
+			props: {
+				...block.props,
+				content: newValue,
+			},
+		});
+	};
+
+	const handleComplete = () => {
+		stopEditing();
+	};
+
+	return (
+		<div
+			ref={isCanvas ? setNodeRef : undefined}
+			{...(isEditing ? {} : dragProps)}
+			className={cn(
+				interactionClassName,
+				isOver && isCanvas && 'ring-2 ring-primary ring-inset',
+				'inline-block' // Linki są inline-block
+			)}
+			data-block-type='Link'
+			data-block-id={block.id}
+			style={{
+				position: isCanvas ? 'relative' : undefined,
+			}}
+			onDoubleClick={handleDoubleClick}
+			onClick={handleClick}
+		>
+			{isEditing ? (
+				<EmailLink block={block}>
+					<InlineTextEditor
+						value={block.props.content as string}
+						onChange={handleChange}
+						onComplete={handleComplete}
+						multiline={false}
+					/>
+				</EmailLink>
+			) : (
+				<EmailLink
+					block={block}
+					canvasContent={displayContent}
+				/>
+			)}
+		</div>
+	);
+}

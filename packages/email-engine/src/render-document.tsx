@@ -4,8 +4,10 @@ import {
 	EmailContainer,
 	EmailDivider,
 	EmailHeading,
+	EmailLink,
 	EmailRoot,
 	EmailSection,
+	EmailText,
 } from './components';
 import { toPlaintext } from './plaintext';
 
@@ -28,6 +30,20 @@ function renderBlock(block: BlockIR, context: RenderContext): React.ReactNode {
 		case 'Heading':
 			return (
 				<EmailHeading
+					block={block}
+					variables={context.variables}
+				/>
+			);
+		case 'Text':
+			return (
+				<EmailText
+					block={block}
+					variables={context.variables}
+				/>
+			);
+		case 'Link':
+			return (
+				<EmailLink
 					block={block}
 					variables={context.variables}
 				/>
