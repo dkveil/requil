@@ -1,6 +1,5 @@
 import { useDroppable } from '@dnd-kit/core';
-import { EmailHeading } from '@requil/email-engine';
-import { replaceVariables } from '@requil/email-engine/';
+import { EmailHeading, replaceVariables } from '@requil/email-engine';
 import { useCanvas } from '@/features/editor/hooks/use-canvas';
 import { cn } from '@/lib/utils';
 import { InlineTextEditor } from '../../../inline-text-editor';

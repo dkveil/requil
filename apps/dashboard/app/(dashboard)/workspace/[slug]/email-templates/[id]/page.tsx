@@ -1,14 +1,14 @@
 import { notFound, redirect } from 'next/navigation';
 
 type Props = {
-	params: {
+	params: Promise<{
 		slug: string;
 		id: string;
-	};
+	}>;
 };
 
 export default async function EmailTemplateDetailPage({ params }: Props) {
-	const { slug, id } = params;
+	const { slug, id } = await params;
 
 	if (!(id && slug)) {
 		notFound();
