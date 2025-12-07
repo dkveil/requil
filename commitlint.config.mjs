@@ -16,6 +16,7 @@ export default {
 				'ci', // CI/CD changes
 				'chore', // Other changes (tooling, configs)
 				'revert', // Revert previous commit
+				'i18n', // Internationalization
 			],
 		],
 		'scope-enum': [

@@ -119,6 +119,8 @@ export const editorPlLocales = {
 					'Używaj camelCase. Wstawiane jako <codeTag>{example}</codeTag>.',
 				dummyData: 'Wartość testowa',
 				dummyDataPlaceholder: 'Wpisz przykładową wartość...',
+				label: 'Etykieta',
+				defaultValue: 'Wartość domyślna',
 				copyToast: 'Skopiowano {{name}} do schowka',
 				copyTitle: 'Kopiuj tag zmiennej',
 				removeTitle: 'Usuń zmienną',

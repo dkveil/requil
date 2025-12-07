@@ -117,6 +117,8 @@ export const editorEnLocales = {
 				helperText: 'Use camelCase. Used as <codeTag>{example}</codeTag>.',
 				dummyData: 'Test Value',
 				dummyDataPlaceholder: 'Enter sample value...',
+				label: 'Label',
+				defaultValue: 'Default Value',
 				copyToast: 'Copied {{name}} to clipboard',
 				copyTitle: 'Copy variable tag',
 				removeTitle: 'Remove variable',
