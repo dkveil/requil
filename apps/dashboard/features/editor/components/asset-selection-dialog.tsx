@@ -1,7 +1,6 @@
 'use client';
 
 import { Asset } from '@requil/types';
-import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
 	Dialog,
@@ -24,10 +23,7 @@ export function AssetSelectionDialog({
 	onSelect,
 }: AssetSelectionDialogProps) {
 	const t = useTranslations('editor.assets');
-	const params = useParams();
 	const { currentWorkspace } = useWorkspace();
-
-	const workspaceId = (params?.slug as string) || currentWorkspace?.id;
 
 	const handleSelect = (asset: Asset) => {
 		onSelect(asset);
@@ -50,9 +46,9 @@ export function AssetSelectionDialog({
 					<DialogTitle>{t('selectImage')}</DialogTitle>
 				</DialogHeader>
 				<div className='flex-1 min-h-0'>
-					{workspaceId ? (
+					{currentWorkspace?.id ? (
 						<AssetsPanel
-							workspaceId={workspaceId}
+							workspaceId={currentWorkspace.id}
 							onSelectAsset={handleSelect}
 							filterType='image'
 						/>
