@@ -7,6 +7,8 @@ export const API_ROUTES = {
 		SESSION: '/auth/session',
 		OAUTH: '/auth/oauth',
 		OAUTH_CALLBACK: '/auth/oauth/callback',
+		FORGOT_PASSWORD: '/auth/forgot-password',
+		RESET_PASSWORD: '/auth/reset-password',
 	},
 	WORKSPACE: {
 		CREATE: '/workspace',

@@ -1,4 +1,5 @@
 import type {
+	ForgotPasswordResponse,
 	GetOAuthUrlResponse,
 	GetSessionResponse,
 	LoginResponse,
@@ -6,6 +7,7 @@ import type {
 	OAuthProvider,
 	RefreshTokenResponse,
 	RegisterResponse,
+	ResetPasswordResponse,
 } from '@requil/types/auth';
 import { API_ROUTES } from '@requil/utils/api-routes';
 import { fetchAPI } from '@/lib/api/client';
@@ -82,6 +84,28 @@ export const authApi = {
 			`${API_ROUTES.AUTH.OAUTH_CALLBACK}?code=${code}`,
 			{
 				method: 'GET',
+			}
+		);
+		return response.data;
+	},
+
+	async forgotPassword(email: string): Promise<ForgotPasswordResponse> {
+		const response = await fetchAPI<ForgotPasswordResponse>(
+			API_ROUTES.AUTH.FORGOT_PASSWORD,
+			{
+				method: 'POST',
+				body: JSON.stringify({ email }),
+			}
+		);
+		return response.data;
+	},
+
+	async resetPassword(password: string): Promise<ResetPasswordResponse> {
+		const response = await fetchAPI<ResetPasswordResponse>(
+			API_ROUTES.AUTH.RESET_PASSWORD,
+			{
+				method: 'POST',
+				body: JSON.stringify({ password }),
 			}
 		);
 		return response.data;

@@ -3,14 +3,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { getErrorMessage } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { useAuthStore } from '../stores/auth-store';
 
 const resetPasswordSchema = z
 	.object({
@@ -34,7 +36,9 @@ export function ResetPasswordForm({
 }: React.ComponentProps<'form'>) {
 	const tAuth = useTranslations('auth.resetPasswordPage');
 	const tCommon = useTranslations('common');
+	const locale = useLocale();
 	const router = useRouter();
+	const resetPassword = useAuthStore((state) => state.resetPassword);
 
 	const form = useForm<ResetPasswordFormValues>({
 		resolver: zodResolver(resetPasswordSchema),
@@ -50,15 +54,20 @@ export function ResetPasswordForm({
 		formState: { isSubmitting },
 	} = form;
 
-	const onSubmit = async (_values: ResetPasswordFormValues) => {
-		// Mock backend call
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+	const onSubmit = async (values: ResetPasswordFormValues) => {
+		try {
+			await resetPassword(values.password);
 
-		toast.success(tAuth('successTitle'), {
-			description: tAuth('success'),
-		});
+			toast.success(tAuth('successTitle'), {
+				description: tAuth('success'),
+			});
 
-		router.push(DASHBOARD_ROUTES.AUTH.LOGIN);
+			router.push(DASHBOARD_ROUTES.AUTH.LOGIN);
+		} catch (err) {
+			toast.error(tAuth('failed'), {
+				description: getErrorMessage(err, locale),
+			});
+		}
 	};
 
 	const onError = (errors: typeof form.formState.errors) => {

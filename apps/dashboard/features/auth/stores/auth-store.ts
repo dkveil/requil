@@ -19,6 +19,8 @@ type AuthActions = {
 	setUser: (user: User | null) => void;
 	signInWithOAuth: (provider: OAuthProvider) => Promise<string>;
 	handleOAuthCallback: (code: string) => Promise<void>;
+	forgotPassword: (email: string) => Promise<void>;
+	resetPassword: (password: string) => Promise<void>;
 };
 
 export const useAuthStore = create<AuthState & AuthActions>()(
@@ -78,6 +80,14 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 			handleOAuthCallback: async (code: string): Promise<void> => {
 				const response = await authApi.handleOAuthCallback(code);
 				set({ user: response.user }, false, 'oauthCallback');
+			},
+
+			forgotPassword: async (email: string) => {
+				await authApi.forgotPassword(email);
+			},
+
+			resetPassword: async (password: string) => {
+				await authApi.resetPassword(password);
 			},
 		}),
 		{ name: 'AuthStore' }

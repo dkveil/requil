@@ -3,14 +3,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { getErrorMessage } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { useAuthStore } from '../stores/auth-store';
 
 const forgotPasswordSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' }),
@@ -24,6 +26,8 @@ export function ForgotPasswordForm({
 }: React.ComponentProps<'form'>) {
 	const tAuth = useTranslations('auth.forgotPasswordPage');
 	const tCommon = useTranslations('common');
+	const locale = useLocale();
+	const forgotPassword = useAuthStore((state) => state.forgotPassword);
 
 	const form = useForm<ForgotPasswordFormValues>({
 		resolver: zodResolver(forgotPasswordSchema),
@@ -38,13 +42,18 @@ export function ForgotPasswordForm({
 		formState: { isSubmitting },
 	} = form;
 
-	const onSubmit = async (_values: ForgotPasswordFormValues) => {
-		// Mock backend call
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+	const onSubmit = async (values: ForgotPasswordFormValues) => {
+		try {
+			await forgotPassword(values.email);
 
-		toast.success(tAuth('successTitle'), {
-			description: tAuth('success'),
-		});
+			toast.success(tAuth('successTitle'), {
+				description: tAuth('success'),
+			});
+		} catch (err) {
+			toast.error(tAuth('failed'), {
+				description: getErrorMessage(err, locale),
+			});
+		}
 	};
 
 	const onError = (errors: typeof form.formState.errors) => {
