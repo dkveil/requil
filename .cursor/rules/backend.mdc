@@ -7,42 +7,161 @@ globs:
   - "packages/validation/**"
   - "packages/webhooks/**"
   - "packages/ratelimit/**"
-  - "packages/utils/**"
-  - "services/**"
 ---
 
 # Backend Guidelines
 
-## Node.js with Fastify
+## Architecture
 
-### Core Principles
+### CQRS Pattern
 
-- Use the schema validation feature with JSON Schema to validate request and response payloads for {{api_endpoints}}
-- Implement the plugin system for modularizing application components and enabling code reuse across projects
-- Use fastify-swagger for automatic API documentation generation based on your schema definitions
-- Leverage the hooks system (onRequest, preHandler, onSend) for precise control over the request lifecycle
-- Use the reply.send() method consistently and avoid mixing with return statements to prevent hard-to-debug issues
-- Implement proper error handling with custom error classes and the setErrorHandler hook for {{error_types}}
+- **CommandBus** - operacje zapisu (create, update, delete)
+- **QueryBus** - operacje odczytu (get, find, list)
+- **EventBus** - zdarzenia domenowe (post-MVP)
+- Każdy handler: `handler` function + `init` method rejestrujący w busie
+- Handlers automatycznie ładowane przez DI container
 
-### Email Engine Specifics
+### Dependency Injection (Awilix)
 
-- Use MJML for responsive email template generation with proper validation
-- Implement Liquid templating for dynamic content insertion with proper escaping
-- Enforce HTML size limits and WCAG contrast checks in the validation pipeline
-- Use Cheerio for HTML analysis and link validation (HTTPS enforcement, rel="noopener")
-- Cache compiled MJML templates in Redis for performance optimization
+- Auto-loading: `*.repository.ts`, `*.handler.ts`, `*.service.ts`, `*.domain.ts`
+- Naming: `kebab-case` → `camelCase` (np. `template.repository.ts` → `templateRepository`)
+- Lifetime: SINGLETON dla wszystkich modułów
+- AsyncInit dla handlerów z metodą `init()`
 
-### Queue & Workers
+### Module Structure
 
-- Use Upstash QStash for reliable job scheduling with automatic retries and backoff
-- Implement idempotency locks using Redis to prevent duplicate processing
-- Design worker endpoints to be called via HTTP (QStash → Fastify monolith)
-- Store job results in Redis with appropriate TTL for client polling
-- Use HMAC-based webhook verification with timestamp and nonce for replay protection
+```
+modules/{module}/
+  commands/{cmd}/{cmd}.handler.ts + {cmd}.route.ts
+  queries/{query}/{query}.handler.ts + {query}.route.ts
+  database/{entity}.repository.ts + {entity}.repository.port.ts
+  domain/{entity}.domain.ts + {entity}.error.ts
+```
 
-### Rate Limiting & Caching
+## Fastify
 
-- Implement token bucket rate limiting using Upstash Redis
-- Cache brand kits, validation schemas, and compiled templates in Redis
-- Use Redis counters for usage tracking and quota enforcement
-- Set appropriate TTLs based on data volatility (templates: 1h, brand kits: 24h)
+### Principles
+
+- JSON Schema validation dla wszystkich endpoints
+- Plugin system: auth, cors, swagger, cqrs, di, error-handler, supabase
+- Custom error classes z errorCode, message, context, traceId
+- Never expose internal errors - log internally, sanitize response
+
+### Error Handling
+
+Error classes: ValidationError (400), UnauthorizedError (401), ForbiddenError (403), NotFoundError (404), ConflictError (409), TransportError (502/503)
+
+## Database
+
+### Supabase & Drizzle ORM
+
+- Type-safe queries z Drizzle
+- Migrations w `packages/db`
+- Row-Level Security (RLS) dla workspace isolation
+- Session variable `app.workspace_id` w request context
+- Helper: `is_member(workspace_id, min_role)` sprawdza access
+
+### Repository Pattern
+
+- RepositoryBase dla generic CRUD
+- Entity Mappers: domain entities ↔ persistence models
+- Custom methods dla domain-specific queries
+- Wszystkie queries muszą include workspace_id
+
+## Email Engine
+
+### React Email Rendering
+
+- **Storage**: JSON Document (BlockIR) w database
+- **Process**: Document → React Email components → HTML
+- **Blocks**: Container, Section, Divider, Heading, Text, Link, Button, Image
+- **Variables**: `document.variables[]` z name/defaultValue, interpolacja w props
+- **Output**: `renderDocumentToHtml()` → `{ html, plaintext, warnings, errors }`
+
+### Guardrails
+
+1. HTML Size: 150KB hard limit, 100KB warning
+2. Links: HTTPS enforcement, rel="noopener" auto-add
+3. Accessibility: Alt text required dla images
+4. WCAG: 4.5:1 contrast dla text, 3:1 dla large text
+5. Validation: on publish (blocking), preview (warnings), send (configurable)
+
+## Queue & Workers
+
+### Upstash QStash
+
+- HTTP workers (QStash → Fastify endpoints)
+- Retry: exponential backoff 1s, 2s, 4s, 8s, 15s (5 attempts)
+- HMAC signature verification
+
+### Idempotency
+
+- Header: `Idempotency-Key` required dla `POST /v1/send`
+- Lock: `lock:send:{key}` w Redis (5m TTL)
+- Hash: SHA-256 body comparison
+- Cache: `result:send:{key}` (24h TTL)
+
+### Batch Processing
+
+- Split >500 recipients into batches
+- Progress tracking: `job:{jobId}:progress` w Redis
+- Per-recipient status w send_recipients table
+
+## Caching & Rate Limiting
+
+### Redis Cache Keys
+
+- Snapshot HTML: `snapshot:{id}:html` (30d, immutable)
+- Draft preview: `template:{id}:draft:preview:{hash}` (5m)
+- Brand kit: `workspace:{id}:brandkit` (1h)
+- Validators: `snapshot:{id}:schema` (7d)
+
+### Rate Limiting
+
+Token bucket per workspace via `@upstash/ratelimit`:
+- Starter: 10 req/s, 1000 req/min
+- Pro: 50 req/s, 5000 req/min
+- Response: 429 z `Retry-After` header
+
+## Security
+
+### Authentication
+
+- API Keys: Argon2id hash, prefix w plaintext, scopes per key
+- Sessions: Supabase Auth JWT w httpOnly cookies
+- Scope validation przed command execution
+
+### Authorization
+
+- RLS policies w database
+- Role checks (owner/member) w handlers
+- Workspace context via session variable
+
+### Input Validation
+
+- JSON Schema w routes
+- Domain validation w entities
+- AJV dla template variables
+- Never log secrets
+
+## Performance
+
+### Optimization
+
+- Redis caching dla compiled templates, brand kits, validators
+- Connection pooling via Supabase
+- Batch operations: `repository.createMany()`
+- Stream processing dla large files
+
+### Monitoring
+
+- Pino structured JSON logging z trace IDs
+- Log query times, render times
+- Full error context logging
+
+### Database
+
+- Indexes na foreign keys + composite dla common queries
+- Cursor-based pagination
+- Drizzle query builder
+- Events table partitioning (post-MVP)

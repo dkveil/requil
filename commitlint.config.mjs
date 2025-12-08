@@ -59,6 +59,7 @@ export default {
 				//documents
 				'ai-plan',
 				'prd',
+				'rules',
 			],
 		],
 		'scope-empty': [1, 'never'],
