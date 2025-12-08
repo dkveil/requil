@@ -4,6 +4,7 @@ export const DASHBOARD_ROUTES = {
 		LOGIN: '/auth/login',
 		REGISTER: '/auth/register',
 		FORGOT_PASSWORD: '/auth/forgot-password',
+		RESET_PASSWORD: '/auth/reset-password',
 		OAUTH_CALLBACK: '/auth/oauth/callback',
 	},
 	WELCOME: '/welcome',

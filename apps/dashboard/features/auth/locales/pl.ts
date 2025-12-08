@@ -49,5 +49,36 @@ export const authPlLocales = {
 				confirmPasswordRequired: 'Potwierdzenie hasła jest wymagane',
 			},
 		},
+		forgotPasswordPage: {
+			title: 'Zresetuj hasło',
+			subtitle:
+				'Podaj swój adres email, a wyślemy Ci link do zresetowania hasła',
+			email: 'Email',
+			emailPlaceholder: 'twoj@email.com',
+			submit: 'Wyślij link resetujący',
+			backToLogin: 'Wróć do logowania',
+			successTitle: 'Sprawdź skrzynkę email',
+			success:
+				'Jeśli istnieje konto dla tego adresu email, otrzymasz link do resetowania hasła.',
+			failed: 'Nie udało się wysłać linku resetującego',
+		},
+		resetPasswordPage: {
+			title: 'Ustaw nowe hasło',
+			subtitle: 'Wprowadź poniżej nowe hasło',
+			password: 'Nowe hasło',
+			passwordPlaceholder: '••••••••',
+			confirmPassword: 'Potwierdź nowe hasło',
+			confirmPasswordPlaceholder: '••••••••',
+			submit: 'Zresetuj hasło',
+			successTitle: 'Hasło zresetowane',
+			success: 'Twoje hasło zostało pomyślnie zresetowane.',
+			failed: 'Nie udało się zresetować hasła',
+			errors: {
+				passwordMismatch: 'Hasła nie są identyczne',
+				weakPassword: 'Hasło musi mieć minimum 8 znaków',
+				passwordRequired: 'Hasło jest wymagane',
+				confirmPasswordRequired: 'Potwierdzenie hasła jest wymagane',
+			},
+		},
 	},
 };

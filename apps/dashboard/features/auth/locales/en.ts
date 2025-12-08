@@ -47,5 +47,36 @@ export const authEnLocales = {
 				confirmPasswordRequired: 'Password confirmation is required',
 			},
 		},
+		forgotPasswordPage: {
+			title: 'Reset Password',
+			subtitle:
+				'Enter your email address and we will send you a link to reset your password',
+			email: 'Email',
+			emailPlaceholder: 'your@email.com',
+			submit: 'Send Reset Link',
+			backToLogin: 'Back to login',
+			successTitle: 'Check your email',
+			success:
+				'If an account exists for this email, you will receive a password reset link.',
+			failed: 'Failed to send reset link',
+		},
+		resetPasswordPage: {
+			title: 'Set new password',
+			subtitle: 'Enter your new password below',
+			password: 'New Password',
+			passwordPlaceholder: '••••••••',
+			confirmPassword: 'Confirm New Password',
+			confirmPasswordPlaceholder: '••••••••',
+			submit: 'Reset Password',
+			successTitle: 'Password reset',
+			success: 'Your password has been successfully reset.',
+			failed: 'Failed to reset password',
+			errors: {
+				passwordMismatch: 'Passwords do not match',
+				weakPassword: 'Password must be at least 8 characters',
+				passwordRequired: 'Password is required',
+				confirmPasswordRequired: 'Password confirmation is required',
+			},
+		},
 	},
 };
