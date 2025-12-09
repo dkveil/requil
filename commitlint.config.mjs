@@ -61,6 +61,7 @@ export default {
 				'ai-plan',
 				'prd',
 				'rules',
+				'license',
 			],
 		],
 		'scope-empty': [1, 'never'],
