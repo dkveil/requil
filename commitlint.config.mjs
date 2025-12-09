@@ -24,6 +24,7 @@ export default {
 			'always',
 			[
 				'app',
+				'testing',
 				// Apps
 				'api',
 				'dashboard',
