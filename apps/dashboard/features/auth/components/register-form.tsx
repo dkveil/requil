@@ -119,7 +119,12 @@ export function RegisterForm({
 		>
 			<FieldGroup>
 				<div className='flex flex-col items-center gap-1 text-center'>
-					<h1 className='text-2xl font-bold' data-test-id='register-title'>{tAuth('title')}</h1>
+					<h1
+						className='text-2xl font-bold'
+						data-test-id='register-title'
+					>
+						{tAuth('title')}
+					</h1>
 					<p className='text-muted-foreground text-sm text-balance'>
 						{tAuth('subtitle')}
 					</p>
@@ -233,7 +238,10 @@ export function RegisterForm({
 						</svg>
 						{tCommon('actions.signUpWithGoogle')}
 					</Button>
-					<FieldDescription className='text-center' data-test-id='register-login-prompt'>
+					<FieldDescription
+						className='text-center'
+						data-test-id='register-login-prompt'
+					>
 						{tAuth('hasAccount')}{' '}
 						<Link
 							href={DASHBOARD_ROUTES.AUTH.LOGIN}

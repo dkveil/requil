@@ -98,7 +98,9 @@ export class RegisterPage extends BasePage {
 	}
 
 	async waitForSuccessToast() {
-		await this.page.getByText(SUCCESS_TOAST_REGEX).waitFor({ state: 'visible' });
+		await this.page
+			.getByText(SUCCESS_TOAST_REGEX)
+			.waitFor({ state: 'visible' });
 	}
 
 	async waitForErrorToast() {
@@ -111,4 +113,3 @@ export class RegisterPage extends BasePage {
 			.waitFor({ state: 'visible' });
 	}
 }
-
