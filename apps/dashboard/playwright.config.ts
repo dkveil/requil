@@ -14,6 +14,7 @@ export default defineConfig({
 		baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5137',
 		trace: 'on-first-retry',
 		screenshot: 'only-on-failure',
+		testIdAttribute: 'data-test-id',
 	},
 
 	projects: [
@@ -26,7 +27,7 @@ export default defineConfig({
 	webServer: {
 		command: 'pnpm dev',
 		url: 'http://localhost:5137',
-		reuseExistingServer: !process.env.CI,
+		reuseExistingServer: true,
 		timeout: 120 * 1000,
 	},
 });

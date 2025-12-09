@@ -33,6 +33,7 @@ export class LoginPage extends BasePage {
 
 	async navigate() {
 		await this.goto('/auth/login');
+		await this.page.waitForLoadState('networkidle');
 	}
 
 	async fillEmail(email: string) {
