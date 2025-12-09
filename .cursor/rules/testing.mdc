@@ -12,70 +12,87 @@ globs:
 
 # Testing Guidelines
 
-## Unit Testing with Vitest
+## Framework & Tools
 
-### Best Practices
+- **Unit + Integration**: Vitest + Testcontainers (Postgres)
+- **E2E**: Playwright (Chromium only)
+- **Coverage**: >80% business logic, run only when asked
 
-- Leverage the `vi` object for test doubles - Use `vi.fn()` for function mocks, `vi.spyOn()` to monitor existing functions, and `vi.stubGlobal()` for global mocks. Prefer spies over mocks when you only need to verify interactions without changing behavior.
-- Master `vi.mock()` factory patterns - Place mock factory functions at the top level of your test file, return typed mock implementations, and use `mockImplementation()` or `mockReturnValue()` for dynamic control during tests. Remember the factory runs before imports are processed.
-- Create setup files for reusable configuration - Define global mocks, custom matchers, and environment setup in dedicated files referenced in your `vitest.config.ts`. This keeps your test files clean while ensuring consistent test environments.
-- Use inline snapshots for readable assertions - Replace complex equality checks with `expect(value).toMatchInlineSnapshot()` to capture expected output directly in your test file, making changes more visible in code reviews.
-- Monitor coverage with purpose and only when asked - Configure coverage thresholds in `vitest.config.ts` to ensure critical code paths are tested, but focus on meaningful tests rather than arbitrary coverage percentages.
-- Make watch mode part of your workflow - Run `vitest --watch` during development for instant feedback as you modify code, filtering tests with `-t` to focus on specific areas under development.
-- Explore UI mode for complex test suites - Use `vitest --ui` to visually navigate large test suites, inspect test results, and debug failures more efficiently during development.
-- Handle optional dependencies with smart mocking - Use conditional mocking to test code with optional dependencies by implementing `vi.mock()` with the factory pattern for modules that might not be available in all environments.
-- Configure jsdom for DOM testing - Set `environment: 'jsdom'` in your configuration for frontend component tests and combine with testing-library utilities for realistic user interaction simulation.
-- Structure tests for maintainability - Group related tests with descriptive `describe` blocks, use explicit assertion messages, and follow the Arrange-Act-Assert pattern to make tests self-documenting.
-- Leverage TypeScript type checking in tests - Enable strict typing in your tests to catch type errors early, use `expectTypeOf()` for type-level assertions, and ensure mocks preserve the original type signatures.
+## Vitest (Unit + Integration)
 
-## Integration Testing with Supertest
+**Core Patterns**:
 
-### API Testing
+- `vi.mock()` factory patterns at top level, typed implementations
+- Setup files for global mocks/matchers in `vitest.config.ts`
+- Watch mode (`vitest --watch`) during development
+- Arrange-Act-Assert pattern, descriptive `describe` blocks
 
-- Use async/await with supertest for cleaner test code
-- Implement a test database for integration tests
-- Use beforeEach/afterEach hooks for database setup and teardown when testing {{api_endpoints}}
+**Unit Tests**:
 
-### Requil API Testing
+- Pure functions, validators, helpers
+- `environment: 'jsdom'` for React components
+- Mock all external dependencies
 
-- Test template validation endpoints with valid and invalid MJML
-- Verify email rendering produces correct HTML and plaintext
-- Test campaign creation and recipient management workflows
-- Verify webhook signature validation and event handling
-- Test rate limiting behavior with multiple rapid requests
-- Verify idempotency keys prevent duplicate operations
+**Integration Tests**:
 
-## E2E Testing with Playwright
+- Testcontainers for isolated Postgres instances
+- Transactional tests with rollback for isolation
+- Mock external services: Supabase Auth, Resend, QStash (when needed)
+- Real or mock Upstash Redis for rate limiting
+- Run drizzle-kit migrations before tests, cleanup in afterAll
 
-### Configuration
+### Requil API Testing Priorities
 
-- Initialize configuration only with Chromium/Desktop Chrome browser
-- Use browser contexts for isolating test environments
-- Implement the Page Object Model for maintainable tests
-- Use locators for resilient element selection
-- Leverage API testing for backend validation
-- Implement visual comparison with expect(page).toHaveScreenshot()
-- Use the codegen tool for test recording
-- Leverage trace viewer for debugging test failures
-- Implement test hooks for setup and teardown
-- Use expect assertions with specific matchers
-- Leverage parallel execution for faster test runs
+**Templates & Rendering**:
 
-### Dashboard E2E Tests
+- React Email (TSX) validation, AI Generate output, compilation to HTML
+- Guardrails: WCAG AA contrast, 100% alt-text, HTTPS only, HTML < 150 kB
+- Variables schema (strict/permissive), plaintext generation
+- Snapshot publication (immutable), Redis cache
 
-- Test template creation workflow from start to finish
-- Verify email preview renders correctly
-- Test campaign sending with test recipients
-- Verify real-time status updates during campaign sends
-- Test authentication flows and session management
-- Verify responsive behavior at different viewport sizes
-- Test keyboard navigation through the template editor
-- Verify error handling and validation feedback
+**Send & Transports**:
 
-### Test Data Management
+- POST /v1/send (single/multiple recipients, per-recipient variables)
+- Transport selection (Resend/SMTP), deliverability headers
+- Suppression list, failed_recipients handling
 
-- Use Playwright fixtures for test data setup
-- Create reusable helper functions for common workflows
-- Clean up test data after each test run
-- Use separate test organizations in Supabase
-- Mock external services (Resend, QStash) in E2E tests when appropriate
+**Orchestration**:
+
+- Rate limiting (Redis, per workspace/transport)
+- Idempotency (duplicate prevention, partial failures)
+- QStash retry (exponential backoff), fan-out batches
+
+**Security**:
+
+- Webhook HMAC signatures, API Keys + scopes, RLS policies
+- SMTP credentials encryption, audit logs
+
+## Playwright (E2E Tests)
+
+**Configuration**:
+
+- Chromium only, browser contexts for isolation
+- Page Object Model for maintainability
+- Resilient locators, trace viewer for debugging
+- Playwright fixtures for test data, cleanup in afterEach
+
+**Critical Flows**:
+
+- **Auth**: Registration, login (email/OAuth), password recovery, session management
+- **Templates**: AI Generate, editor (drag-and-drop blocks), variables panel, quality checklist, snapshot publish
+- **Send**: Campaign creation, preview, send with test recipients, failed recipient handling
+- **UX**: Responsive design, keyboard navigation, form validation, toast notifications
+
+**Test Data**:
+
+- Separate Supabase test organizations
+- Mock external services (Resend, QStash) when appropriate
+
+## Package-Specific Testing Focus
+
+**email-engine**: React Email compilation, Liquid variables, inline CSS, plaintext generation, XSS prevention
+**validation**: WCAG contrast (calculation + auto-fix), alt-text detection, HTTPS enforcement, HTML size limits (Cheerio)
+**transports**: Resend/SMTP integration (mock responses), bounce/complaint webhooks, suppression list updates
+**ratelimit**: Token bucket algorithm (time mocking), Redis TTL, per-workspace/transport limits, 429 responses
+**CQRS handlers**: Commands with mocked dependencies, validation, error mapping, transactional rollback
+**Idempotency**: Redis lock acquisition, cached results, body hash conflicts, partial failures, TTL expiration
