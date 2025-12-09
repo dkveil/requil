@@ -29,6 +29,7 @@
 			"!**/.turbo",
 			"!**/.build",
 			"!**/coverage",
+			"!**/playwright-report",
 			"!apps/api/src/modules/example",
 			"turbo.json"
 		]
