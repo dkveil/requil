@@ -59,6 +59,7 @@ export default {
 				'cursor',
 				//documents
 				'ai-plan',
+				'stack',
 				'prd',
 				'rules',
 				'license',
