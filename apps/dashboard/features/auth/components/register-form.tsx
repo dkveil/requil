@@ -114,11 +114,12 @@ export function RegisterForm({
 		<form
 			className={cn('flex flex-col gap-6', className)}
 			onSubmit={handleSubmit(onSubmit, onError)}
+			data-test-id='register-form'
 			{...props}
 		>
 			<FieldGroup>
 				<div className='flex flex-col items-center gap-1 text-center'>
-					<h1 className='text-2xl font-bold'>{tAuth('title')}</h1>
+					<h1 className='text-2xl font-bold' data-test-id='register-title'>{tAuth('title')}</h1>
 					<p className='text-muted-foreground text-sm text-balance'>
 						{tAuth('subtitle')}
 					</p>
@@ -131,6 +132,7 @@ export function RegisterForm({
 						type='email'
 						placeholder={tAuth('emailPlaceholder')}
 						disabled={isSubmitting}
+						data-test-id='register-email-input'
 						{...register('email')}
 					/>
 				</Field>
@@ -142,6 +144,7 @@ export function RegisterForm({
 						type='password'
 						placeholder={tAuth('passwordPlaceholder')}
 						disabled={isSubmitting}
+						data-test-id='register-password-input'
 						{...register('password')}
 					/>
 					<p className='text-muted-foreground text-sm'>
@@ -158,6 +161,7 @@ export function RegisterForm({
 						type='password'
 						placeholder={tAuth('confirmPasswordPlaceholder')}
 						disabled={isSubmitting}
+						data-test-id='register-confirm-password-input'
 						{...register('confirmPassword')}
 					/>
 				</Field>
@@ -167,6 +171,7 @@ export function RegisterForm({
 						type='submit'
 						className='w-full'
 						disabled={isSubmitting}
+						data-test-id='register-submit-button'
 					>
 						{isSubmitting
 							? tCommon('actions.signingUp')
@@ -181,6 +186,7 @@ export function RegisterForm({
 						type='button'
 						onClick={() => handleOAuthLogin('github')}
 						disabled={isSubmitting}
+						data-test-id='register-github-button'
 					>
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
@@ -200,6 +206,7 @@ export function RegisterForm({
 						type='button'
 						onClick={() => handleOAuthLogin('google')}
 						disabled={isSubmitting}
+						data-test-id='register-google-button'
 					>
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
@@ -226,11 +233,12 @@ export function RegisterForm({
 						</svg>
 						{tCommon('actions.signUpWithGoogle')}
 					</Button>
-					<FieldDescription className='text-center'>
+					<FieldDescription className='text-center' data-test-id='register-login-prompt'>
 						{tAuth('hasAccount')}{' '}
 						<Link
 							href={DASHBOARD_ROUTES.AUTH.LOGIN}
 							className='underline underline-offset-4'
+							data-test-id='register-login-link'
 						>
 							{tCommon('actions.signIn')}
 						</Link>
