@@ -1,13 +1,7 @@
 import type { NextRequest } from 'next/server';
-import { accessMiddleware } from '@/features/access';
 import { authMiddleware } from '@/features/auth';
 
 export function proxy(request: NextRequest) {
-	const accessResponse = accessMiddleware(request);
-	if (accessResponse.status !== 200) {
-		return accessResponse;
-	}
-
 	return authMiddleware(request);
 }
 

@@ -83,10 +83,9 @@ function parseCookies(
 }
 
 export async function authMiddleware(request: NextRequest) {
-	const isAccessRoute = request.nextUrl.pathname.startsWith('/access');
 	const isDemoRoute = request.nextUrl.pathname.startsWith('/demo');
 
-	if (isAccessRoute || isDemoRoute) {
+	if (isDemoRoute) {
 		return NextResponse.next();
 	}
 

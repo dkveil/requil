@@ -97,11 +97,17 @@ export function LoginForm({
 		<form
 			className={cn('flex flex-col gap-6', className)}
 			onSubmit={handleSubmit(onSubmit, onError)}
+			data-test-id='login-form'
 			{...props}
 		>
 			<FieldGroup>
 				<div className='flex flex-col items-center gap-1 text-center'>
-					<h1 className='text-2xl font-bold'>{tAuth('title')}</h1>
+					<h1
+						className='text-2xl font-bold'
+						data-test-id='login-title'
+					>
+						{tAuth('title')}
+					</h1>
 					<p className='text-muted-foreground text-sm text-balance'>
 						{tAuth('subtitle')}
 					</p>
@@ -115,6 +121,7 @@ export function LoginForm({
 							type='email'
 							placeholder={tAuth('emailPlaceholder')}
 							disabled={isSubmitting}
+							data-test-id='login-email-input'
 							{...register('email')}
 						/>
 					</Field>
@@ -125,6 +132,7 @@ export function LoginForm({
 							<Link
 								href={DASHBOARD_ROUTES.AUTH.FORGOT_PASSWORD}
 								className='ml-auto text-sm underline-offset-4 hover:underline'
+								data-test-id='login-forgot-password-link'
 							>
 								{tAuth('forgotPassword')}
 							</Link>
@@ -134,6 +142,7 @@ export function LoginForm({
 							type='password'
 							placeholder={tAuth('passwordPlaceholder')}
 							disabled={isSubmitting}
+							data-test-id='login-password-input'
 							{...register('password')}
 						/>
 					</Field>
@@ -143,6 +152,7 @@ export function LoginForm({
 							type='submit'
 							className='w-full'
 							disabled={isSubmitting}
+							data-test-id='login-submit-button'
 						>
 							{isSubmitting
 								? tCommon('actions.signingIn')
@@ -156,6 +166,7 @@ export function LoginForm({
 							type='button'
 							onClick={() => handleOAuthLogin('github')}
 							disabled={isSubmitting}
+							data-test-id='login-github-button'
 						>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
@@ -175,6 +186,7 @@ export function LoginForm({
 							type='button'
 							onClick={() => handleOAuthLogin('google')}
 							disabled={isSubmitting}
+							data-test-id='login-google-button'
 						>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
@@ -201,11 +213,15 @@ export function LoginForm({
 							</svg>
 							{tCommon('actions.loginWithGoogle')}
 						</Button>
-						<FieldDescription className='text-center'>
+						<FieldDescription
+							className='text-center'
+							data-test-id='login-register-prompt'
+						>
 							{tAuth('noAccount')}{' '}
 							<Link
 								href={DASHBOARD_ROUTES.AUTH.REGISTER}
 								className='underline underline-offset-4'
+								data-test-id='login-register-link'
 							>
 								{tCommon('actions.signUp')}
 							</Link>

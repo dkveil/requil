@@ -1,6 +1,6 @@
 export const TEST_USER = {
-	email: process.env.TEST_USER_EMAIL || 'test@example.com',
-	password: process.env.TEST_USER_PASSWORD || 'test-password-123',
+	email: process.env.E2E_USERNAME || 'test@example.com',
+	password: process.env.E2E_PASSWORD || 'test-password-123',
 };
 
 export const TEST_WORKSPACE = {
