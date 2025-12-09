@@ -1,4 +1,4 @@
-# Stack techniczny – ReLetrr (MVP)
+# Stack techniczny – Requil (MVP)
 
 ## Architektura
 
