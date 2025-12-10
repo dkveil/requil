@@ -32,4 +32,7 @@ export const DASHBOARD_ROUTES = {
 	ACCOUNT: {
 		SETTINGS: '/account/settings',
 	},
+	DEMO: {
+		EDITOR: '/demo/editor',
+	},
 } as const;
