@@ -44,6 +44,7 @@
 	},
 	"dependencies": {
 		"@requil/types": "workspace:*",
+		"argon2": "^0.44.0",
 		"nanoid": "^5.1.6",
 		"pino": "^10.1.0",
 		"pino-pretty": "^13.1.2",

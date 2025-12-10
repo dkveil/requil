@@ -15,6 +15,11 @@
 			"require": "./dist/api/index.js",
 			"default": "./dist/api/index.js"
 		},
+		"./api-keys": {
+			"types": "./dist/api-keys/index.d.ts",
+			"require": "./dist/api-keys/index.js",
+			"default": "./dist/api-keys/index.js"
+		},
 		"./auth": {
 			"types": "./dist/auth/index.d.ts",
 			"require": "./dist/auth/index.js",

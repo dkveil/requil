@@ -1,4 +1,5 @@
 import { createHash, randomBytes } from 'node:crypto';
+import * as argon2 from 'argon2';
 
 const API_KEY_REGEX = /^rql_[A-Za-z0-9_-]{43}$/;
 
@@ -10,17 +11,40 @@ export const hashToken = (token: string): string => {
 	return createHash('sha256').update(token).digest('base64url');
 };
 
-export const generateApiKey = (): {
+export const hashApiKey = async (key: string): Promise<string> => {
+	return argon2.hash(key, {
+		type: argon2.argon2id,
+		memoryCost: 65536,
+		timeCost: 3,
+		parallelism: 4,
+	});
+};
+
+export const verifyApiKey = async (
+	hash: string,
+	key: string
+): Promise<boolean> => {
+	try {
+		return await argon2.verify(hash, key);
+	} catch {
+		return false;
+	}
+};
+
+export const generateApiKey = async (): Promise<{
 	key: string;
 	prefix: string;
 	hash: string;
-} => {
+}> => {
 	const prefix = 'rql';
 	const secret = generateRandomToken(32);
 	const key = `${prefix}_${secret}`;
-	const hash = hashToken(key);
+	const hash = await hashApiKey(key);
 
-	return { key, prefix, hash };
+	const keyPrefixLength = 12;
+	const displayPrefix = key.substring(0, keyPrefixLength);
+
+	return { key, prefix: displayPrefix, hash };
 };
 
 export const verifyApiKeyFormat = (key: string): boolean => {

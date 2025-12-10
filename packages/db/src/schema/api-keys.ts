@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { type InferInsertModel, type InferSelectModel, sql } from 'drizzle-orm';
 import {
 	foreignKey,
 	index,
@@ -86,6 +86,10 @@ export const apiKeys = pgTable(
 	]
 );
 
+export type ApiKey = InferSelectModel<typeof apiKeys>;
+export type NewApiKey = InferInsertModel<typeof apiKeys>;
+export type ApiKeyScope = (typeof apiScope.enumValues)[number];
+
 export const apiKeyScopes = pgTable(
 	'api_key_scopes',
 	{
@@ -145,3 +149,6 @@ export const apiKeyScopes = pgTable(
 		}),
 	]
 );
+
+export type ApiKeyScopeRecord = InferSelectModel<typeof apiKeyScopes>;
+export type NewApiKeyScopeRecord = InferInsertModel<typeof apiKeyScopes>;

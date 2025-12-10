@@ -32,4 +32,9 @@ export const API_ROUTES = {
 		FIND: '/workspace/:workspaceId/asset',
 		DELETE: '/workspace/:workspaceId/asset/:id',
 	},
+	API_KEY: {
+		CREATE: '/v1/api-keys',
+		LIST: '/v1/api-keys',
+		REVOKE: '/v1/api-keys/:keyId',
+	},
 } as const;
