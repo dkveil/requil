@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
+import { toast } from 'sonner';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import {
@@ -35,7 +36,9 @@ export function Header() {
 	};
 
 	const handleAccountSettings = () => {
-		router.push(DASHBOARD_ROUTES.ACCOUNT.SETTINGS);
+		toast.info(t('navigation.featureNotAvailable'), {
+			description: t('navigation.featureNotAvailableDescription'),
+		});
 	};
 
 	const handleNewTemplate = () => {
