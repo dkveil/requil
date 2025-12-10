@@ -57,7 +57,23 @@ Kluczowe decyzje architektoniczne (zgodne z ustaleniami MVP):
     *   **Akcje:** Create New, Delete.
     *   **UX:** Wyszukiwarka po nazwie/ID.
 
-5.  **Template Details (The Hub)**
+5.  **Create Template (Wizard)**
+    *   **Ścieżka:** `/templates/create`
+    *   **Cel:** Utworzenie nowego szablonu z wyborem metody startowej (Pusty, AI, Galeria).
+    *   **Layout:** Formularz metadanych + Selektor metody startowej (poniżej).
+    *   **Kluczowe komponenty:**
+        *   **Metadata Form:** Pola z obecnego formularza (Nazwa, `stableId` auto-generowane, Opis).
+        *   **Source Selector (Tabs/Grid):**
+            *   **Opcja A: Blank Draft (Domyślna):** Tworzy pusty szablon. Karta aktywna.
+            *   **Opcja B: AI Generate (Disabled):**
+                *   UI: Textarea na prompt (disabled) z placeholderem (np. "Create a welcome email for new SaaS users...").
+                *   UX: Label z Tooltipem informującym, że funkcjonalność jest w trakcie budowy ("Work in Progress").
+            *   **Opcja C: Template Gallery:**
+                *   UI: Grid z kartami szablonów.
+                *   Stan Startowy: Wyświetla kartę "Blank Template" oraz `EmptyState` dla reszty z informacją "More templates coming soon".
+    *   **Akcja:** Przycisk "Create Template" tworzy szkic i przekierowuje do Edytora (`/templates/[stableId]/edit`).
+
+6.  **Template Details (The Hub)**
     *   **Ścieżka:** `/templates/[stableId]`
     *   **Cel:** Punkt centralny dla dewelopera integrującego szablon.
     *   **Kluczowe informacje:**
@@ -67,7 +83,7 @@ Kluczowe decyzje architektoniczne (zgodne z ustaleniami MVP):
         *   Statystyki: Last sent (data).
     *   **Akcje:** Główny przycisk "Open Editor".
 
-6.  **Template Editor (Focus Mode)**
+7.  **Template Editor (Focus Mode)**
     *   **Ścieżka:** `/templates/[stableId]/edit`
     *   **Cel:** Tworzenie i edycja struktury maila.
     *   **Layout:** Pełny ekran, brak nawigacji bocznej dashboardu.
@@ -83,7 +99,7 @@ Kluczowe decyzje architektoniczne (zgodne z ustaleniami MVP):
 ### D. Monitoring (Logs)
 **(dashboard)**
 
-7.  **Send Logs (List)**
+8.  **Send Logs (List)**
     *   **Ścieżka:** `/logs`
     *   **Cel:** Monitoring wysyłek i debugowanie problemów z dostarczalnością.
     *   **Kluczowe informacje:** Tabela: Status (Badge: Delivered/Bounced/Failed), Recipient Email, Template Name, Timestamp.
@@ -94,7 +110,7 @@ Kluczowe decyzje architektoniczne (zgodne z ustaleniami MVP):
         *   Recipient Search (Text input - pełne dopasowanie lub 'contains').
     *   **UX:** Paginacja (cursor-based), auto-refresh (opcjonalnie).
 
-8.  **Log Details (Single View)**
+9.  **Log Details (Single View)**
     *   **Ścieżka:** `/logs/[jobId]`
     *   **Cel:** Głęboka analiza konkretnego zdarzenia wysyłki.
     *   **Kluczowe informacje:**
@@ -106,16 +122,16 @@ Kluczowe decyzje architektoniczne (zgodne z ustaleniami MVP):
 ### E. Configuration (Settings)
 **(dashboard)**
 
-9.  **Settings Layout**
+10. **Settings Layout**
     *   **Ścieżka:** `/settings`
     *   **Struktura:** Pionowe zakładki (Vertical Tabs) po lewej stronie.
 
-10. **Settings: General**
+11. **Settings: General**
     *   **Ścieżka:** `/settings/general`
     *   **Cel:** Zarządzanie workspace'm.
     *   **Kluczowe informacje:** Nazwa Workspace, ID Workspace'u.
 
-11. **Settings: Email Setup (Transport)**
+12. **Settings: Email Setup (Transport)**
     *   **Ścieżka:** `/settings/transport`
     *   **Cel:** Konfiguracja bramki wyjściowej e-mail (Single Active Transport).
     *   **Kluczowe komponenty:**
@@ -124,7 +140,7 @@ Kluczowe decyzje architektoniczne (zgodne z ustaleniami MVP):
         *   Action Bar: "Verify Connection" (wysyła test email na adres zalogowanego usera).
     *   **UX:** Jasny status weryfikacji (Verified / Unverified).
 
-12. **Settings: Developers**
+13. **Settings: Developers**
     *   **Ścieżka:** `/settings/developers`
     *   **Cel:** Zarządzanie dostępem API.
     *   **Sekcja API Keys:**
