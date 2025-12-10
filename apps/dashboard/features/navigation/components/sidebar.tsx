@@ -29,7 +29,7 @@ import { MENU_SECTIONS } from '../constants/menu-structure';
 import { useSidebar } from '../hooks/use-sidebar';
 import { NavItem } from './nav-item';
 
-const AVAILABLE_FEATURES = ['dashboard', 'email-templates'];
+const NOT_AVAILABLE_FEATURES = ['events'];
 
 export function Sidebar() {
 	const { currentWorkspace } = useWorkspace();
@@ -68,7 +68,7 @@ export function Sidebar() {
 	return (
 		<aside
 			className={cn(
-				'sticky top-16 h-[calc(100vh-4rem)] z-40 border-r bg-sidebar border-sidebar-border transition-all duration-300',
+				'sticky top-16 h-[calc(100vh-4rem)] z-40 border-r border-sidebar-border transition-all duration-300',
 				isCollapsed ? 'w-16' : 'w-64'
 			)}
 		>
@@ -91,7 +91,9 @@ export function Sidebar() {
 								)}
 
 								{section.items.map((item) => {
-									const isAvailable = AVAILABLE_FEATURES.includes(item.id);
+									const isNotAvailable = NOT_AVAILABLE_FEATURES.includes(
+										item.id
+									);
 									return (
 										<NavItem
 											key={item.id}
@@ -102,9 +104,9 @@ export function Sidebar() {
 												`${section.title}.items.${item.id}.description`
 											)}
 											isCollapsed={isCollapsed}
-											disabled={!isAvailable}
+											disabled={isNotAvailable}
 											onClick={
-												!isAvailable ? handleFeatureNotAvailable : undefined
+												isNotAvailable ? handleFeatureNotAvailable : undefined
 											}
 										/>
 									);

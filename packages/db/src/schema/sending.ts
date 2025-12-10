@@ -37,12 +37,12 @@ export const sendJobs = pgTable(
 	(table) => [
 		index('send_jobs_workspace_created_idx').using(
 			'btree',
-			table.workspaceId.asc().nullsLast().op('timestamptz_ops'),
+			table.workspaceId.asc().nullsLast().op('uuid_ops'),
 			table.createdAt.desc().nullsFirst().op('timestamptz_ops')
 		),
 		index('send_jobs_workspace_idem_idx').using(
 			'btree',
-			table.workspaceId.asc().nullsLast().op('bytea_ops'),
+			table.workspaceId.asc().nullsLast().op('uuid_ops'),
 			table.idempotencyKeyHash.asc().nullsLast().op('bytea_ops')
 		),
 		foreignKey({

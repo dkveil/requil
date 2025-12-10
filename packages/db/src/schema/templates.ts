@@ -121,7 +121,7 @@ export const templateSnapshots = pgTable(
 	(table) => [
 		index('template_snapshots_template_id_published_idx').using(
 			'btree',
-			table.templateId.asc().nullsLast().op('timestamptz_ops'),
+			table.templateId.asc().nullsLast().op('uuid_ops'),
 			table.publishedAt.desc().nullsFirst().op('timestamptz_ops')
 		),
 		index('template_snapshots_variables_schema_gin').using(

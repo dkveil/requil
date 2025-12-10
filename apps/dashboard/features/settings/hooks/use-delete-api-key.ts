@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApiClientError } from '@/lib/api/error';
+import { apiKeysApi } from '../api/api-keys-api';
 
 type DeleteApiKeyParams = {
 	workspaceId: string;
@@ -11,7 +12,7 @@ export function useDeleteApiKey() {
 
 	return useMutation<void, ApiClientError, DeleteApiKeyParams>({
 		mutationFn: async ({ workspaceId, keyId }) => {
-			throw new Error('API endpoint not implemented yet');
+			await apiKeysApi.revoke(workspaceId, keyId);
 		},
 		onSuccess: (_, { workspaceId }) => {
 			queryClient.invalidateQueries({ queryKey: ['api-keys', workspaceId] });

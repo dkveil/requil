@@ -25,7 +25,7 @@ const createApiKeySchema = z.object({
 	name: z.string().min(1, 'Name is required').max(100),
 });
 
-type CreateApiKeyInput = z.infer<typeof createApiKeySchema>;
+type CreateApiKeyFormInput = z.infer<typeof createApiKeySchema>;
 
 type CreateApiKeyDialogProps = {
 	open: boolean;
@@ -46,7 +46,7 @@ export function CreateApiKeyDialog({
 	const [newKey, setNewKey] = useState<string | null>(null);
 	const [copied, setCopied] = useState(false);
 
-	const form = useForm<CreateApiKeyInput>({
+	const form = useForm<CreateApiKeyFormInput>({
 		resolver: zodResolver(createApiKeySchema),
 		defaultValues: {
 			name: '',
@@ -60,7 +60,7 @@ export function CreateApiKeyDialog({
 		reset,
 	} = form;
 
-	const onSubmit = async (data: CreateApiKeyInput) => {
+	const onSubmit = async (data: CreateApiKeyFormInput) => {
 		if (!currentWorkspace?.id) {
 			toast.error('No workspace selected');
 			return;

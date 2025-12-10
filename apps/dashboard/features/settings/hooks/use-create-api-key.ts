@@ -1,21 +1,15 @@
+import type { CreateApiKeyResponse } from '@requil/types/api-keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApiClientError } from '@/lib/api/error';
+import { apiKeysApi } from '../api/api-keys-api';
 
-type CreateApiKeyInput = {
+type CreateApiKeyFormData = {
 	name: string;
-};
-
-type CreateApiKeyResponse = {
-	id: string;
-	name: string;
-	key: string;
-	prefix: string;
-	createdAt: string;
 };
 
 type CreateApiKeyParams = {
 	workspaceId: string;
-	data: CreateApiKeyInput;
+	data: CreateApiKeyFormData;
 };
 
 export function useCreateApiKey() {
@@ -23,7 +17,11 @@ export function useCreateApiKey() {
 
 	return useMutation<CreateApiKeyResponse, ApiClientError, CreateApiKeyParams>({
 		mutationFn: async ({ workspaceId, data }) => {
-			throw new Error('API endpoint not implemented yet');
+			return await apiKeysApi.create(workspaceId, {
+				name: data.name,
+				scopes: ['send', 'templates:read', 'templates:write'],
+				expiresAt: undefined,
+			});
 		},
 		onSuccess: (_, { workspaceId }) => {
 			queryClient.invalidateQueries({ queryKey: ['api-keys', workspaceId] });

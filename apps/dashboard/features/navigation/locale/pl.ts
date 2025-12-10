@@ -28,17 +28,17 @@ export const navigationPlLocales = {
 		settings: {
 			title: 'Ustawienia',
 			items: {
+				general: {
+					title: 'Ogólne',
+					description: 'Zarządzaj ustawieniami ogólnymi',
+				},
 				transports: {
 					title: 'Transporty e-mail',
 					description: 'Konfiguruj transporty e-mail',
 				},
-				'api-keys': {
-					title: 'Klucze API',
-					description: 'Zarządzaj kluczami API',
-				},
-				billing: {
-					title: 'Płatności',
-					description: 'Zarządzaj płatnościami',
+				developers: {
+					title: 'Deweloperzy',
+					description: 'Zarządzaj kluczami API i webhookami',
 				},
 			},
 		},

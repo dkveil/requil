@@ -23,7 +23,7 @@ export const usageCountersDaily = pgTable(
 	(table) => [
 		index('usage_counters_daily_workspace_day_desc_idx').using(
 			'btree',
-			table.workspaceId.asc().nullsLast().op('date_ops'),
+			table.workspaceId.asc().nullsLast().op('uuid_ops'),
 			table.day.desc().nullsFirst().op('date_ops')
 		),
 		foreignKey({

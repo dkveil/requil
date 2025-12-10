@@ -4,7 +4,7 @@ export const settingsEnLocales = {
 			title: 'Settings',
 			description: 'Manage your workspace configuration and preferences',
 			general: 'General',
-			transport: 'Email Setup',
+			transport: 'Email Transport',
 			developers: 'Developers',
 		},
 		general: {

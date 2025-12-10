@@ -2,11 +2,13 @@ import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import type { LucideIcon } from 'lucide-react';
 import {
 	Activity,
+	Code,
 	CreditCard,
 	FileText,
 	Key,
 	LayoutDashboard,
 	Mail,
+	Settings,
 } from 'lucide-react';
 
 export type MenuItem = {
@@ -50,19 +52,19 @@ export const MENU_SECTIONS: MenuSection[] = [
 		title: 'settings',
 		items: [
 			{
+				id: 'general',
+				icon: Settings,
+				route: (slug) => DASHBOARD_ROUTES.WORKSPACE.SETTINGS.GENERAL(slug),
+			},
+			{
 				id: 'transports',
 				icon: Mail,
-				route: (slug) => DASHBOARD_ROUTES.WORKSPACE.SETTINGS.TRANSPORTS(slug),
+				route: (slug) => DASHBOARD_ROUTES.WORKSPACE.SETTINGS.TRANSPORT(slug),
 			},
 			{
-				id: 'api-keys',
-				icon: Key,
-				route: (slug) => DASHBOARD_ROUTES.WORKSPACE.SETTINGS.API_KEYS(slug),
-			},
-			{
-				id: 'billing',
-				icon: CreditCard,
-				route: (slug) => DASHBOARD_ROUTES.WORKSPACE.SETTINGS.BILLING(slug),
+				id: 'developers',
+				icon: Code,
+				route: (slug) => DASHBOARD_ROUTES.WORKSPACE.SETTINGS.DEVELOPERS(slug),
 			},
 		],
 	},

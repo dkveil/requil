@@ -28,12 +28,16 @@ export const navigationEnLocales = {
 		settings: {
 			title: 'Settings',
 			items: {
+				general: {
+					title: 'General',
+					description: 'Manage general settings',
+				},
 				transports: {
 					title: 'Email Transports',
 					description: 'Configure email transports',
 				},
-				'api-keys': {
-					title: 'API Keys',
+				developers: {
+					title: 'Developers',
 					description: 'Manage API keys',
 				},
 				billing: {

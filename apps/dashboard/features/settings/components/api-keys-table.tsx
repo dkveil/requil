@@ -78,12 +78,12 @@ export function ApiKeysTable() {
 							<p className='font-medium'>{key.name}</p>
 							<div className='flex items-center gap-2'>
 								<code className='rounded bg-muted px-2 py-0.5 text-xs'>
-									{key.prefix}...
+									{key.keyPrefix}...
 								</code>
 								<Button
 									variant='ghost'
 									size='icon-sm'
-									onClick={() => handleCopy(key.prefix)}
+									onClick={() => handleCopy(key.keyPrefix)}
 								>
 									<Copy className='size-3' />
 								</Button>
