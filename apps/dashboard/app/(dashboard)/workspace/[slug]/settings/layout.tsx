@@ -13,6 +13,10 @@ export default async function SettingsLayout({
 	children,
 	params,
 }: SettingsLayoutProps) {
+	if (process.env.NODE_ENV === 'development') {
+		await new Promise((resolve) => setTimeout(resolve, 800));
+	}
+
 	const { slug } = await params;
 	const t = await getTranslations('settings.navigation');
 

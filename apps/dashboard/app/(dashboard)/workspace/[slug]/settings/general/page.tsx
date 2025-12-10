@@ -17,6 +17,10 @@ type GeneralSettingsPageProps = {
 export default async function GeneralSettingsPage({
 	params,
 }: GeneralSettingsPageProps) {
+	if (process.env.NODE_ENV === 'development') {
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+	}
+
 	await params;
 	const t = await getTranslations('settings.general.card');
 

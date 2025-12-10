@@ -17,6 +17,10 @@ type TransportSettingsPageProps = {
 export default async function TransportSettingsPage({
 	params,
 }: TransportSettingsPageProps) {
+	if (process.env.NODE_ENV === 'development') {
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+	}
+
 	await params;
 	const t = await getTranslations('settings.transport.card');
 

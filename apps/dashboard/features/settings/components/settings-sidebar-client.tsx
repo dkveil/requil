@@ -31,11 +31,16 @@ export function SettingsSidebarClient({ slug }: SettingsSidebarClientProps) {
 		},
 	];
 
+	const isOnBaseSettingsRoute =
+		pathname === DASHBOARD_ROUTES.WORKSPACE.SETTINGS.ROOT(slug);
+
 	return (
 		<aside className='w-64 shrink-0'>
 			<nav className='flex flex-col gap-1'>
 				{settingsNav.map((item) => {
-					const isActive = pathname === item.href;
+					const isActive =
+						pathname === item.href ||
+						(isOnBaseSettingsRoute && item.value === 'general');
 
 					return (
 						<Link

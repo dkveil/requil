@@ -17,6 +17,10 @@ type DevelopersSettingsPageProps = {
 export default async function DevelopersSettingsPage({
 	params,
 }: DevelopersSettingsPageProps) {
+	if (process.env.NODE_ENV === 'development') {
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+	}
+
 	await params;
 	const tApiKeys = await getTranslations('settings.developers.apiKeys');
 	const tWebhooks = await getTranslations('settings.developers.webhooks');
