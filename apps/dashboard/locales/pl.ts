@@ -17,6 +17,7 @@ export default {
 		edit: 'Edytuj',
 		close: 'Zamknij',
 		submit: 'Wyślij',
+		back: 'Wróć',
 		continueWith: 'Lub kontynuuj z',
 		validationError: 'Błąd walidacji',
 		validationErrorDescription: 'Sprawdź poprawność wypełnienia formularza',

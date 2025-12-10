@@ -10,8 +10,11 @@ export default async function CreateEmailTemplatePage({ params }: Props) {
 	const t = await getTranslations('templates.create');
 
 	const translations = {
+		backToTemplates: t('backToTemplates'),
 		title: t('title'),
 		description: t('description'),
+		detailsTitle: t('detailsTitle'),
+		detailsDescription: t('detailsDescription'),
 		nameLabel: t('nameLabel'),
 		namePlaceholder: t('namePlaceholder'),
 		nameDescription: t('nameDescription'),
@@ -21,6 +24,16 @@ export default async function CreateEmailTemplatePage({ params }: Props) {
 		descriptionLabel: t('descriptionLabel'),
 		descriptionPlaceholder: t('descriptionPlaceholder'),
 		descriptionDescription: t('descriptionDescription'),
+		sourceTitle: t('sourceTitle'),
+		sourceDescription: t('sourceDescription'),
+		sourceBlankTitle: t('sourceBlankTitle'),
+		sourceBlankDescription: t('sourceBlankDescription'),
+		sourceAiTitle: t('sourceAiTitle'),
+		sourceAiDescription: t('sourceAiDescription'),
+		sourceAiTooltip: t('sourceAiTooltip'),
+		sourceGalleryTitle: t('sourceGalleryTitle'),
+		sourceGalleryDescription: t('sourceGalleryDescription'),
+		sourceGalleryTooltip: t('sourceGalleryTooltip'),
 		cancel: t('cancel'),
 		create: t('create'),
 		creating: t('creating'),
@@ -28,6 +41,7 @@ export default async function CreateEmailTemplatePage({ params }: Props) {
 		successDescription: t('successDescription'),
 		errorTitle: t('errorTitle'),
 		errorDescription: t('errorDescription'),
+		errorStableIdTaken: t('errorStableIdTaken'),
 	};
 
 	return (

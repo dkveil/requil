@@ -17,6 +17,7 @@ export default {
 		edit: 'Edit',
 		close: 'Close',
 		submit: 'Submit',
+		back: 'Back',
 		continueWith: 'Or continue with',
 		validationError: 'Validation error',
 		validationErrorDescription: 'Please check the form for errors',
