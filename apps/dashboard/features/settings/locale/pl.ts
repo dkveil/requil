@@ -177,6 +177,7 @@ export const settingsPlLocales = {
 				},
 			},
 			webhooks: {
+				comingSoon: 'Webhooki są jeszcze niedostępne',
 				card: {
 					title: 'Webhooki',
 					description:

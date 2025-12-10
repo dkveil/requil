@@ -1,21 +1,20 @@
-'use client';
-
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { Separator } from '@/components/ui/separator';
-import { SettingsSidebar } from '@/features/settings/components/settings-sidebar';
+import { SettingsSidebarClient } from '@/features/settings/components/settings-sidebar-client';
 
 type SettingsLayoutProps = {
 	children: React.ReactNode;
-	params: {
+	params: Promise<{
 		slug: string;
-	};
+	}>;
 };
 
-export default function SettingsLayout({
+export default async function SettingsLayout({
 	children,
 	params,
 }: SettingsLayoutProps) {
-	const t = useTranslations('settings.navigation');
+	const { slug } = await params;
+	const t = await getTranslations('settings.navigation');
 
 	return (
 		<div className='flex h-full flex-col'>
@@ -28,7 +27,7 @@ export default function SettingsLayout({
 			</div>
 
 			<div className='flex flex-1 gap-8 px-8 pb-8'>
-				<SettingsSidebar slug={params.slug} />
+				<SettingsSidebarClient slug={slug} />
 				<main className='flex-1'>{children}</main>
 			</div>
 		</div>

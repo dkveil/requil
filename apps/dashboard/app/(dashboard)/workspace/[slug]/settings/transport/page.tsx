@@ -1,6 +1,4 @@
-'use client';
-
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import {
 	Card,
 	CardContent,
@@ -11,15 +9,16 @@ import {
 import { TransportConfig } from '@/features/settings/components/transport-config';
 
 type TransportSettingsPageProps = {
-	params: {
+	params: Promise<{
 		slug: string;
-	};
+	}>;
 };
 
-export default function TransportSettingsPage({
+export default async function TransportSettingsPage({
 	params,
 }: TransportSettingsPageProps) {
-	const t = useTranslations('settings.transport.card');
+	await params;
+	const t = await getTranslations('settings.transport.card');
 
 	return (
 		<div className='flex flex-col gap-6'>

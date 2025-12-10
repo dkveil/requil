@@ -1,6 +1,4 @@
-'use client';
-
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import {
 	Card,
 	CardContent,
@@ -11,15 +9,16 @@ import {
 import { UpdateWorkspaceForm } from '@/features/settings';
 
 type GeneralSettingsPageProps = {
-	params: {
+	params: Promise<{
 		slug: string;
-	};
+	}>;
 };
 
-export default function GeneralSettingsPage({
+export default async function GeneralSettingsPage({
 	params,
 }: GeneralSettingsPageProps) {
-	const t = useTranslations('settings.general.card');
+	await params;
+	const t = await getTranslations('settings.general.card');
 
 	return (
 		<div className='flex flex-col gap-6'>

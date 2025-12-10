@@ -1,7 +1,8 @@
 export { ApiKeysTable } from './components/api-keys-table';
 export { CreateApiKeyDialog } from './components/create-api-key-dialog';
 export { CustomResendForm } from './components/custom-resend-form';
-export { SettingsSidebar } from './components/settings-sidebar';
+export { DevelopersSettingsClient } from './components/developers-settings-client';
+export { SettingsSidebarClient } from './components/settings-sidebar-client';
 export { SmtpConfigForm } from './components/smtp-config-form';
 export { TransportConfig } from './components/transport-config';
 export { TransportStatusBadge } from './components/transport-status-badge';

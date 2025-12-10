@@ -177,6 +177,7 @@ export const settingsEnLocales = {
 				},
 			},
 			webhooks: {
+				comingSoon: 'Webhooks are not available yet',
 				card: {
 					title: 'Webhooks',
 					description:

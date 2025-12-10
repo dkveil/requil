@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-type SettingsSidebarProps = {
+type SettingsSidebarClientProps = {
 	slug: string;
 };
 
-export function SettingsSidebar({ slug }: SettingsSidebarProps) {
+export function SettingsSidebarClient({ slug }: SettingsSidebarClientProps) {
 	const t = useTranslations('settings.navigation');
 	const pathname = usePathname();
 
