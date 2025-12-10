@@ -68,6 +68,16 @@ Error classes: ValidationError (400), UnauthorizedError (401), ForbiddenError (4
 - Custom methods dla domain-specific queries
 - Wszystkie queries muszą include workspace_id
 
+### Types & Schemas
+
+- **Input types**: Zod schemas from `packages/types/src/{module}/*.schema.ts`
+  - Example: `CreateWorkspaceInput` from `create-workspace.schema.ts`
+  - Used for request body and query params validation
+- **Model types**: Drizzle types from `packages/db/src/schema/*.ts`
+  - Example: `Workspace`, `NewWorkspace` from `workspace.ts`
+  - Used in repositories and domain entities
+- **Separation**: Input validation (Zod) ↔ Database models (Drizzle)
+
 ## Email Engine
 
 ### React Email Rendering

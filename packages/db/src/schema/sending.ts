@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { InferInsertModel, InferSelectModel, sql } from 'drizzle-orm';
 import {
 	foreignKey,
 	index,
@@ -98,6 +98,9 @@ export const sendJobs = pgTable(
 		}),
 	]
 );
+
+export type SendJob = InferSelectModel<typeof sendJobs>;
+export type NewSendJob = InferInsertModel<typeof sendJobs>;
 
 export const sendRecipients = pgTable(
 	'send_recipients',
