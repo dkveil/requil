@@ -2,6 +2,7 @@ import { WorkspaceMember } from '@requil/db';
 import type { RepositoryPort } from '@/shared/db/repository.port';
 import type { WorkspaceEntity } from '../domain/workspace.domain';
 import type {
+	UpdateWorkspaceProps,
 	UserId,
 	WorkspaceId,
 	WorkspaceWithRole,
@@ -22,4 +23,5 @@ export interface IWorkspaceRepository
 		userId: UserId,
 		role: WorkspaceMember['role']
 	): Promise<WorkspaceWithRole>;
+	update(id: WorkspaceId, data: UpdateWorkspaceProps): Promise<WorkspaceEntity>;
 }

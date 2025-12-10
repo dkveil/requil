@@ -74,6 +74,11 @@ export class WorkspaceEntity {
 		this.validate();
 	}
 
+	updateSlug(slug: string): void {
+		this.props.slug = slug.toLowerCase().trim();
+		this.validate();
+	}
+
 	get id(): WorkspaceId {
 		return this.props.id;
 	}

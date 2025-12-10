@@ -7,6 +7,7 @@ import {
 import { and, eq, sql } from 'drizzle-orm';
 import { WorkspaceEntity } from '../domain/workspace.domain';
 import type {
+	UpdateWorkspaceProps,
 	UserId,
 	WorkspaceId,
 	WorkspaceWithRole,
@@ -172,6 +173,34 @@ export default function workspaceRepository({
 		};
 	};
 
+	const update = async (
+		id: WorkspaceId,
+		data: UpdateWorkspaceProps
+	): Promise<WorkspaceEntity> => {
+		const updateData: Partial<Workspace> = {};
+
+		if (data.name !== undefined) {
+			updateData.name = data.name.trim();
+		}
+		if (data.slug !== undefined) {
+			updateData.slug = data.slug.toLowerCase().trim();
+		}
+
+		const result = await db
+			.update(workspaces)
+			.set(updateData)
+			.where(eq(workspaces.id, id))
+			.returning();
+
+		if (!result[0]) {
+			throw new Error(`Workspace with id ${id} not found`);
+		}
+
+		logger.info({ workspaceId: id, changes: data }, 'Updated workspace');
+
+		return WorkspaceEntity.fromPersistence(result[0]);
+	};
+
 	return {
 		...baseRepository,
 		findByUserId,
@@ -180,5 +209,6 @@ export default function workspaceRepository({
 		existsBySlug,
 		findPersonalByUserId,
 		createWithMember,
+		update,
 	};
 }
