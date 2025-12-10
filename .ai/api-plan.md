@@ -95,13 +95,15 @@ DELETE /v1/api-keys/{keyId}
 ```
 GET /v1/workspace
 ```
-**Description**: Get current workspace details
+**Description**: Get current workspace details including user role
 **Auth**: API Key or User session (member role required)
 **Success Response** (200):
 ```json
 {
   "id": "550e8400-e29b-41d4-a716-446655440000",
   "name": "Acme Corp",
+  "slug": "acme-corp",
+  "role": "owner",
   "created_at": "2025-01-15T10:00:00Z",
   "plan": {
     "type": "pro",
@@ -118,15 +120,28 @@ GET /v1/workspace
 ```
 PATCH /v1/workspace
 ```
-**Description**: Update workspace settings
+**Description**: Update workspace settings (name, slug)
 **Auth**: User session (owner role required)
 **Request Body**:
 ```json
 {
-  "name": "New Workspace Name"
+  "name": "New Workspace Name",
+  "slug": "new-workspace-slug"
 }
 ```
 **Success Response** (200): Updated workspace object
+**Error Responses**:
+- `409 Conflict` - Slug already exists
+
+#### Delete Workspace
+```
+DELETE /v1/workspace
+```
+**Description**: Permanently delete workspace and all associated resources
+**Auth**: User session (owner role required)
+**Success Response** (204): No content
+**Error Responses**:
+- `403 Forbidden` - User is not an owner
 
 #### List Workspace Members
 ```
