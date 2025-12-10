@@ -38,6 +38,10 @@ export const ERROR_CODES = {
 	TEMPLATE_VALIDATION_ERROR: 'TEMPLATE_VALIDATION_ERROR',
 	TEMPLATE_CONFLICT: 'TEMPLATE_CONFLICT',
 	TEMPLATE_NOT_FOUND: 'TEMPLATE_NOT_FOUND',
+	SENDING_ERROR: 'SENDING_ERROR',
+	NO_PUBLISHED_SNAPSHOT: 'NO_PUBLISHED_SNAPSHOT',
+	IDEMPOTENCY_CONFLICT: 'IDEMPOTENCY_CONFLICT',
+	VARIABLE_VALIDATION_ERROR: 'VARIABLE_VALIDATION_ERROR',
 } as const;
 
 export type ErrorCode = keyof typeof ERROR_CODES;
@@ -82,6 +86,10 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
 	TEMPLATE_VALIDATION_ERROR: 'Template validation error',
 	TEMPLATE_CONFLICT: 'Template conflict',
 	TEMPLATE_NOT_FOUND: 'Template not found',
+	SENDING_ERROR: 'Sending error',
+	NO_PUBLISHED_SNAPSHOT: 'No published snapshot available',
+	IDEMPOTENCY_CONFLICT: 'Idempotency conflict',
+	VARIABLE_VALIDATION_ERROR: 'Variable validation error',
 };
 
 export const ERROR_MESSAGES_PL: Record<ErrorCode, string> = {
@@ -125,4 +133,8 @@ export const ERROR_MESSAGES_PL: Record<ErrorCode, string> = {
 	TEMPLATE_VALIDATION_ERROR: 'Błąd walidacji szablonu',
 	TEMPLATE_CONFLICT: 'Konflikt szablonu',
 	TEMPLATE_NOT_FOUND: 'Szablon nie znaleziony',
+	SENDING_ERROR: 'Błąd wysyłki',
+	NO_PUBLISHED_SNAPSHOT: 'Brak opublikowanego snapshota',
+	IDEMPOTENCY_CONFLICT: 'Konflikt klucza idempotencji',
+	VARIABLE_VALIDATION_ERROR: 'Błąd walidacji zmiennych',
 };

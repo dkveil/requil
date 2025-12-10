@@ -12,7 +12,7 @@ Obsługuje dwa główne scenariusze użycia:
 
 - **Metoda HTTP**: `POST`
 - **Struktura URL**: `/v1/send`
-- **Autoryzacja**: 
+- **Autoryzacja**:
   - `Bearer {api_key}` (API Key ze scope `send`).
   - LUB Cookie Sesyjne (dla zapytań z Dashboardu - wysyłka testowa).
 - **Nagłówki**:
@@ -27,9 +27,8 @@ Obsługuje dwa główne scenariusze użycia:
 | `to` | array | **Wymagane** | Lista odbiorców (min. 1). |
 | `to[].email` | string | **Wymagane** | Adres email odbiorcy. |
 | `to[].variables` | object | Opcjonalne | Zmienne do interpolacji dla konkretnego odbiorcy. |
-| `transport` | string | Opcjonalne | `resend` \| `smtp`. Domyślnie używa konfiguracji workspace lub fallback do internal. |
-| `subject` | string | Opcjonalne | Nadpisuje temat zdefiniowany w szablonie. |
-| `preheader` | string | Opcjonalne | Nadpisuje preheader z szablonu. |
+
+**Uwaga**: `subject` i `preheader` są pobierane z template (nie można nadpisać w request).
 
 ## 3. Wykorzystywane typy
 
@@ -41,9 +40,6 @@ Zdefiniowane za pomocą Zod Schema w `modules/sending/sending.schema.ts` (do utw
 // Uproszczony schemat
 const SendEmailSchema = z.object({
   template: z.string(),
-  transport: z.enum(['resend', 'smtp']).optional(),
-  subject: z.string().optional(),
-  preheader: z.string().optional(),
   to: z.array(z.object({
     email: z.string().email(),
     variables: z.record(z.any()).optional()

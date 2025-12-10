@@ -4,5 +4,6 @@ export * from './assets';
 export * from './auth';
 export * from './billing';
 export * from './editor';
+export * from './sending';
 export * from './templates';
 export * from './workspace';

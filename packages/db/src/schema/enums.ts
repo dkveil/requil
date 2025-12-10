@@ -52,4 +52,8 @@ export const transportState = pgEnum('transport_state', [
 	'inactive',
 	'unverified',
 ]);
-export const transportType = pgEnum('transport_type', ['resend', 'smtp']);
+export const transportType = pgEnum('transport_type', [
+	'default',
+	'resend',
+	'smtp',
+]);

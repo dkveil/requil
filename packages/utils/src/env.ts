@@ -52,3 +52,9 @@ export const requiredPort = (fieldName: string) =>
 
 export const nodeEnv = () =>
 	z.enum(['development', 'production', 'test']).default('development');
+
+export const redisEnv = () =>
+	z.object({
+		UPSTASH_REDIS_REST_URL: requiredUrl('UPSTASH_REDIS_REST_URL'),
+		UPSTASH_REDIS_REST_TOKEN: requiredString('UPSTASH_REDIS_REST_TOKEN'),
+	});

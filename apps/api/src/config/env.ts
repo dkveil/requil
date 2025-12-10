@@ -19,6 +19,8 @@ const apiEnvSchema = z.object({
 	CORS_ORIGINS: z
 		.string()
 		.default('http://localhost:5137,http://localhost:3000'),
+	RESEND_API_KEY: z.string().min(1, 'Resend API key is required'),
+	DEFAULT_FROM_EMAIL: z.email().default('noreply@requil.dev'),
 });
 
 type ApiEnv = z.infer<typeof apiEnvSchema>;
@@ -55,6 +57,14 @@ const config = {
 		anonKey: env.SUPABASE_ANON_KEY,
 		serviceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY,
 		jwtSecret: env.SUPABASE_JWT_SECRET,
+	},
+	redis: {
+		url: env.UPSTASH_REDIS_REST_URL,
+		token: env.UPSTASH_REDIS_REST_TOKEN,
+	},
+	email: {
+		resendApiKey: env.RESEND_API_KEY,
+		defaultFromEmail: env.DEFAULT_FROM_EMAIL,
 	},
 };
 

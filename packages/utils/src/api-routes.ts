@@ -37,4 +37,7 @@ export const API_ROUTES = {
 		LIST: '/v1/api-keys',
 		REVOKE: '/v1/api-keys/:keyId',
 	},
+	SEND: {
+		CREATE: '/v1/send',
+	},
 } as const;

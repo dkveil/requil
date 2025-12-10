@@ -189,3 +189,6 @@ export const sendRecipients = pgTable(
 		}),
 	]
 );
+
+export type SendRecipient = InferSelectModel<typeof sendRecipients>;
+export type NewSendRecipient = InferInsertModel<typeof sendRecipients>;

@@ -430,3 +430,8 @@ export const workspacePlans = pgTable(
 		}),
 	]
 );
+
+export type WorkspaceTransport = InferSelectModel<typeof workspaceTransports>;
+export type NewWorkspaceTransport = InferInsertModel<
+	typeof workspaceTransports
+>;
