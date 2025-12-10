@@ -2,6 +2,8 @@ import type {
 	CreateWorkspaceInput,
 	CreateWorkspaceResponse,
 	FindUserWorkspacesResponse,
+	UpdateWorkspaceInput,
+	UpdateWorkspaceResponse,
 } from '@requil/types/workspace';
 import { API_ROUTES } from '@requil/utils/api-routes';
 import { fetchAPI } from '@/lib/api/client';
@@ -25,6 +27,18 @@ export const workspaceApi = {
 				body: JSON.stringify(data),
 			}
 		);
+		return response.data;
+	},
+
+	async update(
+		workspaceId: string,
+		data: UpdateWorkspaceInput
+	): Promise<UpdateWorkspaceResponse> {
+		const url = API_ROUTES.WORKSPACE.UPDATE.replace(':id', workspaceId);
+		const response = await fetchAPI<UpdateWorkspaceResponse>(url, {
+			method: 'PATCH',
+			body: JSON.stringify(data),
+		});
 		return response.data;
 	},
 };

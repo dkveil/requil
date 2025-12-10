@@ -2,6 +2,7 @@
 
 import { NextIntlClientProvider } from 'next-intl';
 import { AuthInitializer } from '@/features/auth/providers/auth-init';
+import { QueryProvider } from '@/lib/providers/query-provider';
 import { ThemeProvider } from '@/lib/providers/theme-provider';
 
 type ProviderProps = {
@@ -12,6 +13,7 @@ type ProviderProps = {
 
 const providers: React.ComponentType<ProviderProps>[] = [
 	ThemeProvider,
+	QueryProvider,
 	AuthInitializer,
 ];
 

@@ -21,6 +21,10 @@ export const DASHBOARD_ROUTES = {
 			EVENTS: (slug: string) => `/workspace/${slug}/analytics/events`,
 		},
 		SETTINGS: {
+			ROOT: (slug: string) => `/workspace/${slug}/settings`,
+			GENERAL: (slug: string) => `/workspace/${slug}/settings/general`,
+			TRANSPORT: (slug: string) => `/workspace/${slug}/settings/transport`,
+			DEVELOPERS: (slug: string) => `/workspace/${slug}/settings/developers`,
 			TRANSPORTS: (slug: string) => `/workspace/${slug}/settings/transports`,
 			API_KEYS: (slug: string) => `/workspace/${slug}/settings/api-keys`,
 			BILLING: (slug: string) => `/workspace/${slug}/settings/billing`,
