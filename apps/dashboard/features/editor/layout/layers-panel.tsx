@@ -14,7 +14,7 @@ interface LayersPanelProps {
 }
 
 export function LayersPanel({ className }: LayersPanelProps) {
-	const t = useTranslations('editor.elementsSidebar.layers');
+	const t = useTranslations('editor.layersPanel');
 	const { document } = useCanvas();
 
 	if (!document) {

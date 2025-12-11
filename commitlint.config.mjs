@@ -25,6 +25,7 @@ export default {
 			[
 				'app',
 				'testing',
+				'deploy',
 				// Apps
 				'api',
 				'dashboard',
@@ -37,6 +38,7 @@ export default {
 				'templates',
 				'editor',
 				// Packages
+				'packages',
 				'email-engine',
 				'transports',
 				'validation',

@@ -4,7 +4,7 @@ import postgres from 'postgres';
 import { env } from './config/env';
 import * as schema from './schema/index';
 
-type DBType = PostgresJsDatabase<typeof schema>;
+export type DBType = PostgresJsDatabase<typeof schema>;
 
 const { NODE_ENV, DATABASE_URL } = env;
 

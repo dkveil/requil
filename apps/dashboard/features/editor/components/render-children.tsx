@@ -1,5 +1,6 @@
 import type { BlockIR } from '@requil/types';
 import React from 'react';
+import { BlockRenderer } from './block-renderer';
 import { DropZone } from './drop-zone';
 
 export type RenderChildrenProps = {
@@ -30,7 +31,6 @@ export function RenderChildren({
 	onDelete,
 	onSelectParent,
 }: RenderChildrenProps) {
-	const { BlockRenderer } = require('./block-renderer');
 	const children = block.children || [];
 
 	return (

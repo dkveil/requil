@@ -127,6 +127,9 @@ export const editorPlLocales = {
 				variableExists: 'Zmienna o tej nazwie już istnieje',
 			},
 		},
+		layersPanel: {
+			noDocument: 'Brak dokumentu',
+		},
 		movedBlock: 'Blok przeniesiony pomyślnie',
 		blockActions: {
 			selectParent: 'Wybierz rodzica',

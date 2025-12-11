@@ -22,6 +22,7 @@ export function Providers({ children, locale, messages }: ProviderProps) {
 		<NextIntlClientProvider
 			locale={locale}
 			messages={messages}
+			timeZone='Europe/Warsaw'
 		>
 			{providers.reduceRight(
 				(acc, Provider, index) => (

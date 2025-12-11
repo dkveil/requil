@@ -13,7 +13,7 @@
 		}
 	},
 	"scripts": {
-		"build": "rm -rf dist && tsc && resolve-tspaths -s ./src -o ./dist",
+		"build": "tsup src/index.ts --format esm --dts --clean",
 		"dev": "tsc --watch",
 		"clean": "rm -rf dist",
 		"type-check": "tsc --noEmit",

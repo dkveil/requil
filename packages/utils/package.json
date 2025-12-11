@@ -1,6 +1,7 @@
 {
 	"name": "@requil/utils",
 	"version": "1.0.0",
+	"type": "module",
 	"private": true,
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -35,7 +36,7 @@
 		}
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsup src/index.ts src/api-routes.ts src/dashboard-routes.ts src/logger.ts src/errors.ts src/crypto.ts src/env.ts --format esm --dts --clean",
 		"dev": "tsc --watch",
 		"clean": "rm -rf dist",
 		"type-check": "tsc --noEmit",

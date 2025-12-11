@@ -1,6 +1,7 @@
 {
 	"name": "@requil/types",
 	"version": "1.0.0",
+	"type": "module",
 	"private": true,
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -47,7 +48,7 @@
 		}
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsup src/index.ts src/api/index.ts src/api-keys/index.ts src/auth/index.ts src/billing/index.ts src/editor/index.ts src/templates/index.ts src/workspace/index.ts --format esm --dts --clean",
 		"dev": "tsc --watch",
 		"clean": "rm -rf dist",
 		"type-check": "tsc --noEmit"

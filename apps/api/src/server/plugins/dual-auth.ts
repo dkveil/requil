@@ -1,6 +1,6 @@
 import { apiKeyScopes, apiKeys, db } from '@requil/db';
 import { ERROR_CODES } from '@requil/types';
-import { compareSync } from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import { eq, sql } from 'drizzle-orm';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
@@ -98,7 +98,7 @@ async function dualAuthPlugin(fastify: FastifyInstance) {
 					);
 				}
 
-				const isValidKey = compareSync(apiKey, keyRecord.keyHash);
+				const isValidKey = bcryptjs.compareSync(apiKey, keyRecord.keyHash);
 
 				if (!isValidKey) {
 					return sendError(

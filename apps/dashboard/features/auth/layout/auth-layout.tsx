@@ -61,7 +61,7 @@ export default function AuthLayout({
 							size='lg'
 							className='gap-2 group/btn'
 						>
-							Wypróbuj demo
+							DEMO
 							<ArrowRight className='w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform' />
 						</Button>
 					</Link>

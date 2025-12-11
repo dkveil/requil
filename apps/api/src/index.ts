@@ -48,4 +48,5 @@ async function init() {
 	}
 }
 
+// Trigger build
 init();

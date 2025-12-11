@@ -23,6 +23,13 @@ export async function di(fastify: FastifyInstance) {
 				supabase: fastify.supabase,
 			}),
 		})
+		.loadModules([path.join(__dirname, '../../shared/**/*.service.{js,ts}')], {
+			formatName,
+			resolverOptions: {
+				register: asFunction,
+				lifetime: Lifetime.SINGLETON,
+			},
+		})
 		.loadModules(
 			[
 				path.join(

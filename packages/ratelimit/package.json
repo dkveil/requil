@@ -8,11 +8,12 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js"
+			"require": "./dist/index.js",
+			"default": "./dist/index.js"
 		}
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsup src/index.ts --format esm --dts --clean",
 		"dev": "tsc --watch",
 		"clean": "rm -rf dist",
 		"type-check": "tsc --noEmit",

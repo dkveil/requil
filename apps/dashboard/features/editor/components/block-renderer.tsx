@@ -91,7 +91,7 @@ export function renderChildrenWithDropZones(
 	);
 }
 
-export const BlockRenderer: React.FC<BlockRendererProps> = ({
+export function BlockRenderer({
 	block,
 	isCanvas = true,
 	viewport = 'desktop',
@@ -106,7 +106,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 	parentId,
 	siblingIndex = 0,
 	siblingCount = 1,
-}) => {
+}: BlockRendererProps) {
 	const isSelected = isCanvas && selectedBlockId === block.id;
 	const isHovered = isCanvas && hoveredBlockId === block.id && !isSelected;
 
@@ -250,4 +250,4 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
 	}
 
 	return blockContent;
-};
+}
