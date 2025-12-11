@@ -1,9 +1,14 @@
 import { getTranslations } from 'next-intl/server';
 import { TemplatesList } from '@/features/templates';
+import { generatePageMetadata } from '@/lib/metadata';
 
 type Props = {
 	params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata() {
+	return generatePageMetadata('templates');
+}
 
 export default async function EmailTemplatesPage({ params }: Props) {
 	const { slug } = await params;

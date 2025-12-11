@@ -7,12 +7,17 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { TransportConfig } from '@/features/settings/components/transport-config';
+import { generatePageMetadata } from '@/lib/metadata';
 
 type TransportSettingsPageProps = {
 	params: Promise<{
 		slug: string;
 	}>;
 };
+
+export async function generateMetadata() {
+	return generatePageMetadata('settingsTransport');
+}
 
 export default async function TransportSettingsPage({
 	params,

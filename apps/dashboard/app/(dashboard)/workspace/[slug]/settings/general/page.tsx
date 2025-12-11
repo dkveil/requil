@@ -7,12 +7,17 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { UpdateWorkspaceForm } from '@/features/settings';
+import { generatePageMetadata } from '@/lib/metadata';
 
 type GeneralSettingsPageProps = {
 	params: Promise<{
 		slug: string;
 	}>;
 };
+
+export async function generateMetadata() {
+	return generatePageMetadata('settingsGeneral');
+}
 
 export default async function GeneralSettingsPage({
 	params,

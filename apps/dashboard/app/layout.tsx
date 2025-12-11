@@ -18,6 +18,48 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
 	title: 'Requil - Email Engine',
 	description: 'API-first engine for transactional and campaign emails',
+	icons: {
+		icon: [
+			{
+				url: '/images/logo/logo-icon-black.ico',
+				media: '(prefers-color-scheme: light)',
+			},
+			{
+				url: '/images/logo/logo-icon-white.ico',
+				media: '(prefers-color-scheme: dark)',
+			},
+			{
+				url: '/images/logo/logo-icon-black.webp',
+				type: 'image/webp',
+				media: '(prefers-color-scheme: light)',
+			},
+			{
+				url: '/images/logo/logo-icon-white.webp',
+				type: 'image/webp',
+				media: '(prefers-color-scheme: dark)',
+			},
+		],
+		shortcut: [
+			{
+				url: '/images/logo/logo-icon-black.ico',
+				media: '(prefers-color-scheme: light)',
+			},
+			{
+				url: '/images/logo/logo-icon-white.ico',
+				media: '(prefers-color-scheme: dark)',
+			},
+		],
+		apple: [
+			{
+				url: '/images/logo/logo-icon-black.webp',
+				media: '(prefers-color-scheme: light)',
+			},
+			{
+				url: '/images/logo/logo-icon-white.webp',
+				media: '(prefers-color-scheme: dark)',
+			},
+		],
+	},
 };
 
 export default async function RootLayout({

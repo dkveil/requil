@@ -7,12 +7,17 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { DevelopersSettingsClient } from '@/features/settings/components/developers-settings-client';
+import { generatePageMetadata } from '@/lib/metadata';
 
 type DevelopersSettingsPageProps = {
 	params: Promise<{
 		slug: string;
 	}>;
 };
+
+export async function generateMetadata() {
+	return generatePageMetadata('settingsDevelopers');
+}
 
 export default async function DevelopersSettingsPage({
 	params,

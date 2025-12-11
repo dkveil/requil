@@ -1,5 +1,6 @@
 import { DASHBOARD_ROUTES } from '@requil/utils/dashboard-routes';
 import { redirect } from 'next/navigation';
+import { generatePageMetadata } from '@/lib/metadata';
 import GeneralSettingsLoading from './general/loading';
 
 type SettingsPageProps = {
@@ -7,6 +8,10 @@ type SettingsPageProps = {
 		slug: string;
 	}>;
 };
+
+export async function generateMetadata() {
+	return generatePageMetadata('settings');
+}
 
 export default async function SettingsPage({ params }: SettingsPageProps) {
 	if (process.env.NODE_ENV === 'development') {
