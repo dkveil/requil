@@ -1,4 +1,5 @@
 import type { BlockIR, Document, Variable } from '@requil/types';
+import { nanoid } from 'nanoid';
 import { toast } from 'sonner';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
@@ -794,7 +795,7 @@ function findParentOfBlock(block: BlockIR, targetId: string): BlockIR | null {
 
 // Clone a block with new IDs (for duplication)
 function cloneBlockWithNewIds(block: BlockIR): BlockIR {
-	const newId = crypto.randomUUID();
+	const newId = nanoid();
 
 	return {
 		...block,

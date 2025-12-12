@@ -11,7 +11,7 @@ export type BlockIR = {
 
 export const BlockSchema: z.ZodType<BlockIR> = z.lazy(() =>
 	z.object({
-		id: z.uuid(),
+		id: z.string(),
 		type: z.string(),
 		name: z.string().optional(),
 		props: z.record(z.string(), z.unknown()),
