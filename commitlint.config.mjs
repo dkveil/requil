@@ -1,3 +1,51 @@
+import { existsSync, readdirSync } from 'node:fs';
+
+// Helper to read directories ignoring dotfiles
+const getDirectories = (source) =>
+	existsSync(source)
+		? readdirSync(source, { withFileTypes: true })
+				.filter(
+					(dirent) => dirent.isDirectory() && !dirent.name.startsWith('.')
+				)
+				.map((dirent) => dirent.name)
+		: [];
+
+const apps = getDirectories('apps');
+const packages = getDirectories('packages');
+
+// Internal modules from API (domain scopes)
+const apiModules = getDirectories('apps/api/src/modules');
+
+// Manual scopes that don't map to directories
+const manualScopes = [
+	'monorepo',
+	'config', // global config if not referring to @requil/config
+	'typescript',
+	'scripts',
+	'e2e',
+	'testing',
+	'deploy',
+	'docker',
+	'ci',
+	'deps',
+	'lint',
+	'biome',
+	'cursor',
+	'docs',
+	'release',
+	// Project specific
+	'ai-plan',
+	'stack',
+	'prd',
+	'rules',
+	'license',
+	'access', // Legacy/Specific domain
+];
+
+const scopes = [
+	...new Set([...apps, ...packages, ...apiModules, ...manualScopes]),
+];
+
 export default {
 	extends: ['@commitlint/config-conventional'],
 	rules: {
@@ -19,56 +67,11 @@ export default {
 				'i18n', // Internationalization
 			],
 		],
-		'scope-enum': [
-			2,
-			'always',
-			[
-				'app',
-				'testing',
-				'deploy',
-				// Apps
-				'api',
-				'dashboard',
-				'website',
-				// Modules
-				'access',
-				'auth',
-				'workspace',
-				'billing',
-				'templates',
-				'editor',
-				// Packages
-				'packages',
-				'email-engine',
-				'transports',
-				'validation',
-				'webhooks',
-				'ratelimit',
-				'db',
-				'types',
-				'ui',
-				'utils',
-				'config',
-				'typescript',
-				// Infrastructure
-				'docker',
-				'ci',
-				'deps',
-				'lint',
-				'biome',
-				// Meta
-				'monorepo',
-				'cursor',
-				//documents
-				'ai-plan',
-				'stack',
-				'prd',
-				'rules',
-				'license',
-			],
-		],
-		'scope-empty': [1, 'never'],
-		'subject-case': [0],
+		'scope-enum': [2, 'always', scopes],
+		// Angular convention allows empty scope (e.g. "fix: global fix")
+		'scope-empty': [0],
+		// Angular convention requires lowercase subject
+		'subject-case': [2, 'always', 'lower-case'],
 		'subject-empty': [2, 'never'],
 		'subject-full-stop': [2, 'never', '.'],
 		'header-max-length': [2, 'always', 100],
