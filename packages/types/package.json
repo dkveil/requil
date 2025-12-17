@@ -1,54 +1,45 @@
 {
 	"name": "@requil/types",
 	"version": "1.0.0",
-	"type": "module",
 	"private": true,
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"require": "./dist/index.js",
 			"default": "./dist/index.js"
 		},
 		"./api": {
 			"types": "./dist/api/index.d.ts",
-			"require": "./dist/api/index.js",
 			"default": "./dist/api/index.js"
 		},
 		"./api-keys": {
 			"types": "./dist/api-keys/index.d.ts",
-			"require": "./dist/api-keys/index.js",
 			"default": "./dist/api-keys/index.js"
 		},
 		"./auth": {
 			"types": "./dist/auth/index.d.ts",
-			"require": "./dist/auth/index.js",
 			"default": "./dist/auth/index.js"
 		},
 		"./billing": {
 			"types": "./dist/billing/index.d.ts",
-			"require": "./dist/billing/index.js",
 			"default": "./dist/billing/index.js"
 		},
 		"./editor": {
 			"types": "./dist/editor/index.d.ts",
-			"require": "./dist/editor/index.js",
 			"default": "./dist/editor/index.js"
 		},
 		"./templates": {
 			"types": "./dist/templates/index.d.ts",
-			"require": "./dist/templates/index.js",
 			"default": "./dist/templates/index.js"
 		},
 		"./workspace": {
 			"types": "./dist/workspace/index.d.ts",
-			"require": "./dist/workspace/index.js",
 			"default": "./dist/workspace/index.js"
 		}
 	},
 	"scripts": {
-		"build": "tsup src/index.ts src/api/index.ts src/api-keys/index.ts src/auth/index.ts src/billing/index.ts src/editor/index.ts src/templates/index.ts src/workspace/index.ts --format esm --dts --clean",
+		"build": "tsc",
 		"dev": "tsc --watch",
 		"clean": "rm -rf dist",
 		"type-check": "tsc --noEmit"

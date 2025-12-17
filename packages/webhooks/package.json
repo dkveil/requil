@@ -1,22 +1,21 @@
 {
 	"name": "@requil/webhooks",
 	"version": "1.0.0",
-	"type": "module",
 	"private": true,
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js"
+			"default": "./dist/index.js"
 		},
 		"./middleware": {
 			"types": "./dist/middleware/index.d.ts",
-			"import": "./dist/middleware/index.js"
+			"default": "./dist/middleware/index.js"
 		}
 	},
 	"scripts": {
-		"build": "tsup src/index.ts src/middleware/index.ts --format esm --dts --clean",
+		"build": "tsc",
 		"dev": "tsc --watch",
 		"clean": "rm -rf dist",
 		"type-check": "tsc --noEmit",

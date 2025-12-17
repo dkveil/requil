@@ -1,7 +1,6 @@
 {
 	"name": "@requil/db",
 	"version": "1.0.0",
-	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
@@ -15,7 +14,7 @@
 		}
 	},
 	"scripts": {
-		"build": "tsup src/index.ts src/client.ts --format esm --dts --clean",
+		"build": "tsc",
 		"dev": "tsc --watch",
 		"db:pull": "drizzle-kit pull",
 		"db:push": "drizzle-kit push",

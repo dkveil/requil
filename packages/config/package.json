@@ -2,7 +2,6 @@
 	"name": "@requil/config",
 	"version": "0.0.0",
 	"private": true,
-	"type": "module",
 	"exports": {
 		"./typescript/base.json": "./typescript/base.json",
 		"./typescript/nextjs.json": "./typescript/nextjs.json",

@@ -1,19 +1,17 @@
 {
 	"name": "@requil/ratelimit",
 	"version": "1.0.0",
-	"type": "module",
 	"private": true,
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"require": "./dist/index.js",
 			"default": "./dist/index.js"
 		}
 	},
 	"scripts": {
-		"build": "tsup src/index.ts --format esm --dts --clean",
+		"build": "tsc",
 		"dev": "tsc --watch",
 		"clean": "rm -rf dist",
 		"type-check": "tsc --noEmit",

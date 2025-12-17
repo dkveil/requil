@@ -2,18 +2,16 @@
 	"name": "@requil/email-engine",
 	"version": "1.0.0",
 	"private": true,
-	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"require": "./dist/index.js",
-			"import": "./dist/index.js"
+			"default": "./dist/index.js"
 		}
 	},
 	"scripts": {
-		"build": "tsup src/index.ts --format esm --dts --clean",
+		"build": "tsc",
 		"dev": "tsc --watch",
 		"clean": "rm -rf dist",
 		"type-check": "tsc --noEmit",

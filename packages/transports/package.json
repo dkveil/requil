@@ -1,29 +1,25 @@
 {
 	"name": "@requil/transports",
 	"version": "1.0.0",
-	"type": "module",
 	"private": true,
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"require": "./dist/index.js",
 			"default": "./dist/index.js"
 		},
 		"./resend": {
 			"types": "./dist/resend/index.d.ts",
-			"require": "./dist/resend/index.js",
 			"default": "./dist/resend/index.js"
 		},
 		"./smtp": {
 			"types": "./dist/smtp/index.d.ts",
-			"require": "./dist/smtp/index.js",
 			"default": "./dist/smtp/index.js"
 		}
 	},
 	"scripts": {
-		"build": "tsup src/index.ts src/resend/index.ts src/smtp/index.ts --format esm --dts --clean",
+		"build": "tsc",
 		"dev": "tsc --watch",
 		"clean": "rm -rf dist",
 		"type-check": "tsc --noEmit",

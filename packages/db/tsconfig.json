@@ -3,9 +3,7 @@
 	"extends": "@requil/config/typescript/node.json",
 	"compilerOptions": {
 		"outDir": "dist",
-		"rootDir": "src",
-		"module": "CommonJS",
-		"moduleResolution": "node"
+		"rootDir": "src"
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "dist", "**/*.test.ts"]
